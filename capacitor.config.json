@@ -1,0 +1,13 @@
+{
+  "appId": "com.codigofenix.tratamientocero",
+  "appName": "Tratamiento Cero",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "ScreenOrientation": {
+      "orientation": "landscape"
+    }
+  }
+}

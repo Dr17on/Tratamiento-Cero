@@ -1,0 +1,17 @@
+{
+  "name": "tratamiento-cero",
+  "version": "1.0.0",
+  "description": "Juego indie de terror psicológico para 2 jugadores",
+  "main": "www/index.html",
+  "scripts": {
+    "build": "echo 'Build handled by GitHub Actions'"
+  },
+  "author": "Código Fénix",
+  "license": "ISC",
+  "dependencies": {
+    "@capacitor/android": "^6.0.0",
+    "@capacitor/cli": "^6.0.0",
+    "@capacitor/core": "^6.0.0",
+    "@capacitor/screen-orientation": "^6.0.0"
+  }
+}
