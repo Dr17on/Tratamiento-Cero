@@ -8,31 +8,28 @@
 </head>
 <body>
     <div id="game-container"></div>
-    <div id="error-log" style="color: #ff6666; position: absolute; top: 10px; left: 10px; z-index: 9999; font-family: monospace; font-size: 14px; background: rgba(0,0,0,0.9); padding: 15px; max-width: 90%; border: 1px solid #ff6666; display: none; word-wrap: break-word;"></div>
+    <div id="error-log" style="color: #ff6666; position: absolute; top: 10px; left: 10px; z-index: 9999; font-family: monospace; font-size: 13px; background: rgba(0,0,0,0.95); padding: 15px; max-width: 95%; border: 1px solid #ff6666; display: none; word-wrap: break-word;"></div>
 
     <script>
         window.onerror = function(msg, url, line) {
             const errorDiv = document.getElementById('error-log');
             errorDiv.style.display = 'block';
-            errorDiv.innerHTML += '⚠️ ERROR: ' + msg + '<br>📁 Archivo: ' + url + '<br>📍 Línea: ' + line + '<br><hr>';
+            errorDiv.innerHTML += '⚠️ ' + msg + '<br>📁 ' + url + '<br>📍 Línea: ' + line + '<br><hr>';
             return false;
         };
     </script>
 
-    <!-- 1. Motor y traducciones -->
     <script src="lib/phaser.min.js"></script>
     <script src="js/locales.js"></script>
 
-    <!-- 2. Escenas (en orden, antes de main.js) -->
-    <script src="js/scenes/Boot.js"></script>
+    <script src="js/scenes/boot.js"></script>
     <script src="js/scenes/CodigoFenix.js"></script>
-    <script src="js/scenes/Presentacion.js"></script>
-    <script src="js/scenes/Menu.js"></script>
-    <script src="js/scenes/Capitulos.js"></script>
-    <script src="js/scenes/Configuracion.js"></script>
+    <script src="js/scenes/presentacion.js"></script>
+    <script src="js/scenes/menu.js"></script>
+    <script src="js/scenes/capitulos.js"></script>
+    <script src="js/scenes/configuracion.js"></script>
     <script src="js/scenes/Capitulo1.js"></script>
 
-    <!-- 3. main.js AL FINAL, es el que arranca todo -->
     <script src="js/main.js"></script>
 </body>
 </html>
