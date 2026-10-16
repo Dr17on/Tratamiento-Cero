@@ -42,13 +42,13 @@ class Configuracion extends Phaser.Scene {
             fontSize: '20px', color: '#ffffff', fontFamily: 'Courier New'
         }).setOrigin(0.5);
 
-        langEsBtn.on('pointerdown', () => {
+        langEsBtn.on('pointerup', () => {
             if (currentLang !== 'es') {
                 setLanguage('es');
                 this.scene.restart();
             }
         });
-        langEnBtn.on('pointerdown', () => {
+        langEnBtn.on('pointerup', () => {
             if (currentLang !== 'en') {
                 setLanguage('en');
                 this.scene.restart();
@@ -65,7 +65,7 @@ class Configuracion extends Phaser.Scene {
         this.add.rectangle(cx + 200, 320, 400, 30, 0x222222, 1)
             .setStrokeStyle(2, 0x666666);
 
-        // Relleno del volumen (desde la izquierda del todo)
+        // Relleno del volumen
         const vol = getVolumen();
         this.volFill = this.add.rectangle(cx, 320, 400 * vol, 26, 0xc0a060)
             .setOrigin(0, 0.5);
@@ -83,11 +83,11 @@ class Configuracion extends Phaser.Scene {
             fontSize: '40px', color: '#ffffff', fontFamily: 'Courier New'
         }).setOrigin(0.5).setInteractive({ useHandCursor: true });
 
-        volDown.on('pointerdown', () => {
+        volDown.on('pointerup', () => {
             setVolumen(Math.max(0, getVolumen() - 0.1));
             this.actualizarVolumen();
         });
-        volUp.on('pointerdown', () => {
+        volUp.on('pointerup', () => {
             setVolumen(Math.min(1, getVolumen() + 0.1));
             this.actualizarVolumen();
         });
@@ -102,7 +102,7 @@ class Configuracion extends Phaser.Scene {
             fontFamily: 'Courier New', fontStyle: 'bold'
         }).setOrigin(0.5);
 
-        creditosBtn.on('pointerdown', () => this.mostrarCreditos());
+        creditosBtn.on('pointerup', () => this.mostrarCreditos());
 
         // =============== BOTÓN VOLVER ===============
         const backBtn = this.add.text(cx, GAME_HEIGHT - 60, '← ' + t('common.back'), {
@@ -111,7 +111,7 @@ class Configuracion extends Phaser.Scene {
             padding: { x: 20, y: 10 }
         }).setOrigin(0.5).setInteractive({ useHandCursor: true });
 
-        backBtn.on('pointerdown', () => this.scene.start('Menu'));
+        backBtn.on('pointerup', () => this.scene.start('Menu'));
     }
 
     actualizarVolumen() {
@@ -119,9 +119,24 @@ class Configuracion extends Phaser.Scene {
         this.volFill.width = 400 * vol;
         this.volText.setText(Math.round(vol * 100) + '%');
 
-        if (this.sound.get('ambiente_menu')) {
-            this.sound.get('ambiente_menu').setVolume(vol * 0.4);
-        }
+        // Aplicar a TODOS los sonidos activos
+        this.sound.sounds.forEach(sound => {
+            if (sound.key === 'ambiente_menu') {
+                sound.setVolume(vol * 0.5);
+            } else if (sound.key === 'puzzle_tension') {
+                sound.setVolume(vol * 0.18);
+            } else if (sound.key === 'ambiente_eugenia' || sound.key === 'ambiente_mateo') {
+                sound.setVolume(vol * 0.35);
+            } else if (sound.key === 'presentacion') {
+                sound.setVolume(vol * 0.5);
+            } else if (sound.key === 'revelacion') {
+                sound.setVolume(vol * 0.5);
+            } else if (sound.key === 'codigo_fenix') {
+                sound.setVolume(vol * 0.6);
+            } else {
+                sound.setVolume(vol * 0.7);
+            }
+        });
     }
 
     mostrarCreditos() {
@@ -137,9 +152,9 @@ class Configuracion extends Phaser.Scene {
             { texto: 'Dos épocas. Una sola voz.', size: '20px', color: '#888888', y: -150, italic: true },
             { texto: '—', size: '20px', color: '#666666', y: -100 },
             { texto: 'Un juego de CÓDIGO FÉNIX', size: '26px', color: '#ffffff', y: -50 },
-            { texto: 'Creado por: Álvaro Quintana Gómez', size: '20px', color: '#cccccc', y: 0 },
+            { texto: 'Creado por: Dr17on', size: '20px', color: '#cccccc', y: 0 },
             { texto: 'Diseño narrativo y programación:', size: '18px', color: '#888888', y: 50 },
-            { texto: 'Álvaro Quintana Gómez', size: '22px', color: '#ffffff', y: 80 },
+            { texto: 'Dr17on', size: '22px', color: '#ffffff', y: 80 },
             { texto: '—', size: '20px', color: '#666666', y: 130 },
             { texto: 'Inspirado en The Past Within y Tick Tock', size: '18px', color: '#888888', y: 170, italic: true },
             { texto: '© 2026 Código Fénix. Todos los derechos reservados.', size: '16px', color: '#666666', y: 220 }
@@ -166,7 +181,7 @@ class Configuracion extends Phaser.Scene {
 
         elementos.push(cerrarBtn);
 
-        cerrarBtn.on('pointerdown', () => {
+        cerrarBtn.on('pointerup', () => {
             elementos.forEach(el => el.destroy());
         });
     }

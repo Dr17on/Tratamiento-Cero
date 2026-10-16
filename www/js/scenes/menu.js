@@ -47,26 +47,26 @@ class Menu extends Phaser.Scene {
         this.crearBotonRol(cx, 560, t('menu.mateo'), t('menu.mateo_desc'),
             'retrato_mateo', 0x2a4a6a, () => this.startGame('mateo'));
 
-        // ✅ NUEVO: Botón de Capítulos
+        // Botón de Capítulos (arriba izquierda)
         const chaptersBtn = this.add.text(40, 40, t('menu_chapters'), {
             fontSize: '24px', color: '#ffffff', fontFamily: 'Courier New',
             backgroundColor: '#333333',
             padding: { x: 16, y: 10 }
         }).setOrigin(0, 0).setInteractive({ useHandCursor: true });
 
-        chaptersBtn.on('pointerdown', () => {
+        chaptersBtn.on('pointerup', () => {
             if (this.musica) this.musica.stop();
             this.scene.start('Capitulos');
         });
 
-        // Botón de configuración (arriba derecha)
+        // Botón de Configuración (arriba derecha)
         const configBtn = this.add.text(GAME_WIDTH - 40, 40, t('menu_settings'), {
             fontSize: '24px', color: '#ffffff', fontFamily: 'Courier New',
             backgroundColor: '#333333',
             padding: { x: 16, y: 10 }
         }).setOrigin(1, 0).setInteractive({ useHandCursor: true });
 
-        configBtn.on('pointerdown', () => {
+        configBtn.on('pointerup', () => {
             if (this.musica) this.musica.stop();
             this.scene.start('Configuracion');
         });
@@ -95,13 +95,12 @@ class Menu extends Phaser.Scene {
 
         btn.on('pointerover', () => btn.setFillStyle(color, 0.85));
         btn.on('pointerout', () => btn.setFillStyle(color, 0.55));
-        btn.on('pointerdown', callback);
+        btn.on('pointerup', callback);
     }
 
     startGame(rol) {
         if (this.musica) this.musica.stop();
         localStorage.setItem('tc_rol', rol);
-        // Respetar el progreso guardado
         if (!localStorage.getItem('tc_capitulo')) localStorage.setItem('tc_capitulo', '1');
         if (!localStorage.getItem('tc_capitulo_actual')) localStorage.setItem('tc_capitulo_actual', '1');
         if (!localStorage.getItem('tc_puzzle')) localStorage.setItem('tc_puzzle', '1');

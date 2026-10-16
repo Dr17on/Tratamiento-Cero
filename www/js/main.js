@@ -6,12 +6,15 @@ const config = {
     parent: 'game-container',
     width: GAME_WIDTH,
     height: GAME_HEIGHT,
-    backgroundColor: '#0a0a0a',
+    backgroundColor: '#000000',
     scale: {
-        mode: Phaser.Scale.FIT,
+        mode: Phaser.Scale.ENVELOP,
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
-    scene: [Boot, CodigoFenix, Presentacion, Menu, Capitulos, Configuracion, Capitulo1]
+    input: {
+        activePointers: 3
+    },
+    scene: [Boot, CodigoFenix, Presentacion, Menu, Capitulos, Configuracion, Capitulo1, Capitulo2]
 };
 
 detectLanguage();

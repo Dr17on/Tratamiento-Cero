@@ -1,0 +1,948 @@
+// ==========================================
+// DATOS DEL CAPÍTULO 2
+// ==========================================
+const ELECTRODOS = [
+    { nombre: 'Aqua',  color: 0x2a6aaa, simbolo: '💧' },
+    { nombre: 'Ignis', color: 0xaa2a2a, simbolo: '🔥' },
+    { nombre: 'Aer',   color: 0xaaaa2a, simbolo: '💨' },
+    { nombre: 'Terra', color: 0x2a7a2a, simbolo: '🌱' }
+];
+
+const ORDEN_ELECTRODOS = [0, 1, 2, 3];
+
+const PALABRAS_PUZLE2 = {
+    correctas: ['recordar', 'silencio', 'épocas', 'voz', 'esperaba'],
+    distractores: ['olvidar', 'ruido', 'días', 'eco', 'buscaba']
+};
+
+const FRAGMENTOS_PUZLE3 = [
+    'Quien lea esto',
+    'debe saber que',
+    'el Tratamiento Cero',
+    'fue',
+    'un error.'
+];
+
+const PAGINAS_PUZLE4 = [
+    { fecha: '14/02/1953', palabra: 'NO' },
+    { fecha: '03/05/1953', palabra: 'FUISTE' },
+    { fecha: '21/07/1953', palabra: 'TÚ' },
+    { fecha: '12/10/1953', palabra: 'EL' },
+    { fecha: '30/12/1953', palabra: 'CULPABLE' }
+];
+
+const CODIGO_CAPITULO2 = '8156';
+
+class Capitulo2 extends Phaser.Scene {
+    constructor() {
+        super({ key: 'Capitulo2' });
+    }
+
+    create() {
+        if (this.sound.context && this.sound.context.state === 'suspended') {
+            this.sound.context.resume();
+        }
+
+        this.rol = localStorage.getItem('tc_rol') || 'eugenia';
+        this.ambiente = null;
+        this.tension = null;
+
+        const ambienteKey = (this.rol === 'eugenia') ? 'ambiente_cap2_eugenia' : 'ambiente_cap2_mateo';
+        if (this.cache.audio.exists(ambienteKey)) {
+            this.ambiente = this.sound.add(ambienteKey, { loop: true, volume: getVolumen() * 0.35 });
+            this.ambiente.play();
+        }
+        if (this.cache.audio.exists('puzzle_completar')) {
+            this.tension = this.sound.add('puzzle_completar', { loop: true, volume: getVolumen() * 0.18 });
+            this.tension.play();
+        }
+
+        const puzzleGuardado = parseInt(localStorage.getItem('tc2_puzzle') || '1');
+        if (puzzleGuardado === 2) this.mostrarPuzzle2();
+        else if (puzzleGuardado === 3) this.mostrarPuzzle3();
+        else if (puzzleGuardado === 4) this.mostrarPuzzle4();
+        else if (puzzleGuardado === 5) this.mostrarFinal();
+        else this.mostrarPuzzle1();
+    }
+
+    reproducirAcierto() { if (this.cache.audio.exists('acierto')) this.sound.play('acierto', { volume: getVolumen() * 0.7 }); }
+    reproducirError() { if (this.cache.audio.exists('error')) this.sound.play('error', { volume: getVolumen() * 0.7 }); }
+    detenerAmbiente() { if (this.ambiente) this.ambiente.stop(); if (this.tension) this.tension.stop(); }
+
+    crearFondo() {
+        this.children.removeAll();
+        const cx = GAME_WIDTH / 2;
+        const cy = GAME_HEIGHT / 2;
+
+        const fondoKey = (this.rol === 'eugenia') ? 'fondo_cap2_eugenia' : 'fondo_cap2_mateo';
+        this.add.image(cx, cy, fondoKey).setDisplaySize(GAME_WIDTH, GAME_HEIGHT);
+
+        const tinte = (this.rol === 'eugenia') ? 0xd4a050 : 0x1a2a5a;
+        this.add.rectangle(cx, cy, GAME_WIDTH, GAME_HEIGHT, tinte, 0.10);
+        this.add.rectangle(cx, 30, GAME_WIDTH, 60, 0x000000, 0.6);
+        this.add.rectangle(cx, GAME_HEIGHT - 15, GAME_WIDTH, 30, 0x000000, 0.6);
+    }
+
+    mostrarTitulo(mostrarAnterior = false) {
+        const cx = GAME_WIDTH / 2;
+        this.add.rectangle(cx, 55, 700, 70, 0x000000, 0.65);
+        this.add.text(cx, 55, t('capitulo2.title'), {
+            fontSize: '32px', color: '#e0d8c8', fontFamily: 'Courier New', fontStyle: 'bold',
+            stroke: '#000000', strokeThickness: 4
+        }).setOrigin(0.5);
+
+        const backBtn = this.add.text(80, GAME_HEIGHT - 60, '← ' + t('common.back'), {
+            fontSize: '22px', color: '#ffffff', fontFamily: 'Courier New',
+            backgroundColor: '#444444', padding: { x: 14, y: 8 }
+        }).setOrigin(0, 0.5).setInteractive({ useHandCursor: true });
+        backBtn.on('pointerup', () => {
+            this.detenerAmbiente();
+            this.scene.start('Menu');
+        });
+
+        if (mostrarAnterior) {
+            const puzzleActual = parseInt(localStorage.getItem('tc2_puzzle') || '1');
+            const labelTexto = (puzzleActual === 1) ? '← ' + t('chapters.chapter1') : '← ' + t('common.previous');
+            const prevBtn = this.add.text(80, 55, labelTexto, {
+                fontSize: '20px', color: '#ffffff', fontFamily: 'Courier New',
+                backgroundColor: '#444444', padding: { x: 12, y: 6 }
+            }).setOrigin(0, 0.5).setInteractive({ useHandCursor: true });
+            prevBtn.on('pointerup', () => this.irAPuzzleAnterior());
+        }
+
+        const resetBtn = this.add.text(GAME_WIDTH - 40, 55, t('common.reiniciar'), {
+            fontSize: '18px', color: '#ffffff', fontFamily: 'Courier New',
+            backgroundColor: '#8b3a3a', padding: { x: 12, y: 6 }
+        }).setOrigin(1, 0.5).setInteractive({ useHandCursor: true });
+        resetBtn.on('pointerup', () => this.confirmarReinicio());
+    }
+
+    confirmarReinicio() {
+        const cx = GAME_WIDTH / 2;
+        const cy = GAME_HEIGHT / 2;
+        const overlay = this.add.rectangle(cx, cy, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.9).setDepth(100);
+        const panel = this.add.rectangle(cx, cy, 600, 250, 0x1a1a1a, 1).setStrokeStyle(3, 0xc0a060).setDepth(101);
+        this.add.text(cx, cy - 40, t('common.reiniciar_confirm'), {
+            fontSize: '22px', color: '#ffffff', fontFamily: 'Courier New',
+            wordWrap: { width: 550 }, align: 'center'
+        }).setOrigin(0.5).setDepth(102);
+
+        const siBtn = this.add.rectangle(cx - 110, cy + 60, 180, 60, 0x2a6a2a, 0.95)
+            .setStrokeStyle(2, 0x4aaa4a).setInteractive({ useHandCursor: true }).setDepth(102);
+        this.add.text(cx - 110, cy + 60, t('common.si'), {
+            fontSize: '22px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold'
+        }).setOrigin(0.5).setDepth(103);
+
+        const noBtn = this.add.rectangle(cx + 110, cy + 60, 180, 60, 0x8b3a3a, 0.95)
+            .setStrokeStyle(2, 0xaa4a4a).setInteractive({ useHandCursor: true }).setDepth(102);
+        this.add.text(cx + 110, cy + 60, t('common.no'), {
+            fontSize: '22px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold'
+        }).setOrigin(0.5).setDepth(103);
+
+        const destruir = () => { overlay.destroy(); panel.destroy(); siBtn.destroy(); noBtn.destroy(); };
+
+        siBtn.on('pointerup', () => {
+            reiniciarCapitulo(2);
+            destruir();
+            this.scene.restart();
+        });
+        noBtn.on('pointerup', () => destruir());
+    }
+
+    mostrarPuzzleResueltoOverlay(callback) {
+        const cx = GAME_WIDTH / 2;
+        const cy = GAME_HEIGHT / 2;
+        const overlay = this.add.rectangle(cx, cy, 600, 200, 0x000000, 0.9)
+            .setStrokeStyle(3, 0x66aa66).setDepth(50);
+        this.add.text(cx, cy - 30, t('common.puzzle_resuelto'), {
+            fontSize: '32px', color: '#66ff66', fontFamily: 'Courier New', fontStyle: 'bold',
+            stroke: '#000000', strokeThickness: 4
+        }).setOrigin(0.5).setDepth(51);
+        const btn = this.add.rectangle(cx, cy + 50, 280, 60, 0x2a6a2a, 0.95)
+            .setStrokeStyle(2, 0x4aaa4a).setInteractive({ useHandCursor: true }).setDepth(51);
+        this.add.text(cx, cy + 50, t('capitulo1.continuar'), {
+            fontSize: '22px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold'
+        }).setOrigin(0.5).setDepth(52);
+        btn.on('pointerup', () => { overlay.destroy(); callback(); });
+    }
+
+    // ==========================================
+    // PUZLE 1
+    // ==========================================
+    mostrarPuzzle1() {
+        localStorage.setItem('tc2_puzzle', '1');
+        this.crearFondo();
+        this.mostrarTitulo(true);
+        this.electrodosColocados = [null, null, null, null];
+
+        const cx = GAME_WIDTH / 2;
+        this.add.rectangle(cx, 100, 700, 40, 0x000000, 0.7);
+        this.add.text(cx, 100, t('capitulo2.puzzle1_title'), {
+            fontSize: '24px', color: '#e0d8c8', fontFamily: 'Courier New', fontStyle: 'bold',
+            stroke: '#000000', strokeThickness: 3
+        }).setOrigin(0.5);
+
+        if (this.rol === 'eugenia') this.crearVistaEugeniaPuzzle1();
+        else this.crearVistaMateoPuzzle1();
+    }
+
+    crearVistaEugeniaPuzzle1() {
+        const cx = GAME_WIDTH / 2;
+        this.add.image(cx, 360, 'panel_electrodos').setDisplaySize(560, 360);
+
+        if (estaResuelto(2, 1)) {
+            this.mostrarPuzzleResueltoOverlay(() => this.irAPuzzle2());
+            return;
+        }
+
+        const startX = cx - 210;
+        const spacing = 140;
+        this.slots = [];
+
+        for (let i = 0; i < 4; i++) {
+            const x = startX + i * spacing;
+            const slot = this.add.rectangle(x, 300, 100, 100, 0x000000, 0.5).setStrokeStyle(3, 0xc0a060);
+            slot.slotIndex = i;
+            this.slots.push(slot);
+            this.add.text(x, 240, (i + 1).toString(), {
+                fontSize: '24px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'bold'
+            }).setOrigin(0.5);
+        }
+
+        const electrodosDesordenados = [1, 3, 0, 2];
+        this.electrodoObjetos = [];
+
+        electrodosDesordenados.forEach((idx, i) => {
+            const x = startX + i * spacing;
+            const y = 540;
+            const circulo = this.add.circle(x, y, 45, ELECTRODOS[idx].color)
+                .setStrokeStyle(4, 0xc0a060).setInteractive({ draggable: true, useHandCursor: true });
+            const textoNombre = this.add.text(x, y, ELECTRODOS[idx].nombre, {
+                fontSize: '16px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold',
+                stroke: '#000000', strokeThickness: 3
+            }).setOrigin(0.5);
+            circulo.electrodoIndex = idx;
+            circulo.textoVinculado = textoNombre;
+            circulo.posOriginal = { x: x, y: y };
+            this.electrodoObjetos.push(circulo);
+            this.input.setDraggable(circulo);
+            circulo.on('drag', (pointer, dragX, dragY) => {
+                circulo.x = dragX; circulo.y = dragY;
+                textoNombre.x = dragX; textoNombre.y = dragY;
+            });
+            circulo.on('dragend', () => this.intentarColocarElectrodo(circulo));
+        });
+
+        this.mensaje = this.add.text(cx, GAME_HEIGHT - 60, t('capitulo2.puzzle1_eugenia_hint'), {
+            fontSize: '18px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic',
+            stroke: '#000000', strokeThickness: 3
+        }).setOrigin(0.5);
+    }
+
+    crearVistaMateoPuzzle1() {
+        const cx = GAME_WIDTH / 2;
+        this.add.image(cx, 400, 'pared_simbolos').setDisplaySize(700, 450);
+        this.add.rectangle(cx, 670, 800, 50, 0x000000, 0.7);
+        this.add.text(cx, 670, t('capitulo2.puzzle1_mateo_hint'), {
+            fontSize: '20px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic',
+            stroke: '#000000', strokeThickness: 3
+        }).setOrigin(0.5);
+
+        const continueBtn = this.add.rectangle(GAME_WIDTH - 140, GAME_HEIGHT - 60, 220, 60, 0x2a6a2a, 0.9)
+            .setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
+        this.add.text(GAME_WIDTH - 140, GAME_HEIGHT - 60, t('capitulo1.continuar'), {
+            fontSize: '20px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold'
+        }).setOrigin(0.5);
+        continueBtn.on('pointerup', () => this.irAPuzzle2());
+    }
+
+    intentarColocarElectrodo(circulo) {
+        let slotCercano = null;
+        let distanciaMin = 100;
+        this.slots.forEach(slot => {
+            const dist = Phaser.Math.Distance.Between(circulo.x, circulo.y, slot.x, slot.y);
+            if (dist < distanciaMin) { distanciaMin = dist; slotCercano = slot; }
+        });
+
+        if (slotCercano) {
+            const ocupado = this.electrodoObjetos.some(e => e !== circulo && e.slotAsignado === slotCercano.slotIndex);
+            if (!ocupado) {
+                circulo.x = slotCercano.x;
+                circulo.y = slotCercano.y;
+                circulo.textoVinculado.x = slotCercano.x;
+                circulo.textoVinculado.y = slotCercano.y;
+                if (circulo.slotAsignado !== undefined) this.electrodosColocados[circulo.slotAsignado] = null;
+                circulo.slotAsignado = slotCercano.slotIndex;
+                this.electrodosColocados[slotCercano.slotIndex] = circulo.electrodoIndex;
+                if (this.electrodosColocados.every(e => e !== null)) this.verificarPuzzle1();
+                return;
+            }
+        }
+        circulo.x = circulo.posOriginal.x;
+        circulo.y = circulo.posOriginal.y;
+        circulo.textoVinculado.x = circulo.posOriginal.x;
+        circulo.textoVinculado.y = circulo.posOriginal.y;
+        if (circulo.slotAsignado !== undefined) {
+            this.electrodosColocados[circulo.slotAsignado] = null;
+            circulo.slotAsignado = undefined;
+        }
+    }
+
+    verificarPuzzle1() {
+        const ordenCorrecto = this.electrodosColocados.every((idx, pos) => idx === ORDEN_ELECTRODOS[pos]);
+        if (ordenCorrecto) {
+            marcarResuelto(2, 1);
+            this.reproducirAcierto();
+            this.mensaje.setText(t('capitulo2.puzzle1_correct')).setColor('#66ff66');
+            this.time.delayedCall(1800, () => this.irAPuzzle2());
+        } else {
+            this.reproducirError();
+            this.mensaje.setText(t('capitulo2.puzzle1_wrong')).setColor('#ff6666');
+            if (navigator.vibrate) navigator.vibrate(200);
+            this.time.delayedCall(800, () => {
+                this.electrodoObjetos.forEach(e => {
+                    e.x = e.posOriginal.x; e.y = e.posOriginal.y;
+                    e.textoVinculado.x = e.posOriginal.x; e.textoVinculado.y = e.posOriginal.y;
+                    e.slotAsignado = undefined;
+                });
+                this.electrodosColocados = [null, null, null, null];
+                this.mensaje.setText(t('capitulo2.puzzle1_eugenia_hint')).setColor('#c0a060');
+            });
+        }
+    }
+
+    // ==========================================
+    // PUZLE 2
+    // ==========================================
+    irAPuzzle2() {
+        localStorage.setItem('tc2_puzzle', '2');
+        this.mostrarPuzzle2();
+    }
+
+    mostrarPuzzle2() {
+        this.crearFondo();
+        this.mostrarTitulo(true);
+        this.palabrasColocadas = [null, null, null, null, null];
+
+        const cx = GAME_WIDTH / 2;
+        this.add.rectangle(cx, 100, 700, 40, 0x000000, 0.7);
+        this.add.text(cx, 100, t('capitulo2.puzzle2_title'), {
+            fontSize: '24px', color: '#e0d8c8', fontFamily: 'Courier New', fontStyle: 'bold',
+            stroke: '#000000', strokeThickness: 3
+        }).setOrigin(0.5);
+
+        if (this.rol === 'eugenia') this.crearVistaEugeniaPuzzle2();
+        else this.crearVistaMateoPuzzle2();
+    }
+
+    crearVistaEugeniaPuzzle2() {
+        const cx = GAME_WIDTH / 2;
+        this.add.image(cx, 280, getImg('transcripcion')).setDisplaySize(800, 280);
+
+        if (estaResuelto(2, 2)) {
+            this.mostrarPuzzleResueltoOverlay(() => this.irAPuzzle3());
+            return;
+        }
+
+        this.add.text(cx, 150, t('capitulo2.puzzle2_eugenia_hint'), {
+            fontSize: '18px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic',
+            stroke: '#000000', strokeThickness: 3
+        }).setOrigin(0.5);
+
+        const huecosY = 420;
+        const startX = cx - 240;
+        const spacing = 120;
+        this.slotsPalabras = [];
+        for (let i = 0; i < 5; i++) {
+            const x = startX + i * spacing;
+            const slot = this.add.rectangle(x, huecosY, 110, 50, 0x000000, 0.7).setStrokeStyle(3, 0xc0a060);
+            slot.slotIndex = i;
+            this.slotsPalabras.push(slot);
+        }
+
+        const todasLasPalabras = [...PALABRAS_PUZLE2.correctas, ...PALABRAS_PUZLE2.distractores];
+        const mezcladas = Phaser.Utils.Array.Shuffle([...todasLasPalabras]);
+
+        this.palabrasObjetos = [];
+        const bancoStartX = cx - 400;
+        const bancoY = 580;
+        const bancoSpacing = 160;
+
+        mezcladas.forEach((palabra, i) => {
+            const col = i % 5;
+            const fila = Math.floor(i / 5);
+            const x = bancoStartX + col * bancoSpacing;
+            const y = bancoY + fila * 60;
+            const caja = this.add.rectangle(x, y, 140, 45, 0x333333, 0.9)
+                .setStrokeStyle(2, 0xc0a060).setInteractive({ draggable: true, useHandCursor: true });
+            const texto = this.add.text(x, y, palabra, {
+                fontSize: '18px', color: '#ffffff', fontFamily: 'Courier New',
+                stroke: '#000000', strokeThickness: 2
+            }).setOrigin(0.5);
+            caja.palabra = palabra;
+            caja.textoVinculado = texto;
+            caja.posOriginal = { x: x, y: y };
+            this.palabrasObjetos.push(caja);
+            this.input.setDraggable(caja);
+            caja.on('drag', (pointer, dragX, dragY) => {
+                caja.x = dragX; caja.y = dragY;
+                texto.x = dragX; texto.y = dragY;
+            });
+            caja.on('dragend', () => this.intentarColocarPalabra(caja));
+        });
+    }
+
+    crearVistaMateoPuzzle2() {
+        const cx = GAME_WIDTH / 2;
+        this.add.image(cx, 320, 'cinta_audio').setDisplaySize(600, 360);
+
+        this.add.rectangle(cx, 120, 800, 40, 0x000000, 0.7);
+        this.add.text(cx, 120, t('capitulo2.puzzle2_mateo_hint'), {
+            fontSize: '18px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic',
+            stroke: '#000000', strokeThickness: 3
+        }).setOrigin(0.5);
+
+        this.add.rectangle(cx, 560, 900, 130, 0x000000, 0.88).setStrokeStyle(2, 0xc0a060);
+        this.add.text(cx, 510, '🔊 Palabras que se oyen en la cinta:', {
+            fontSize: '18px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic'
+        }).setOrigin(0.5);
+        this.add.text(cx, 560, PALABRAS_PUZLE2.correctas.join('   •   '), {
+            fontSize: '22px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold',
+            wordWrap: { width: 850 }, align: 'center',
+            stroke: '#000000', strokeThickness: 3
+        }).setOrigin(0.5);
+
+        const continueBtn = this.add.rectangle(GAME_WIDTH - 140, GAME_HEIGHT - 60, 220, 60, 0x2a6a2a, 0.9)
+            .setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
+        this.add.text(GAME_WIDTH - 140, GAME_HEIGHT - 60, t('capitulo1.continuar'), {
+            fontSize: '20px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold'
+        }).setOrigin(0.5);
+        continueBtn.on('pointerup', () => this.irAPuzzle3());
+    }
+
+    intentarColocarPalabra(caja) {
+        let slotCercano = null;
+        let distanciaMin = 100;
+        this.slotsPalabras.forEach(slot => {
+            const dist = Phaser.Math.Distance.Between(caja.x, caja.y, slot.x, slot.y);
+            if (dist < distanciaMin) { distanciaMin = dist; slotCercano = slot; }
+        });
+        if (slotCercano) {
+            const ocupado = this.palabrasObjetos.some(p => p !== caja && p.slotAsignado === slotCercano.slotIndex);
+            if (!ocupado) {
+                caja.x = slotCercano.x; caja.y = slotCercano.y;
+                caja.textoVinculado.x = slotCercano.x; caja.textoVinculado.y = slotCercano.y;
+                if (caja.slotAsignado !== undefined) this.palabrasColocadas[caja.slotAsignado] = null;
+                caja.slotAsignado = slotCercano.slotIndex;
+                this.palabrasColocadas[slotCercano.slotIndex] = caja.palabra;
+                if (this.palabrasColocadas.every(p => p !== null)) this.verificarPuzzle2();
+                return;
+            }
+        }
+        caja.x = caja.posOriginal.x; caja.y = caja.posOriginal.y;
+        caja.textoVinculado.x = caja.posOriginal.x; caja.textoVinculado.y = caja.posOriginal.y;
+        if (caja.slotAsignado !== undefined) {
+            this.palabrasColocadas[caja.slotAsignado] = null;
+            caja.slotAsignado = undefined;
+        }
+    }
+
+    verificarPuzzle2() {
+        const correcto = this.palabrasColocadas.every((palabra, pos) => palabra === PALABRAS_PUZLE2.correctas[pos]);
+        if (correcto) {
+            marcarResuelto(2, 2);
+            this.reproducirAcierto();
+            this.mostrarMensajeGlobal(t('capitulo2.puzzle2_correct'), '#66ff66');
+            this.time.delayedCall(800, () => {
+                const cx = GAME_WIDTH / 2;
+                const overlay = this.add.rectangle(cx, 360, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.95).setDepth(50);
+                const img = this.add.image(cx, 340, getImg('transcripcion_completa')).setDisplaySize(900, 500).setDepth(51);
+                const ok = this.add.text(cx, GAME_HEIGHT - 60, '✓ Mensaje descifrado', {
+                    fontSize: '28px', color: '#66ff66', fontFamily: 'Courier New', fontStyle: 'bold',
+                    stroke: '#000000', strokeThickness: 4
+                }).setOrigin(0.5).setDepth(52);
+                this.time.delayedCall(2800, () => {
+                    overlay.destroy(); img.destroy(); ok.destroy();
+                    this.irAPuzzle3();
+                });
+            });
+        } else {
+            this.reproducirError();
+            this.mostrarMensajeGlobal(t('capitulo2.puzzle2_wrong'), '#ff6666');
+            if (navigator.vibrate) navigator.vibrate(200);
+            this.time.delayedCall(800, () => {
+                this.palabrasObjetos.forEach(p => {
+                    p.x = p.posOriginal.x; p.y = p.posOriginal.y;
+                    p.textoVinculado.x = p.posOriginal.x; p.textoVinculado.y = p.posOriginal.y;
+                    p.slotAsignado = undefined;
+                });
+                this.palabrasColocadas = [null, null, null, null, null];
+            });
+        }
+    }
+
+    // ==========================================
+    // PUZLE 3
+    // ==========================================
+    irAPuzzle3() {
+        localStorage.setItem('tc2_puzzle', '3');
+        this.mostrarPuzzle3();
+    }
+
+    mostrarPuzzle3() {
+        this.crearFondo();
+        this.mostrarTitulo(true);
+        this.fragmentosColocados = [null, null, null, null, null];
+
+        const cx = GAME_WIDTH / 2;
+        this.add.rectangle(cx, 100, 700, 40, 0x000000, 0.7);
+        this.add.text(cx, 100, t('capitulo2.puzzle3_title'), {
+            fontSize: '24px', color: '#e0d8c8', fontFamily: 'Courier New', fontStyle: 'bold',
+            stroke: '#000000', strokeThickness: 3
+        }).setOrigin(0.5);
+
+        if (this.rol === 'eugenia') this.crearVistaEugeniaPuzzle3();
+        else this.crearVistaMateoPuzzle3();
+    }
+
+    crearVistaEugeniaPuzzle3() {
+        const cx = GAME_WIDTH / 2;
+        this.add.image(cx, 320, getImg('espejo_eugenia')).setDisplaySize(650, 400);
+
+        if (estaResuelto(2, 3)) {
+            this.mostrarPuzzleResueltoOverlay(() => this.irAPuzzle4());
+            return;
+        }
+
+        this.add.rectangle(cx, 130, 800, 40, 0x000000, 0.7);
+        this.add.text(cx, 130, t('capitulo2.puzzle3_eugenia_hint'), {
+            fontSize: '18px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic',
+            stroke: '#000000', strokeThickness: 3
+        }).setOrigin(0.5);
+
+        const startY = 590;
+        const startX = 200;
+        const spacingX = 220;
+        this.slotsFragmentos = [];
+        for (let i = 0; i < 5; i++) {
+            const x = startX + i * spacingX;
+            const slot = this.add.rectangle(x, startY, 190, 55, 0x000000, 0.7).setStrokeStyle(3, 0xc0a060);
+            slot.slotIndex = i;
+            this.slotsFragmentos.push(slot);
+            this.add.text(x - 100, startY, (i + 1).toString(), {
+                fontSize: '22px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'bold',
+                stroke: '#000000', strokeThickness: 3
+            }).setOrigin(0.5);
+        }
+
+        const ordenDesordenado = [2, 0, 4, 1, 3];
+        this.fragmentosObjetos = [];
+        ordenDesordenado.forEach((idx, i) => {
+            const x = 200 + i * 220;
+            const y = 500;
+            const caja = this.add.rectangle(x, y, 200, 55, 0x333333, 0.95)
+                .setStrokeStyle(2, 0xc0a060).setInteractive({ draggable: true, useHandCursor: true });
+            const texto = this.add.text(x, y, FRAGMENTOS_PUZLE3[idx], {
+                fontSize: '15px', color: '#ffffff', fontFamily: 'Courier New',
+                wordWrap: { width: 190 }, align: 'center',
+                stroke: '#000000', strokeThickness: 2
+            }).setOrigin(0.5);
+            caja.fragmentoIndex = idx;
+            caja.textoVinculado = texto;
+            caja.posOriginal = { x: x, y: y };
+            this.fragmentosObjetos.push(caja);
+            this.input.setDraggable(caja);
+            caja.on('drag', (pointer, dragX, dragY) => {
+                caja.x = dragX; caja.y = dragY;
+                texto.x = dragX; texto.y = dragY;
+            });
+            caja.on('dragend', () => this.intentarColocarFragmento(caja));
+        });
+    }
+
+    crearVistaMateoPuzzle3() {
+        const cx = GAME_WIDTH / 2;
+        this.add.image(cx, 300, getImg('espejo_roto')).setDisplaySize(550, 380);
+
+        this.add.rectangle(cx, 110, 800, 40, 0x000000, 0.7);
+        this.add.text(cx, 110, t('capitulo2.puzzle3_mateo_hint'), {
+            fontSize: '18px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic',
+            stroke: '#000000', strokeThickness: 3
+        }).setOrigin(0.5);
+
+        this.add.rectangle(cx, 560, 900, 200, 0x000000, 0.88).setStrokeStyle(2, 0xc0a060);
+        this.add.text(cx, 480, '📜 Números grabados detrás de cada fragmento:', {
+            fontSize: '18px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic'
+        }).setOrigin(0.5);
+
+        const mapeo = [
+            { num: 'I',   texto: FRAGMENTOS_PUZLE3[0] },
+            { num: 'II',  texto: FRAGMENTOS_PUZLE3[1] },
+            { num: 'III', texto: FRAGMENTOS_PUZLE3[2] },
+            { num: 'IV',  texto: FRAGMENTOS_PUZLE3[3] },
+            { num: 'V',   texto: FRAGMENTOS_PUZLE3[4] }
+        ];
+        mapeo.forEach((item, i) => {
+            const x = cx - 380 + i * 155;
+            this.add.text(x, 530, item.num, {
+                fontSize: '22px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'bold',
+                stroke: '#000000', strokeThickness: 3
+            }).setOrigin(0.5);
+            this.add.text(x, 570, item.texto, {
+                fontSize: '11px', color: '#ffffff', fontFamily: 'Courier New',
+                wordWrap: { width: 140 }, align: 'center',
+                stroke: '#000000', strokeThickness: 2
+            }).setOrigin(0.5);
+        });
+
+        const continueBtn = this.add.rectangle(GAME_WIDTH - 140, GAME_HEIGHT - 60, 220, 60, 0x2a6a2a, 0.9)
+            .setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
+        this.add.text(GAME_WIDTH - 140, GAME_HEIGHT - 60, t('capitulo1.continuar'), {
+            fontSize: '20px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold'
+        }).setOrigin(0.5);
+        continueBtn.on('pointerup', () => this.irAPuzzle4());
+    }
+
+    intentarColocarFragmento(caja) {
+        let slotCercano = null;
+        let distanciaMin = 130;
+        this.slotsFragmentos.forEach(slot => {
+            const dist = Phaser.Math.Distance.Between(caja.x, caja.y, slot.x, slot.y);
+            if (dist < distanciaMin) { distanciaMin = dist; slotCercano = slot; }
+        });
+        if (slotCercano) {
+            const ocupado = this.fragmentosObjetos.some(f => f !== caja && f.slotAsignado === slotCercano.slotIndex);
+            if (!ocupado) {
+                caja.x = slotCercano.x; caja.y = slotCercano.y;
+                caja.textoVinculado.x = slotCercano.x; caja.textoVinculado.y = slotCercano.y;
+                if (caja.slotAsignado !== undefined) this.fragmentosColocados[caja.slotAsignado] = null;
+                caja.slotAsignado = slotCercano.slotIndex;
+                this.fragmentosColocados[slotCercano.slotIndex] = caja.fragmentoIndex;
+                if (this.fragmentosColocados.every(f => f !== null)) this.verificarPuzzle3();
+                return;
+            }
+        }
+        caja.x = caja.posOriginal.x; caja.y = caja.posOriginal.y;
+        caja.textoVinculado.x = caja.posOriginal.x; caja.textoVinculado.y = caja.posOriginal.y;
+        if (caja.slotAsignado !== undefined) {
+            this.fragmentosColocados[caja.slotAsignado] = null;
+            caja.slotAsignado = undefined;
+        }
+    }
+
+    verificarPuzzle3() {
+        const correcto = this.fragmentosColocados.every((idx, pos) => idx === pos);
+        if (correcto) {
+            marcarResuelto(2, 3);
+            this.reproducirAcierto();
+            this.mostrarMensajeGlobal(t('capitulo2.puzzle3_correct'), '#66ff66');
+            this.time.delayedCall(1800, () => this.irAPuzzle4());
+        } else {
+            this.reproducirError();
+            this.mostrarMensajeGlobal(t('capitulo2.puzzle3_wrong'), '#ff6666');
+            if (navigator.vibrate) navigator.vibrate(200);
+            this.time.delayedCall(800, () => {
+                this.fragmentosObjetos.forEach(f => {
+                    f.x = f.posOriginal.x; f.y = f.posOriginal.y;
+                    f.textoVinculado.x = f.posOriginal.x; f.textoVinculado.y = f.posOriginal.y;
+                    f.slotAsignado = undefined;
+                });
+                this.fragmentosColocados = [null, null, null, null, null];
+            });
+        }
+    }
+
+    // ==========================================
+    // PUZLE 4
+    // ==========================================
+    irAPuzzle4() {
+        localStorage.setItem('tc2_puzzle', '4');
+        this.mostrarPuzzle4();
+    }
+
+    mostrarPuzzle4() {
+        this.crearFondo();
+        this.mostrarTitulo(true);
+        this.paginasColocadas = [null, null, null, null, null];
+
+        const cx = GAME_WIDTH / 2;
+        this.add.rectangle(cx, 100, 700, 40, 0x000000, 0.7);
+        this.add.text(cx, 100, t('capitulo2.puzzle4_title'), {
+            fontSize: '24px', color: '#e0d8c8', fontFamily: 'Courier New', fontStyle: 'bold',
+            stroke: '#000000', strokeThickness: 3
+        }).setOrigin(0.5);
+
+        if (this.rol === 'eugenia') this.crearVistaEugeniaPuzzle4();
+        else this.crearVistaMateoPuzzle4();
+    }
+
+    crearVistaEugeniaPuzzle4() {
+        const cx = GAME_WIDTH / 2;
+        this.add.rectangle(cx, 130, 800, 40, 0x000000, 0.7);
+        this.add.text(cx, 130, t('capitulo2.puzzle4_eugenia_hint'), {
+            fontSize: '18px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic',
+            stroke: '#000000', strokeThickness: 3
+        }).setOrigin(0.5);
+
+        if (estaResuelto(2, 4)) {
+            this.mostrarPuzzleResueltoOverlay(() => this.irAFinal());
+            return;
+        }
+
+        const startY = 240;
+        const spacingY = 70;
+        this.slotsPaginas = [];
+        for (let i = 0; i < 5; i++) {
+            const y = startY + i * spacingY;
+            const slot = this.add.rectangle(cx, y, 600, 55, 0x000000, 0.6).setStrokeStyle(3, 0xc0a060);
+            slot.slotIndex = i;
+            this.slotsPaginas.push(slot);
+            this.add.text(cx - 290, y, (i + 1).toString(), {
+                fontSize: '22px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'bold'
+            }).setOrigin(0.5);
+        }
+
+        const ordenDesordenado = [3, 1, 4, 0, 2];
+        this.paginasObjetos = [];
+        ordenDesordenado.forEach((idx, i) => {
+            const y = 600;
+            const x = 180 + i * 220;
+            const caja = this.add.rectangle(x, y, 180, 50, 0xd4c4a0, 0.95)
+                .setStrokeStyle(2, 0x8b6b3a).setInteractive({ draggable: true, useHandCursor: true });
+            const texto = this.add.text(x, y, PAGINAS_PUZLE4[idx].palabra, {
+                fontSize: '18px', color: '#1a1a1a', fontFamily: 'Courier New', fontStyle: 'bold'
+            }).setOrigin(0.5);
+            caja.paginaIndex = idx;
+            caja.textoVinculado = texto;
+            caja.posOriginal = { x: x, y: y };
+            this.paginasObjetos.push(caja);
+            this.input.setDraggable(caja);
+            caja.on('drag', (pointer, dragX, dragY) => {
+                caja.x = dragX; caja.y = dragY;
+                texto.x = dragX; texto.y = dragY;
+            });
+            caja.on('dragend', () => this.intentarColocarPagina(caja));
+        });
+    }
+
+    crearVistaMateoPuzzle4() {
+        const cx = GAME_WIDTH / 2;
+        this.add.image(cx, 300, getImg('diario_paginas')).setDisplaySize(800, 420);
+
+        this.add.rectangle(cx, 110, 800, 40, 0x000000, 0.7);
+        this.add.text(cx, 110, t('capitulo2.puzzle4_mateo_hint'), {
+            fontSize: '18px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic',
+            stroke: '#000000', strokeThickness: 3
+        }).setOrigin(0.5);
+
+        this.add.rectangle(cx, 590, 900, 180, 0x000000, 0.88).setStrokeStyle(2, 0xc0a060);
+        this.add.text(cx, 510, '📅 Fechas escritas en cada página:', {
+            fontSize: '18px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic'
+        }).setOrigin(0.5);
+
+        PAGINAS_PUZLE4.forEach((p, i) => {
+            const col = i % 5;
+            const x = cx - 360 + col * 180;
+            this.add.text(x, 560, p.fecha, {
+                fontSize: '18px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold',
+                stroke: '#000000', strokeThickness: 3
+            }).setOrigin(0.5);
+        });
+
+        const continueBtn = this.add.rectangle(GAME_WIDTH - 140, GAME_HEIGHT - 60, 220, 60, 0x2a6a2a, 0.9)
+            .setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
+        this.add.text(GAME_WIDTH - 140, GAME_HEIGHT - 60, t('capitulo1.continuar'), {
+            fontSize: '20px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold'
+        }).setOrigin(0.5);
+        continueBtn.on('pointerup', () => this.irAFinal());
+    }
+
+    intentarColocarPagina(caja) {
+        let slotCercano = null;
+        let distanciaMin = 130;
+        this.slotsPaginas.forEach(slot => {
+            const dist = Phaser.Math.Distance.Between(caja.x, caja.y, slot.x, slot.y);
+            if (dist < distanciaMin) { distanciaMin = dist; slotCercano = slot; }
+        });
+        if (slotCercano) {
+            const ocupado = this.paginasObjetos.some(p => p !== caja && p.slotAsignado === slotCercano.slotIndex);
+            if (!ocupado) {
+                caja.x = slotCercano.x; caja.y = slotCercano.y;
+                caja.textoVinculado.x = slotCercano.x; caja.textoVinculado.y = slotCercano.y;
+                if (caja.slotAsignado !== undefined) this.paginasColocadas[caja.slotAsignado] = null;
+                caja.slotAsignado = slotCercano.slotIndex;
+                this.paginasColocadas[slotCercano.slotIndex] = caja.paginaIndex;
+                if (this.paginasColocadas.every(p => p !== null)) this.verificarPuzzle4();
+                return;
+            }
+        }
+        caja.x = caja.posOriginal.x; caja.y = caja.posOriginal.y;
+        caja.textoVinculado.x = caja.posOriginal.x; caja.textoVinculado.y = caja.posOriginal.y;
+        if (caja.slotAsignado !== undefined) {
+            this.paginasColocadas[caja.slotAsignado] = null;
+            caja.slotAsignado = undefined;
+        }
+    }
+
+    verificarPuzzle4() {
+        const correcto = this.paginasColocadas.every((idx, pos) => idx === pos);
+        if (correcto) {
+            marcarResuelto(2, 4);
+            this.reproducirAcierto();
+            this.mostrarMensajeGlobal(t('capitulo2.puzzle4_correct'), '#66ff66');
+            this.time.delayedCall(1800, () => this.irAFinal());
+        } else {
+            this.reproducirError();
+            this.mostrarMensajeGlobal(t('capitulo2.puzzle4_wrong'), '#ff6666');
+            if (navigator.vibrate) navigator.vibrate(200);
+            this.time.delayedCall(800, () => {
+                this.paginasObjetos.forEach(p => {
+                    p.x = p.posOriginal.x; p.y = p.posOriginal.y;
+                    p.textoVinculado.x = p.posOriginal.x; p.textoVinculado.y = p.posOriginal.y;
+                    p.slotAsignado = undefined;
+                });
+                this.paginasColocadas = [null, null, null, null, null];
+            });
+        }
+    }
+
+    // ==========================================
+    // HELPERS
+    // ==========================================
+    mostrarMensajeGlobal(texto, color) {
+        const cx = GAME_WIDTH / 2;
+        if (this.mensajeGlobal) this.mensajeGlobal.destroy();
+        this.mensajeGlobal = this.add.text(cx, GAME_HEIGHT - 60, texto, {
+            fontSize: '22px', color: color, fontFamily: 'Courier New', fontStyle: 'bold',
+            stroke: '#000000', strokeThickness: 4
+        }).setOrigin(0.5);
+    }
+
+    irAPuzzleAnterior() {
+        const actual = parseInt(localStorage.getItem('tc2_puzzle') || '1');
+        if (actual === 5) { localStorage.setItem('tc2_puzzle', '4'); this.mostrarPuzzle4(); }
+        else if (actual === 4) { localStorage.setItem('tc2_puzzle', '3'); this.mostrarPuzzle3(); }
+        else if (actual === 3) { localStorage.setItem('tc2_puzzle', '2'); this.mostrarPuzzle2(); }
+        else if (actual === 2) { localStorage.setItem('tc2_puzzle', '1'); this.mostrarPuzzle1(); }
+        else if (actual === 1) {
+            // Volver al Capítulo 1 en su última vista guardada
+            this.detenerAmbiente();
+            this.scene.start('Capitulo1');
+        }
+    }
+
+    // ==========================================
+    // FINAL
+    // ==========================================
+    irAFinal() {
+        localStorage.setItem('tc2_puzzle', '5');
+        this.detenerAmbiente();
+        if (this.cache.audio.exists('revelacion_cap2')) {
+            this.revelacionMusica = this.sound.add('revelacion_cap2', { loop: true, volume: getVolumen() * 0.5 });
+            this.revelacionMusica.play();
+        }
+        this.mostrarFinal();
+    }
+
+    mostrarFinal() {
+        this.crearFondo();
+        this.mostrarTitulo(true);
+
+        const cx = GAME_WIDTH / 2;
+        this.add.text(cx, 130, t('capitulo2.chapter_end_title'), {
+            fontSize: '40px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'bold',
+            stroke: '#000000', strokeThickness: 6
+        }).setOrigin(0.5);
+
+        const miMitad = (this.rol === 'eugenia') ? '81--' : '--56';
+        const etiqueta = (this.rol === 'eugenia')
+            ? t('capitulo2.chapter_end_eugenia') : t('capitulo2.chapter_end_mateo');
+
+        this.add.text(cx, 210, etiqueta, {
+            fontSize: '22px', color: '#aaaaaa', fontFamily: 'Courier New', fontStyle: 'italic'
+        }).setOrigin(0.5);
+        this.add.text(cx, 270, miMitad, {
+            fontSize: '70px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold',
+            stroke: '#000000', strokeThickness: 6
+        }).setOrigin(0.5);
+
+        if (estaResuelto(2, 5)) {
+            this.add.text(cx, 400, t('common.puzzle_resuelto'), {
+                fontSize: '28px', color: '#66ff66', fontFamily: 'Courier New', fontStyle: 'bold',
+                stroke: '#000000', strokeThickness: 4
+            }).setOrigin(0.5);
+            const irBtn = this.add.rectangle(cx, 510, 560, 70, 0x2a6a2a, 0.95)
+                .setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
+            this.add.text(cx, 510, '→ ' + t('chapters.chapter3') + ' ' + t('chapters.coming_soon'), {
+                fontSize: '22px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold'
+            }).setOrigin(0.5);
+            return;
+        }
+
+        this.add.text(cx, 340, t('capitulo2.chapter_end_instruction'), {
+            fontSize: '20px', color: '#cccccc', fontFamily: 'Courier New',
+            wordWrap: { width: 900 }, align: 'center',
+            stroke: '#000000', strokeThickness: 3
+        }).setOrigin(0.5);
+
+        this.codigoIngresado = ['', '', '', ''];
+        const startX = 470;
+        const spacing = 110;
+        this.codigoTexts = [];
+
+        for (let i = 0; i < 4; i++) {
+            const x = startX + i * spacing;
+            this.add.rectangle(x, 440, 80, 90, 0x1a1a1a, 0.95).setStrokeStyle(3, 0xc0a060);
+            const txt = this.add.text(x, 440, '', {
+                fontSize: '48px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold'
+            }).setOrigin(0.5);
+            this.codigoTexts.push(txt);
+            const index = i;
+            const upBtn = this.add.text(x, 370, '▲', {
+                fontSize: '32px', color: '#cccccc', fontFamily: 'Courier New'
+            }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+            const downBtn = this.add.text(x, 510, '▼', {
+                fontSize: '32px', color: '#cccccc', fontFamily: 'Courier New'
+            }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+            upBtn.on('pointerup', () => {
+                this.codigoIngresado[index] = ((parseInt(this.codigoIngresado[index]) || 0) + 1) % 10;
+                this.codigoTexts[index].setText(this.codigoIngresado[index].toString());
+            });
+            downBtn.on('pointerup', () => {
+                this.codigoIngresado[index] = ((parseInt(this.codigoIngresado[index]) || 0) + 9) % 10;
+                this.codigoTexts[index].setText(this.codigoIngresado[index].toString());
+            });
+        }
+
+        const confirmBtn = this.add.rectangle(cx, 600, 500, 70, 0x2a6a2a, 0.9)
+            .setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
+        this.add.text(cx, 600, t('capitulo2.chapter_code_confirm'), {
+            fontSize: '24px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold'
+        }).setOrigin(0.5);
+
+        this.mensajeFinal = this.add.text(cx, 680, '', {
+            fontSize: '24px', color: '#ff6666', fontFamily: 'Courier New', fontStyle: 'bold',
+            stroke: '#000000', strokeThickness: 4
+        }).setOrigin(0.5);
+
+        confirmBtn.on('pointerup', () => this.verificarCodigoCapitulo());
+    }
+
+    verificarCodigoCapitulo() {
+        const codigo = this.codigoIngresado.join('');
+        if (codigo === CODIGO_CAPITULO2) {
+            marcarResuelto(2, 5);
+            this.mensajeFinal.setText(t('capitulo2.chapter_code_ok')).setColor('#66ff66');
+            this.reproducirAcierto();
+            localStorage.setItem('tc_capitulo', '3');
+            localStorage.setItem('tc2_puzzle', '1');
+            this.time.delayedCall(2500, () => {
+                this.mensajeFinal.setText('→ ' + t('chapters.chapter3') + ' ' + t('chapters.coming_soon')).setColor('#ffffff');
+            });
+        } else {
+            this.mensajeFinal.setText(t('capitulo2.chapter_code_bad')).setColor('#ff6666');
+            this.reproducirError();
+            if (navigator.vibrate) navigator.vibrate(200);
+        }
+    }
+}

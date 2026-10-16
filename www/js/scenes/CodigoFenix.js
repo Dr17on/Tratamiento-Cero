@@ -17,52 +17,73 @@ class CodigoFenix extends Phaser.Scene {
             .setScale(0.8);
 
         this.texto = this.add.text(cx, cy + 220, 'CÓDIGO FÉNIX', {
-            fontSize: '48px', color: '#c0a060',
-            fontFamily: 'Courier New', fontStyle: 'bold',
-            stroke: '#000000', strokeThickness: 6
+            fontSize: '48px',
+            color: '#c0a060',
+            fontFamily: 'Courier New',
+            fontStyle: 'bold',
+            stroke: '#000000',
+            strokeThickness: 6
         }).setOrigin(0.5).setAlpha(0);
 
         this.tagline = this.add.text(cx, cy + 275, 'Estudio de juegos indie', {
-            fontSize: '20px', color: '#888888',
-            fontFamily: 'Courier New', fontStyle: 'italic'
+            fontSize: '20px',
+            color: '#888888',
+            fontFamily: 'Courier New',
+            fontStyle: 'italic'
         }).setOrigin(0.5).setAlpha(0);
 
         this.tapText = this.add.text(cx, GAME_HEIGHT - 80, 'Toca para comenzar', {
-            fontSize: '24px', color: '#888888', fontFamily: 'Courier New'
+            fontSize: '24px',
+            color: '#888888',
+            fontFamily: 'Courier New'
         }).setOrigin(0.5);
 
-        this.tweens.add({ targets: this.logo, alpha: 1, scale: 1, duration: 1200, ease: 'Power2' });
-        this.tweens.add({ targets: [this.texto, this.tagline], alpha: 1, duration: 1000, delay: 900 });
-        this.tweens.add({ targets: this.tapText, alpha: 0.3, duration: 900, yoyo: true, repeat: -1 });
+        this.tweens.add({
+            targets: this.logo,
+            alpha: 1,
+            scale: 1,
+            duration: 1200,
+            ease: 'Power2'
+        });
 
-        this.input.once('pointerdown', () => this.iniciarAudio());
+        this.tweens.add({
+            targets: [this.texto, this.tagline],
+            alpha: 1,
+            duration: 1000,
+            delay: 900
+        });
+
+        this.tweens.add({
+            targets: this.tapText,
+            alpha: 0.3,
+            duration: 900,
+            yoyo: true,
+            repeat: -1
+        });
+
+        this.input.once('pointerup', () => {
+            this.iniciarAudio();
+        });
     }
 
     iniciarAudio() {
         if (this.audioIniciado) return;
         this.audioIniciado = true;
 
-        // ⚠️ FORZAR RESUME DEL AUDIOCONTEXT
         if (this.sound.context && this.sound.context.state === 'suspended') {
-            this.sound.context.resume().then(() => {
-                console.log('🔊 AudioContext reanudado en CodigoFenix');
-                this.reproducirMusica();
-            });
-        } else {
-            this.reproducirMusica();
+            this.sound.context.resume();
         }
 
-        this.tapText.destroy();
-        this.time.delayedCall(4000, () => this.terminarIntro());
-        this.input.once('pointerdown', () => this.terminarIntro());
-    }
-
-    reproducirMusica() {
         if (this.cache.audio.exists('codigo_fenix')) {
             this.musica = this.sound.add('codigo_fenix', { volume: getVolumen() * 0.6 });
             this.musica.play();
-            console.log('▶️ Reproduciendo codigo_fenix');
         }
+
+        this.tapText.destroy();
+
+        this.time.delayedCall(4000, () => this.terminarIntro());
+
+        this.input.once('pointerup', () => this.terminarIntro());
     }
 
     terminarIntro() {
@@ -70,7 +91,11 @@ class CodigoFenix extends Phaser.Scene {
         this.yaTermino = true;
 
         if (this.musica) {
-            this.tweens.add({ targets: this.musica, volume: 0, duration: 700 });
+            this.tweens.add({
+                targets: this.musica,
+                volume: 0,
+                duration: 700
+            });
             this.time.delayedCall(750, () => { if (this.musica) this.musica.stop(); });
         }
 

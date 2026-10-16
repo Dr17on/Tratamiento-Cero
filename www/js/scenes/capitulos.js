@@ -30,14 +30,13 @@ class Capitulos extends Phaser.Scene {
             this.crearTarjetaCapitulo(cx, startY + i * spacing, cap);
         });
 
-        // Botón volver
-        const backBtn = this.add.text(cx, GAME_HEIGHT - 40, '← ' + t('common.back'), {
+        const backBtn = this.add.text(cx, GAME_HEIGHT - 60, '← ' + t('common.back'), {
             fontSize: '24px', color: '#ffffff', fontFamily: 'Courier New',
-            backgroundColor: '#333333',
+            backgroundColor: '#444444',
             padding: { x: 16, y: 8 }
         }).setOrigin(0.5).setInteractive({ useHandCursor: true });
 
-        backBtn.on('pointerdown', () => this.scene.start('Menu'));
+        backBtn.on('pointerup', () => this.scene.start('Menu'));
     }
 
     crearTarjetaCapitulo(x, y, cap) {
@@ -49,25 +48,21 @@ class Capitulos extends Phaser.Scene {
         const card = this.add.rectangle(x, y, 780, 95, color, desbloqueado ? 0.85 : 0.5)
             .setStrokeStyle(3, colorBorde, 1);
 
-        // Número del capítulo
         this.add.text(x - 320, y, cap.n.toString(), {
             fontSize: '56px', color: desbloqueado ? '#ffffff' : '#555555',
             fontFamily: 'Courier New', fontStyle: 'bold'
         }).setOrigin(0.5);
 
-        // Título
         this.add.text(x - 250, y - 18, cap.titulo, {
             fontSize: '28px', color: desbloqueado ? '#ffffff' : '#666666',
             fontFamily: 'Courier New', fontStyle: 'bold'
         }).setOrigin(0, 0.5);
 
-        // Subtítulo
         this.add.text(x - 250, y + 18, cap.sub, {
             fontSize: '20px', color: desbloqueado ? '#a0a0a0' : '#555555',
             fontFamily: 'Courier New', fontStyle: 'italic'
         }).setOrigin(0, 0.5);
 
-        // Estado
         if (!desbloqueado) {
             this.add.text(x + 300, y, '🔒 ' + t('chapters.locked'), {
                 fontSize: '18px', color: '#666666',
@@ -85,12 +80,11 @@ class Capitulos extends Phaser.Scene {
             }).setOrigin(1, 0.5);
         }
 
-        // Solo interactivo si está desbloqueado
         if (desbloqueado) {
             card.setInteractive({ useHandCursor: true });
             card.on('pointerover', () => card.setFillStyle(color, 1));
             card.on('pointerout', () => card.setFillStyle(color, 0.85));
-            card.on('pointerdown', () => this.iniciarCapitulo(cap.n));
+            card.on('pointerup', () => this.iniciarCapitulo(cap.n));
         }
     }
 
@@ -107,20 +101,12 @@ class Capitulos extends Phaser.Scene {
 
     iniciarCapitulo(n) {
         if (n === 1) {
-            // Resumir donde se quedó si es el mismo capítulo
-            const capActual = parseInt(localStorage.getItem('tc_capitulo_actual') || '1');
-            if (capActual !== 1) {
-                // Entrando a capítulo 1 desde otro, empezar de nuevo
-                localStorage.setItem('tc_capitulo_actual', '1');
-                localStorage.setItem('tc_puzzle', '1');
-            }
-            // Si no había puzzle guardado, empezar en 1
-            if (!localStorage.getItem('tc_puzzle')) {
-                localStorage.setItem('tc_puzzle', '1');
-            }
+            if (!localStorage.getItem('tc_puzzle')) localStorage.setItem('tc_puzzle', '1');
             this.scene.start('Capitulo1');
+        } else if (n === 2) {
+            if (!localStorage.getItem('tc2_puzzle')) localStorage.setItem('tc2_puzzle', '1');
+            this.scene.start('Capitulo2');
         } else {
-            // Capítulos 2, 3, 4 aún no están implementados
             const cx = GAME_WIDTH / 2;
             const cy = GAME_HEIGHT / 2;
             const aviso = this.add.text(cx, cy, t('chapters.coming_soon'), {
@@ -130,7 +116,6 @@ class Capitulos extends Phaser.Scene {
                 padding: { x: 30, y: 20 },
                 stroke: '#000000', strokeThickness: 4
             }).setOrigin(0.5).setDepth(100);
-
             this.time.delayedCall(2500, () => aviso.destroy());
         }
     }

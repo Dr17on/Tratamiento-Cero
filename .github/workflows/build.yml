@@ -27,6 +27,13 @@ jobs:
       - name: Sync Capacitor
         run: npx cap sync android
 
+      - name: Patch AndroidManifest for Landscape
+        run: |
+          MANIFEST=android/app/src/main/AndroidManifest.xml
+          sed -i 's|<activity|<activity android:screenOrientation="landscape"|g' $MANIFEST
+          echo "--- MANIFEST DESPUÉS DE PARCHEAR ---"
+          cat $MANIFEST
+
       - name: Grant Execute Permission for Gradlew
         run: chmod +x android/gradlew
 

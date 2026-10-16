@@ -69,12 +69,48 @@ const LOCALES = {
             chapter_code_bad: "✗ Código incorrecto",
             continuar: "Continuar →"
         },
+        capitulo2: {
+            title: "Capítulo 2 — Las Voces",
+            puzzle1_title: "El Panel de Electrodos",
+            puzzle1_eugenia_hint: "Arrastra cada electrodo a su ranura en el orden correcto",
+            puzzle1_mateo_hint: "La pared revela el orden: I, II, III, IV",
+            puzzle1_correct: "✓ ¡El panel se activa!",
+            puzzle1_wrong: "✗ El orden no es correcto",
+            puzzle2_title: "La Cinta de Audio",
+            puzzle2_eugenia_hint: "Arrastra las palabras correctas a los huecos",
+            puzzle2_mateo_hint: "Escucha la cinta y dicta las palabras que faltan",
+            puzzle2_frase: "El Paciente Cero no olvidó. Escogió [1]. Y en el [2] entre [3], encontró una [4] que lo [5].",
+            puzzle2_correct: "✓ Transcripción completada",
+            puzzle2_wrong: "✗ Algunas palabras no encajan",
+            puzzle3_title: "El Espejo Roto",
+            puzzle3_eugenia_hint: "Ordena los fragmentos del 1 al 5",
+            puzzle3_mateo_hint: "Cada fragmento tiene un número grabado detrás",
+            puzzle3_correct: "✓ El mensaje está completo",
+            puzzle3_wrong: "✗ El orden está mal",
+            puzzle4_title: "El Diario de la Abuela",
+            puzzle4_eugenia_hint: "Ordena las páginas según las fechas que te dicte Mateo",
+            puzzle4_mateo_hint: "Dicta las fechas de cada página a Eugenia",
+            puzzle4_correct: "✓ Las páginas forman un mensaje",
+            puzzle4_wrong: "✗ El orden de las fechas no es correcto",
+            chapter_end_title: "CAPÍTULO 2 COMPLETADO",
+            chapter_end_eugenia: "Tu mitad del código:",
+            chapter_end_mateo: "Tu mitad del código:",
+            chapter_end_instruction: "Dicta tu mitad a tu compañero e ingresa el código completo:",
+            chapter_code_confirm: "DESBLOQUEAR CAPÍTULO 3",
+            chapter_code_ok: "✓ Capítulo 3 desbloqueado",
+            chapter_code_bad: "✗ Código incorrecto"
+        },
         common: {
             back: "Menú",
             previous: "Anterior",
             next: "Siguiente",
             correct: "Correcto",
-            wrong: "Incorrecto"
+            wrong: "Incorrecto",
+            reiniciar: "🔄 Reiniciar",
+            reiniciar_confirm: "¿Reiniciar todos los puzles de este capítulo?",
+            si: "Sí",
+            no: "No",
+            puzzle_resuelto: "✓ Puzle resuelto"
         }
     },
     en: {
@@ -147,12 +183,48 @@ const LOCALES = {
             chapter_code_bad: "✗ Wrong code",
             continuar: "Continue →"
         },
+        capitulo2: {
+            title: "Chapter 2 — The Voices",
+            puzzle1_title: "The Electrode Panel",
+            puzzle1_eugenia_hint: "Drag each electrode to its slot in the right order",
+            puzzle1_mateo_hint: "The wall reveals the order: I, II, III, IV",
+            puzzle1_correct: "✓ The panel activates!",
+            puzzle1_wrong: "✗ Wrong order",
+            puzzle2_title: "The Audio Tape",
+            puzzle2_eugenia_hint: "Drag the right words into the blanks",
+            puzzle2_mateo_hint: "Listen to the tape and dictate the missing words",
+            puzzle2_frase: "Patient Zero did not forget. He chose to [1]. And in the [2] between [3], he found a [4] that [5] for him.",
+            puzzle2_correct: "✓ Transcript complete",
+            puzzle2_wrong: "✗ Some words don't fit",
+            puzzle3_title: "The Broken Mirror",
+            puzzle3_eugenia_hint: "Order the fragments from 1 to 5",
+            puzzle3_mateo_hint: "Each fragment has a number carved behind it",
+            puzzle3_correct: "✓ The message is complete",
+            puzzle3_wrong: "✗ The order is wrong",
+            puzzle4_title: "Grandmother's Diary",
+            puzzle4_eugenia_hint: "Order the pages by the dates Mateo dictates",
+            puzzle4_mateo_hint: "Dictate the date of each page to Eugenia",
+            puzzle4_correct: "✓ The pages form a message",
+            puzzle4_wrong: "✗ The date order is wrong",
+            chapter_end_title: "CHAPTER 2 COMPLETE",
+            chapter_end_eugenia: "Your half of the code:",
+            chapter_end_mateo: "Your half of the code:",
+            chapter_end_instruction: "Tell your partner your half and enter the full code:",
+            chapter_code_confirm: "UNLOCK CHAPTER 3",
+            chapter_code_ok: "✓ Chapter 3 unlocked",
+            chapter_code_bad: "✗ Wrong code"
+        },
         common: {
             back: "Menu",
             previous: "Previous",
             next: "Next",
             correct: "Correct",
-            wrong: "Wrong"
+            wrong: "Wrong",
+            reiniciar: "🔄 Restart",
+            reiniciar_confirm: "Restart all puzzles in this chapter?",
+            si: "Yes",
+            no: "No",
+            puzzle_resuelto: "✓ Puzzle solved"
         }
     }
 };
@@ -197,4 +269,30 @@ function getVolumen() {
 
 function setVolumen(valor) {
     localStorage.setItem('tc_volumen', valor.toString());
+}
+
+// ==========================================
+// IMÁGENES BILINGÜES
+// ==========================================
+function getImg(key) {
+    return currentLang === 'en' ? key + '_en' : key + '_es';
+}
+
+// ==========================================
+// SISTEMA DE PROGRESO DE PUZLES
+// ==========================================
+function marcarResuelto(cap, puzzle) {
+    localStorage.setItem('tc' + cap + '_p' + puzzle + '_resuelto', 'true');
+}
+
+function estaResuelto(cap, puzzle) {
+    return localStorage.getItem('tc' + cap + '_p' + puzzle + '_resuelto') === 'true';
+}
+
+function reiniciarCapitulo(cap) {
+    const totalPuzzles = (cap === 1) ? 3 : 5;
+    for (let i = 1; i <= totalPuzzles; i++) {
+        localStorage.removeItem('tc' + cap + '_p' + i + '_resuelto');
+    }
+    localStorage.setItem('tc' + cap + '_puzzle', '1');
 }
