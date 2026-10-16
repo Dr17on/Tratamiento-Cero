@@ -1,6 +1,3 @@
-// ==========================================
-// DATOS DEL CAPÍTULO 2
-// ==========================================
 const ELECTRODOS = [
     { nombre: 'Aqua',  color: 0x2a6aaa, simbolo: '💧' },
     { nombre: 'Ignis', color: 0xaa2a2a, simbolo: '🔥' },
@@ -535,7 +532,7 @@ class Capitulo2 extends Phaser.Scene {
             }).setOrigin(0.5);
         }
 
-        const ordenDesordenado = [2, 0, 4, 1, 3];
+        const ordenDesordenado = [1, 4, 2, 0, 3];
         this.fragmentosObjetos = [];
         ordenDesordenado.forEach((idx, i) => {
             const x = 200 + i * 220;
@@ -873,9 +870,14 @@ class Capitulo2 extends Phaser.Scene {
             }).setOrigin(0.5);
             const irBtn = this.add.rectangle(cx, 510, 560, 70, 0x2a6a2a, 0.95)
                 .setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
-            this.add.text(cx, 510, '→ ' + t('chapters.chapter3') + ' ' + t('chapters.coming_soon'), {
+            this.add.text(cx, 510, '→ ' + t('interludio.title') + ' 2', {
                 fontSize: '22px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold'
             }).setOrigin(0.5);
+            irBtn.on('pointerup', () => {
+                this.detenerAmbiente();
+                localStorage.setItem('tc3_puzzle', '1');
+                this.scene.start('Interludio', { numero: 2, siguiente: 'Capitulo3' });
+            });
             return;
         }
 
@@ -936,8 +938,20 @@ class Capitulo2 extends Phaser.Scene {
             this.reproducirAcierto();
             localStorage.setItem('tc_capitulo', '3');
             localStorage.setItem('tc2_puzzle', '1');
-            this.time.delayedCall(2500, () => {
-                this.mensajeFinal.setText('→ ' + t('chapters.chapter3') + ' ' + t('chapters.coming_soon')).setColor('#ffffff');
+
+            this.time.delayedCall(1500, () => {
+                const cx = GAME_WIDTH / 2;
+                const irBtn = this.add.rectangle(cx, GAME_HEIGHT - 110, 560, 70, 0x2a6a2a, 0.95)
+                    .setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
+                this.add.text(cx, GAME_HEIGHT - 110,
+                    '→ ' + t('interludio.title') + ' 2', {
+                    fontSize: '22px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold'
+                }).setOrigin(0.5);
+                irBtn.on('pointerup', () => {
+                    this.detenerAmbiente();
+                    localStorage.setItem('tc3_puzzle', '1');
+                    this.scene.start('Interludio', { numero: 2, siguiente: 'Capitulo3' });
+                });
             });
         } else {
             this.mensajeFinal.setText(t('capitulo2.chapter_code_bad')).setColor('#ff6666');

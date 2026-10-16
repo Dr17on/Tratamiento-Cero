@@ -387,7 +387,6 @@ class Capitulo1 extends Phaser.Scene {
             stroke: '#000000', strokeThickness: 6
         }).setOrigin(0.5);
 
-        // Si ya se resolvió, mostrar botón directo al Cap 2
         if (estaResuelto(1, 3)) {
             this.add.text(cx, 400, t('common.puzzle_resuelto'), {
                 fontSize: '28px', color: '#66ff66', fontFamily: 'Courier New', fontStyle: 'bold',
@@ -401,7 +400,7 @@ class Capitulo1 extends Phaser.Scene {
             irBtn.on('pointerup', () => {
                 this.detenerAmbiente();
                 localStorage.setItem('tc2_puzzle', '1');
-                this.scene.start('Capitulo2');
+                this.scene.start('Interludio', { numero: 1, siguiente: 'Capitulo2' });
             });
             return;
         }
@@ -474,7 +473,7 @@ class Capitulo1 extends Phaser.Scene {
                 irBtn.on('pointerup', () => {
                     this.detenerAmbiente();
                     localStorage.setItem('tc2_puzzle', '1');
-                    this.scene.start('Capitulo2');
+                    this.scene.start('Interludio', { numero: 1, siguiente: 'Capitulo2' });
                 });
             });
         } else {

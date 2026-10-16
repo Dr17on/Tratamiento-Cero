@@ -8,13 +8,13 @@ const config = {
     height: GAME_HEIGHT,
     backgroundColor: '#000000',
     scale: {
-        mode: Phaser.Scale.ENVELOP,
+        mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
     input: {
         activePointers: 3
     },
-    scene: [Boot, CodigoFenix, Presentacion, Menu, Capitulos, Configuracion, Capitulo1, Capitulo2]
+    scene: [Boot, CodigoFenix, Presentacion, Menu, Capitulos, Configuracion, Capitulo1, Interludio, Capitulo2]
 };
 
 detectLanguage();

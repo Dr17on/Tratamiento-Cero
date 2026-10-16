@@ -100,6 +100,40 @@ const LOCALES = {
             chapter_code_ok: "✓ Capítulo 3 desbloqueado",
             chapter_code_bad: "✗ Código incorrecto"
         },
+        interludio: {
+            title: "INTERLUDIO",
+            tap: "Toca para continuar",
+            skip: "Saltar »",
+            int1_narr1: "Año 1953. Eugenia cruza la puerta 47.",
+            int1_eugenia1: "Huele a ceniza. El pasillo se estira más de lo que debería.",
+            int1_mateo1: "Yo veo lo mismo pero en ruinas. Hay un reloj al fondo, detenido a las 3:00.",
+            int1_eugenia2: "Mateo, ¿me estás oyendo?",
+            int1_mateo2: "Sí. Pero tu voz viene de muy lejos.",
+            int1_narr2: "Ambos cruzan el pasillo, cada uno desde su tiempo.",
+
+            int2_narr1: "El diario estaba en la estantería. Las páginas formaban una frase.",
+            int2_mateo1: "«No fuiste tú el culpable». Eugenia, mi abuela escribió esto.",
+            int2_eugenia1: "Recuerdo ese nombre. Estaba en el expediente del Tratamiento Cero.",
+            int2_mateo2: "¿Era una paciente?",
+            int2_eugenia2: "No. Era la Paciente Cero. La primera.",
+            int2_narr2: "El nombre de la abuela de Mateo cuelga en el aire.",
+
+            int3_narr1: "El incendio comenzó a las 3:00. Ni un minuto antes.",
+            int3_eugenia1: "Mateo, fue un accidente. Lo vi. Nadie pudo evitarlo.",
+            int3_mateo1: "Pero yo pude haber hecho algo. Pude haber cambiado el pasado.",
+            int3_eugenia2: "No. El pasado no se cambia. Solo se entiende.",
+            int3_mateo2: "Entonces, ¿para qué estamos aquí?",
+            int3_narr2: "Una última puerta les espera. La del Tratamiento Cero.",
+
+            int4_narr1: "Cerraron el experimento. Las voces callan, una por una.",
+            int4_eugenia1: "Mateo... esa voz. La que me guio en 1953.",
+            int4_mateo1: "¿Qué pasa con ella?",
+            int4_eugenia2: "Eras tú. Siempre fuiste tú.",
+            int4_mateo2: "No puede ser. Yo nunca estuve en 1953.",
+            int4_eugenia3: "No en cuerpo. Pero tu voz cruzó el tiempo. El Tratamiento Cero unía personas, no épocas.",
+            int4_narr2: "Eugenia mira a Mateo. Setenta y tres años de gratitud en una sola mirada.",
+            int4_narr3: "El Hospital Santa Elena se queda en silencio. Por primera vez en décadas."
+        },
         common: {
             back: "Menú",
             previous: "Anterior",
@@ -213,6 +247,40 @@ const LOCALES = {
             chapter_code_confirm: "UNLOCK CHAPTER 3",
             chapter_code_ok: "✓ Chapter 3 unlocked",
             chapter_code_bad: "✗ Wrong code"
+        },
+        interludio: {
+            title: "INTERLUDE",
+            tap: "Tap to continue",
+            skip: "Skip »",
+            int1_narr1: "1953. Eugenia steps through door 47.",
+            int1_eugenia1: "It smells of ash. The hallway stretches longer than it should.",
+            int1_mateo1: "I see the same but in ruins. There's a clock at the end, stopped at 3:00.",
+            int1_eugenia2: "Mateo, can you hear me?",
+            int1_mateo2: "Yes. But your voice comes from very far away.",
+            int1_narr2: "They both walk the hallway, each from their own time.",
+
+            int2_narr1: "The diary was on the shelf. The pages formed a sentence.",
+            int2_mateo1: "«You were not the culprit». Eugenia, my grandmother wrote this.",
+            int2_eugenia1: "I remember that name. It was in the Treatment Zero file.",
+            int2_mateo2: "Was she a patient?",
+            int2_eugenia2: "No. She was Patient Zero. The first one.",
+            int2_narr2: "Mateo's grandmother's name hangs in the air.",
+
+            int3_narr1: "The fire started at 3:00. Not a minute earlier.",
+            int3_eugenia1: "Mateo, it was an accident. I saw it. No one could have stopped it.",
+            int3_mateo1: "But I could have done something. I could have changed the past.",
+            int3_eugenia2: "No. The past can't be changed. Only understood.",
+            int3_mateo2: "So what are we doing here?",
+            int3_narr2: "One last door awaits them. Treatment Zero's.",
+
+            int4_narr1: "They shut down the experiment. The voices fall silent, one by one.",
+            int4_eugenia1: "Mateo... that voice. The one that guided me in 1953.",
+            int4_mateo1: "What about it?",
+            int4_eugenia2: "It was you. It was always you.",
+            int4_mateo2: "It can't be. I was never in 1953.",
+            int4_eugenia3: "Not in body. But your voice crossed time. Treatment Zero connected people, not eras.",
+            int4_narr2: "Eugenia looks at Mateo. Seventy-three years of gratitude in one glance.",
+            int4_narr3: "Santa Elena Hospital falls silent. For the first time in decades."
         },
         common: {
             back: "Menu",

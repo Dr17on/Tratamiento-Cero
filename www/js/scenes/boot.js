@@ -80,6 +80,9 @@ class Boot extends Phaser.Scene {
         this.load.audio('puzzle_completar', 'assets/audio/puzzle_completar.ogg');
         this.load.audio('puzzle_ordenar', 'assets/audio/puzzle_ordenar.ogg');
         this.load.audio('revelacion_cap2', 'assets/audio/revelacion_cap2.ogg');
+
+        // AUDIO INTERLUDIOS
+        this.load.audio('ambiente_interludio', 'assets/audio/ambiente_interludio.ogg');
     }
 
     create() {
