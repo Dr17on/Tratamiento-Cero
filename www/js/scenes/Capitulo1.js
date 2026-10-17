@@ -15,30 +15,36 @@ class Capitulo1 extends Phaser.Scene {
         super({ key: 'Capitulo1' });
     }
 
-    create() {
-        if (this.sound.context && this.sound.context.state === 'suspended') {
-            this.sound.context.resume();
-        }
-
-        this.rol = localStorage.getItem('tc_rol') || 'eugenia';
-        this.ambiente = null;
-        this.tension = null;
-
-        const ambienteKey = (this.rol === 'eugenia') ? 'ambiente_eugenia' : 'ambiente_mateo';
-        if (this.cache.audio.exists(ambienteKey)) {
-            this.ambiente = this.sound.add(ambienteKey, { loop: true, volume: getVolumen() * 0.35 });
-            this.ambiente.play();
-        }
-        if (this.cache.audio.exists('puzzle_tension')) {
-            this.tension = this.sound.add('puzzle_tension', { loop: true, volume: getVolumen() * 0.18 });
-            this.tension.play();
-        }
-
-        const vista = parseInt(localStorage.getItem('tc1_puzzle') || '1');
-        if (vista === 2) this.mostrarPuzzle2();
-        else if (vista === 3) this.mostrarFinal();
-        else this.mostrarPuzzle1();
+create() {
+    if (this.sound.context && this.sound.context.state === 'suspended') {
+        this.sound.context.resume();
     }
+
+    this.rol = localStorage.getItem('tc_rol') || 'eugenia';
+    this.ambiente = null;
+    this.tension = null;
+
+    // ✅ INICIALIZAR TODAS LAS VARIABLES ANTES DE CUALQUIER VISTA
+    this.digitos = [0, 0, 0, 0];
+    this.hora = 0;
+    this.minuto = 0;
+    this.codigoIngresado = ['', '', '', ''];
+
+    const ambienteKey = (this.rol === 'eugenia') ? 'ambiente_eugenia' : 'ambiente_mateo';
+    if (this.cache.audio.exists(ambienteKey)) {
+        this.ambiente = this.sound.add(ambienteKey, { loop: true, volume: getVolumen() * 0.35 });
+        this.ambiente.play();
+    }
+    if (this.cache.audio.exists('puzzle_tension')) {
+        this.tension = this.sound.add('puzzle_tension', { loop: true, volume: getVolumen() * 0.18 });
+        this.tension.play();
+    }
+
+    const vista = parseInt(localStorage.getItem('tc1_puzzle') || '1');
+    if (vista === 2) this.mostrarPuzzle2();
+    else if (vista === 3) this.mostrarFinal();
+    else this.mostrarPuzzle1();
+  }
 
     reproducirAcierto() { if (this.cache.audio.exists('acierto')) this.sound.play('acierto', { volume: getVolumen() * 0.7 }); }
     reproducirError() { if (this.cache.audio.exists('error')) this.sound.play('error', { volume: getVolumen() * 0.7 }); }

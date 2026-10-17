@@ -100,23 +100,26 @@ class Capitulos extends Phaser.Scene {
     }
 
     iniciarCapitulo(n) {
-        if (n === 1) {
-            if (!localStorage.getItem('tc_puzzle')) localStorage.setItem('tc_puzzle', '1');
-            this.scene.start('Capitulo1');
-        } else if (n === 2) {
-            if (!localStorage.getItem('tc2_puzzle')) localStorage.setItem('tc2_puzzle', '1');
-            this.scene.start('Capitulo2');
-        } else {
-            const cx = GAME_WIDTH / 2;
-            const cy = GAME_HEIGHT / 2;
-            const aviso = this.add.text(cx, cy, t('chapters.coming_soon'), {
-                fontSize: '36px', color: '#c0a060',
-                fontFamily: 'Courier New', fontStyle: 'italic',
-                backgroundColor: '#000000',
-                padding: { x: 30, y: 20 },
-                stroke: '#000000', strokeThickness: 4
-            }).setOrigin(0.5).setDepth(100);
-            this.time.delayedCall(2500, () => aviso.destroy());
-        }
+    if (n === 1) {
+        if (!localStorage.getItem('tc1_puzzle')) localStorage.setItem('tc1_puzzle', '1');
+        this.scene.start('Capitulo1');
+    } else if (n === 2) {
+        if (!localStorage.getItem('tc2_puzzle')) localStorage.setItem('tc2_puzzle', '1');
+        this.scene.start('Capitulo2');
+    } else if (n === 3) {
+        if (!localStorage.getItem('tc3_puzzle')) localStorage.setItem('tc3_puzzle', '1');
+        this.scene.start('Capitulo3');
+    } else {
+        const cx = GAME_WIDTH / 2;
+        const cy = GAME_HEIGHT / 2;
+        const aviso = this.add.text(cx, cy, t('chapters.coming_soon'), {
+            fontSize: '36px', color: '#c0a060',
+            fontFamily: 'Courier New', fontStyle: 'italic',
+            backgroundColor: '#000000',
+            padding: { x: 30, y: 20 },
+            stroke: '#000000', strokeThickness: 4
+        }).setOrigin(0.5).setDepth(100);
+        this.time.delayedCall(2500, () => aviso.destroy());
     }
+  }
 }

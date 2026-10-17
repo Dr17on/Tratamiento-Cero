@@ -14,7 +14,7 @@ const config = {
     input: {
         activePointers: 3
     },
-    scene: [Boot, CodigoFenix, Presentacion, Menu, Capitulos, Configuracion, Capitulo1, Interludio, Capitulo2]
+    scene: [Boot, CodigoFenix, Presentacion, Menu, Capitulos, Configuracion, Capitulo1, Interludio, Capitulo2, Capitulo3]
 };
 
 detectLanguage();

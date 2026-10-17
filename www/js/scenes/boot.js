@@ -81,6 +81,30 @@ class Boot extends Phaser.Scene {
         this.load.audio('puzzle_ordenar', 'assets/audio/puzzle_ordenar.ogg');
         this.load.audio('revelacion_cap2', 'assets/audio/revelacion_cap2.ogg');
 
+        // CAPÍTULO 3 — visuales (sin texto)
+        this.load.image('fondo_cap3_eugenia', 'assets/img/fondo_cap3_eugenia.jpg');
+        this.load.image('fondo_cap3_mateo', 'assets/img/fondo_cap3_mateo.jpg');
+        this.load.image('panel_valvulas', 'assets/img/panel_valvulas.jpg');
+        this.load.image('pared_valvulas_marcas', 'assets/img/pared_valvulas_marcas.jpg');
+        this.load.image('mapa_hospital_quemado', 'assets/img/mapa_hospital_quemado.jpg');
+        this.load.image('cilindro_quemado', 'assets/img/cilindro_quemado.jpg');
+        this.load.image('puerta_47_abierta', 'assets/img/puerta_47_abierta.jpg');
+
+        // CAPÍTULO 3 — bilingües (con texto)
+        this.load.image('manual_valvulas_es', 'assets/img/manual_valvulas_es.jpg');
+        this.load.image('manual_valvulas_en', 'assets/img/manual_valvulas_en.jpg');
+        this.load.image('mapa_hospital_es', 'assets/img/mapa_hospital_es.jpg');
+        this.load.image('mapa_hospital_en', 'assets/img/mapa_hospital_en.jpg');
+        this.load.image('cilindro_cifrado_es', 'assets/img/cilindro_cifrado_es.jpg');
+        this.load.image('cilindro_cifrado_en', 'assets/img/cilindro_cifrado_en.jpg');
+
+        // AUDIO CAP 3
+        this.load.audio('ambiente_cap3_eugenia', 'assets/audio/ambiente_cap3_eugenia.ogg');
+        this.load.audio('ambiente_cap3_mateo', 'assets/audio/ambiente_cap3_mateo.ogg');
+        this.load.audio('puzzle_valvulas', 'assets/audio/puzzle_valvulas.ogg');
+        this.load.audio('puzzle_mapa', 'assets/audio/puzzle_mapa.ogg');
+        this.load.audio('revelacion_cap3', 'assets/audio/revelacion_cap3.ogg');
+      
         // AUDIO INTERLUDIOS
         this.load.audio('ambiente_interludio', 'assets/audio/ambiente_interludio.ogg');
     }

@@ -100,6 +100,32 @@ const LOCALES = {
             chapter_code_ok: "✓ Capítulo 3 desbloqueado",
             chapter_code_bad: "✗ Código incorrecto"
         },
+        capitulo3: {
+            title: "Capítulo 3 — El Incendio",
+            puzzle1_title: "Las Válvulas de Gas",
+            puzzle1_eugenia_hint: "Gira cada válvula a la posición que te dicte Mateo",
+            puzzle1_mateo_hint: "La pared revela el orden de las válvulas",
+            puzzle1_correct: "✓ ¡El gas se corta!",
+            puzzle1_wrong: "✗ Algo no está bien",
+            puzzle2_title: "El Mapa del Hospital",
+            puzzle2_eugenia_hint: "Toca las habitaciones en el orden que te dicte Mateo",
+            puzzle2_mateo_hint: "El camino está dibujado con carbón en el mapa",
+            puzzle2_correct: "✓ El camino está trazado",
+            puzzle2_wrong: "✗ El camino no es correcto",
+            puzzle3_title: "El Cilindro Cifrado",
+            puzzle3_eugenia_hint: "Forma la palabra usando la frase clave",
+            puzzle3_eugenia_frase: "«LA CULPA NO ES DE LOS NIÑOS»",
+            puzzle3_mateo_hint: "Algunas letras se ven en el cilindro quemado",
+            puzzle3_correct: "✓ La puerta 47 se abre",
+            puzzle3_wrong: "✗ La palabra no es la correcta",
+            chapter_end_title: "CAPÍTULO 3 COMPLETADO",
+            chapter_end_eugenia: "Tu mitad del código:",
+            chapter_end_mateo: "Tu mitad del código:",
+            chapter_end_instruction: "Dicta tu mitad a tu compañero e ingresa el código completo:",
+            chapter_code_confirm: "DESBLOQUEAR CAPÍTULO 4",
+            chapter_code_ok: "✓ Capítulo 4 desbloqueado",
+            chapter_code_bad: "✗ Código incorrecto"
+        },
         interludio: {
             title: "INTERLUDIO",
             tap: "Toca para continuar",
@@ -248,6 +274,32 @@ const LOCALES = {
             chapter_code_ok: "✓ Chapter 3 unlocked",
             chapter_code_bad: "✗ Wrong code"
         },
+        capitulo3: {
+            title: "Chapter 3 — The Fire",
+            puzzle1_title: "The Gas Valves",
+            puzzle1_eugenia_hint: "Turn each valve to the position Mateo dictates",
+            puzzle1_mateo_hint: "The wall reveals the order of the valves",
+            puzzle1_correct: "✓ The gas is cut!",
+            puzzle1_wrong: "✗ Something is wrong",
+            puzzle2_title: "The Hospital Map",
+            puzzle2_eugenia_hint: "Tap the rooms in the order Mateo dictates",
+            puzzle2_mateo_hint: "The path is drawn with charcoal on the map",
+            puzzle2_correct: "✓ The path is traced",
+            puzzle2_wrong: "✗ The path is wrong",
+            puzzle3_title: "The Cipher Cylinder",
+            puzzle3_eugenia_hint: "Form the word using the key phrase",
+            puzzle3_eugenia_frase: "«THE BLAME IS NOT THE CHILDREN'S»",
+            puzzle3_mateo_hint: "Some letters are visible on the burnt cylinder",
+            puzzle3_correct: "✓ Door 47 opens",
+            puzzle3_wrong: "✗ Wrong word",
+            chapter_end_title: "CHAPTER 3 COMPLETE",
+            chapter_end_eugenia: "Your half of the code:",
+            chapter_end_mateo: "Your half of the code:",
+            chapter_end_instruction: "Tell your partner your half and enter the full code:",
+            chapter_code_confirm: "UNLOCK CHAPTER 4",
+            chapter_code_ok: "✓ Chapter 4 unlocked",
+            chapter_code_bad: "✗ Wrong code"
+        },
         interludio: {
             title: "INTERLUDE",
             tap: "Tap to continue",
@@ -358,7 +410,7 @@ function estaResuelto(cap, puzzle) {
 }
 
 function reiniciarCapitulo(cap) {
-    const totalPuzzles = (cap === 1) ? 3 : 5;
+    const totalPuzzles = (cap === 1) ? 3 : ((cap === 2) ? 5 : 4); // Cap 3 tiene 4 "puzles" (incluyendo final)
     for (let i = 1; i <= totalPuzzles; i++) {
         localStorage.removeItem('tc' + cap + '_p' + i + '_resuelto');
     }

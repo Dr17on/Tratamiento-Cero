@@ -44,6 +44,13 @@ class Capitulo2 extends Phaser.Scene {
         this.ambiente = null;
         this.tension = null;
 
+        // Inicializar variables defensivamente
+        this.electrodosColocados = [null, null, null, null];
+        this.palabrasColocadas = [null, null, null, null, null];
+        this.fragmentosColocados = [null, null, null, null, null];
+        this.paginasColocadas = [null, null, null, null, null];
+        this.codigoIngresado = ['', '', '', ''];
+
         const ambienteKey = (this.rol === 'eugenia') ? 'ambiente_cap2_eugenia' : 'ambiente_cap2_mateo';
         if (this.cache.audio.exists(ambienteKey)) {
             this.ambiente = this.sound.add(ambienteKey, { loop: true, volume: getVolumen() * 0.35 });
@@ -870,13 +877,13 @@ class Capitulo2 extends Phaser.Scene {
             }).setOrigin(0.5);
             const irBtn = this.add.rectangle(cx, 510, 560, 70, 0x2a6a2a, 0.95)
                 .setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
-            this.add.text(cx, 510, '→ ' + t('interludio.title') + ' 2', {
+            this.add.text(cx, 510, '→ ' + t('interludio.title') + ' 3', {
                 fontSize: '22px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold'
             }).setOrigin(0.5);
             irBtn.on('pointerup', () => {
                 this.detenerAmbiente();
                 localStorage.setItem('tc3_puzzle', '1');
-                this.scene.start('Interludio', { numero: 2, siguiente: 'Capitulo3' });
+                this.scene.start('Interludio', { numero: 3, siguiente: 'Capitulo3' });
             });
             return;
         }
@@ -944,13 +951,13 @@ class Capitulo2 extends Phaser.Scene {
                 const irBtn = this.add.rectangle(cx, GAME_HEIGHT - 110, 560, 70, 0x2a6a2a, 0.95)
                     .setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
                 this.add.text(cx, GAME_HEIGHT - 110,
-                    '→ ' + t('interludio.title') + ' 2', {
+                    '→ ' + t('interludio.title') + ' 3', {
                     fontSize: '22px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold'
                 }).setOrigin(0.5);
                 irBtn.on('pointerup', () => {
                     this.detenerAmbiente();
                     localStorage.setItem('tc3_puzzle', '1');
-                    this.scene.start('Interludio', { numero: 2, siguiente: 'Capitulo3' });
+                    this.scene.start('Interludio', { numero: 3, siguiente: 'Capitulo3' });
                 });
             });
         } else {
