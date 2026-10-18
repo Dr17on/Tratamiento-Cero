@@ -40,6 +40,16 @@ const LOCALES = {
             credits: "Créditos",
             close: "Cerrar"
         },
+        transiciones: {
+            cap1_p2: "La gaveta se abre. Un reloj de pared al fondo marca las 3:15.",
+            cap2_p1: "La puerta 47 se cierra detrás de ustedes. Frente a ustedes, un panel con electrodos.",
+            cap2_p2: "Las voces susurran desde las paredes. Una cinta de audio yace en el suelo.",
+            cap2_p3: "Un espejo roto cuelga de la pared. Los fragmentos parecen moverse.",
+            cap2_p4: "Un diario antiguo descansa sobre la mesa. Las páginas están desordenadas.",
+            cap3_p1: "El fuego avanza. Un panel de válvulas de gas bloquea el paso.",
+            cap3_p2: "El humo se disipa un poco. Un mapa del hospital está clavado en la pared.",
+            cap3_p3: "Frente a la puerta 47, un cilindro de metal con anillos gira lentamente."
+        },
         capitulo1: {
             title: "Capítulo 1 — El Ingreso",
             form_header: "HOSPITAL SANTA ELENA",
@@ -89,9 +99,22 @@ const LOCALES = {
             puzzle3_wrong: "✗ El orden está mal",
             puzzle4_title: "El Diario de la Abuela",
             puzzle4_eugenia_hint: "Ordena las páginas según las fechas que te dicte Mateo",
-            puzzle4_mateo_hint: "Dicta las fechas de cada página a Eugenia",
+            puzzle4_mateo_hint: "Dicta las fechas y pistas de las notas a Eugenia",
             puzzle4_correct: "✓ Las páginas forman un mensaje",
             puzzle4_wrong: "✗ El orden de las fechas no es correcto",
+            
+            // Pistas y palabras del Puzle 4 (Cap 2)
+            puzzle4_palabra1: "NO",
+            puzzle4_palabra2: "FUISTE",
+            puzzle4_palabra3: "TÚ",
+            puzzle4_palabra4: "EL",
+            puzzle4_palabra5: "CULPABLE",
+            puzzle4_hint1: "1. Negación",
+            puzzle4_hint2: "2. Ir (pasado)",
+            puzzle4_hint3: "3. Segunda persona",
+            puzzle4_hint4: "4. Artículo definido",
+            puzzle4_hint5: "5. Culpable",
+
             chapter_end_title: "CAPÍTULO 2 COMPLETADO",
             chapter_end_eugenia: "Tu mitad del código:",
             chapter_end_mateo: "Tu mitad del código:",
@@ -104,7 +127,8 @@ const LOCALES = {
             title: "Capítulo 3 — El Incendio",
             puzzle1_title: "Las Válvulas de Gas",
             puzzle1_eugenia_hint: "Gira cada válvula a la posición que te dicte Mateo",
-            puzzle1_mateo_hint: "La pared revela el orden de las válvulas",
+            puzzle1_mateo_hint: "La pared revela los ángulos de las válvulas",
+            puzzle1_mateo_orden: "Ángulos:\nA = 90°\nB = 270°\nC = 0°\nD = 180°",
             puzzle1_correct: "✓ ¡El gas se corta!",
             puzzle1_wrong: "✗ Algo no está bien",
             puzzle2_title: "El Mapa del Hospital",
@@ -124,6 +148,31 @@ const LOCALES = {
             chapter_end_instruction: "Dicta tu mitad a tu compañero e ingresa el código completo:",
             chapter_code_confirm: "DESBLOQUEAR CAPÍTULO 4",
             chapter_code_ok: "✓ Capítulo 4 desbloqueado",
+            chapter_code_bad: "✗ Código incorrecto"
+        },
+        capitulo4: {
+            title: "Capítulo 4 — Tratamiento Cero",
+            puzzle1_title: "La Silla de Electroshock",
+            puzzle1_eugenia_hint: "Arrastra los cables a los puertos correctos",
+            puzzle1_mateo_hint: "Los puertos están sucios. Dime los colores que recuerdas",
+            puzzle1_correct: "✓ La máquina se enciende",
+            puzzle1_wrong: "✗ Los cables no coinciden",
+            puzzle2_title: "La Frecuencia de Radio",
+            puzzle2_eugenia_hint: "Sintoniza la frecuencia que recuerdes",
+            puzzle2_mateo_hint: "La radio no tiene energía. Necesito la frecuencia",
+            puzzle2_correct: "✓ La señal se capta",
+            puzzle2_wrong: "✗ Solo hay estática",
+            puzzle3_title: "El Nombre Verdadero",
+            puzzle3_eugenia_hint: "Escribe el nombre de la Paciente Cero",
+            puzzle3_mateo_hint: "El nombre de mi abuela. Lo vi en los archivos",
+            puzzle3_correct: "✓ Las voces descansan",
+            puzzle3_wrong: "✗ El nombre no es correcto",
+            chapter_end_title: "TRATAMIENTO CERO COMPLETADO",
+            chapter_end_eugenia: "Tu mitad del código:",
+            chapter_end_mateo: "Tu mitad del código:",
+            chapter_end_instruction: "Dicta tu mitad a tu compañero e ingresa el código final:",
+            chapter_code_confirm: "CERRAR EL EXPERIMENTO",
+            chapter_code_ok: "✓ Tratamiento Cero cerrado",
             chapter_code_bad: "✗ Código incorrecto"
         },
         interludio: {
@@ -214,6 +263,16 @@ const LOCALES = {
             credits: "Credits",
             close: "Close"
         },
+        transiciones: {
+            cap1_p2: "The drawer opens. A wall clock in the background reads 3:15.",
+            cap2_p1: "Door 47 closes behind you. In front of you, a panel with electrodes.",
+            cap2_p2: "Voices whisper from the walls. An audio tape lies on the floor.",
+            cap2_p3: "A broken mirror hangs on the wall. The fragments seem to move.",
+            cap2_p4: "An old diary rests on the table. The pages are out of order.",
+            cap3_p1: "The fire advances. A panel of gas valves blocks the way.",
+            cap3_p2: "The smoke clears a bit. A hospital map is nailed to the wall.",
+            cap3_p3: "In front of door 47, a metal cylinder with rings spins slowly."
+        },
         capitulo1: {
             title: "Chapter 1 — Admission",
             form_header: "SANTA ELENA HOSPITAL",
@@ -263,9 +322,22 @@ const LOCALES = {
             puzzle3_wrong: "✗ The order is wrong",
             puzzle4_title: "Grandmother's Diary",
             puzzle4_eugenia_hint: "Order the pages by the dates Mateo dictates",
-            puzzle4_mateo_hint: "Dictate the date of each page to Eugenia",
+            puzzle4_mateo_hint: "Dictate the dates and hints from the notes to Eugenia",
             puzzle4_correct: "✓ The pages form a message",
             puzzle4_wrong: "✗ The date order is wrong",
+            
+            // Pistas y palabras del Puzle 4 (Cap 2)
+            puzzle4_palabra1: "YOU",
+            puzzle4_palabra2: "WERE",
+            puzzle4_palabra3: "NOT",
+            puzzle4_palabra4: "THE",
+            puzzle4_palabra5: "CULPRIT",
+            puzzle4_hint1: "1. 2nd Person",
+            puzzle4_hint2: "2. Past Verb",
+            puzzle4_hint3: "3. Negation",
+            puzzle4_hint4: "4. Article",
+            puzzle4_hint5: "5. Guilty",
+
             chapter_end_title: "CHAPTER 2 COMPLETE",
             chapter_end_eugenia: "Your half of the code:",
             chapter_end_mateo: "Your half of the code:",
@@ -278,7 +350,8 @@ const LOCALES = {
             title: "Chapter 3 — The Fire",
             puzzle1_title: "The Gas Valves",
             puzzle1_eugenia_hint: "Turn each valve to the position Mateo dictates",
-            puzzle1_mateo_hint: "The wall reveals the order of the valves",
+            puzzle1_mateo_hint: "The wall reveals the valve angles",
+            puzzle1_mateo_orden: "Angles:\nA = 90°\nB = 270°\nC = 0°\nD = 180°",
             puzzle1_correct: "✓ The gas is cut!",
             puzzle1_wrong: "✗ Something is wrong",
             puzzle2_title: "The Hospital Map",
@@ -298,6 +371,31 @@ const LOCALES = {
             chapter_end_instruction: "Tell your partner your half and enter the full code:",
             chapter_code_confirm: "UNLOCK CHAPTER 4",
             chapter_code_ok: "✓ Chapter 4 unlocked",
+            chapter_code_bad: "✗ Wrong code"
+        },
+        capitulo4: {
+            title: "Chapter 4 — Treatment Zero",
+            puzzle1_title: "The Electroshock Chair",
+            puzzle1_eugenia_hint: "Drag the cables to the correct ports",
+            puzzle1_mateo_hint: "The ports are dirty. Tell me the colors you remember",
+            puzzle1_correct: "✓ The machine turns on",
+            puzzle1_wrong: "✗ The cables don't match",
+            puzzle2_title: "The Radio Frequency",
+            puzzle2_eugenia_hint: "Tune to the frequency you remember",
+            puzzle2_mateo_hint: "The radio has no power. I need the frequency",
+            puzzle2_correct: "✓ The signal is caught",
+            puzzle2_wrong: "✗ Only static",
+            puzzle3_title: "The True Name",
+            puzzle3_eugenia_hint: "Write the name of Patient Zero",
+            puzzle3_mateo_hint: "My grandmother's name. I saw it in the files",
+            puzzle3_correct: "✓ The voices rest",
+            puzzle3_wrong: "✗ The name is wrong",
+            chapter_end_title: "TREATMENT ZERO COMPLETE",
+            chapter_end_eugenia: "Your half of the code:",
+            chapter_end_mateo: "Your half of the code:",
+            chapter_end_instruction: "Tell your partner your half and enter the final code:",
+            chapter_code_confirm: "CLOSE THE EXPERIMENT",
+            chapter_code_ok: "✓ Treatment Zero closed",
             chapter_code_bad: "✗ Wrong code"
         },
         interludio: {
@@ -410,7 +508,7 @@ function estaResuelto(cap, puzzle) {
 }
 
 function reiniciarCapitulo(cap) {
-    const totalPuzzles = (cap === 1) ? 3 : ((cap === 2) ? 5 : 4); // Cap 3 tiene 4 "puzles" (incluyendo final)
+    const totalPuzzles = (cap === 1) ? 3 : ((cap === 2) ? 5 : 4);
     for (let i = 1; i <= totalPuzzles; i++) {
         localStorage.removeItem('tc' + cap + '_p' + i + '_resuelto');
     }

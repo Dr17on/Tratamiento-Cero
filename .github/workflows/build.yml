@@ -8,7 +8,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v4
@@ -21,8 +20,16 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      # ✅ 1. Instalar la herramienta de assets (en Ubuntu funciona perfecto)
+      - name: Install Capacitor Assets
+        run: npm install @capacitor/assets --save-dev
+
       - name: Add Android Platform
         run: npx cap add android
+
+      # ✅ 2. Generar los íconos antes de compilar
+      - name: Generate App Icons
+        run: npx @capacitor/assets generate --android
 
       - name: Sync Capacitor
         run: npx cap sync android
@@ -31,8 +38,6 @@ jobs:
         run: |
           MANIFEST=android/app/src/main/AndroidManifest.xml
           sed -i 's|<activity|<activity android:screenOrientation="landscape"|g' $MANIFEST
-          echo "--- MANIFEST DESPUÉS DE PARCHEAR ---"
-          cat $MANIFEST
 
       - name: Grant Execute Permission for Gradlew
         run: chmod +x android/gradlew

@@ -2,6 +2,7 @@
   "appId": "com.codigofenix.tratamientocero",
   "appName": "Tratamiento Cero",
   "webDir": "www",
+  "backgroundColor": "#000000",
   "server": {
     "androidScheme": "https"
   },

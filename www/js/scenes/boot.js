@@ -19,8 +19,11 @@ class Boot extends Phaser.Scene {
             console.error('❌ FALLÓ:', file.key, '→', file.src);
         });
 
-        // LOGO
+        // ... (cargas anteriores)
+
+        // PORTADA Y LOGO
         this.load.image('logo_codigo_fenix', 'assets/img/logo_codigo_fenix.png');
+        this.load.image('portada', 'assets/img/portada.jpg'); // <-- NUEVA LÍNEA
 
         // PRESENTACIÓN
         this.load.image('presentacion_1', 'assets/img/presentacion_1.jpg');
@@ -41,7 +44,7 @@ class Boot extends Phaser.Scene {
         this.load.image('reloj_mateo', 'assets/img/reloj_mateo.jpg');
         this.load.image('pared_nombres', 'assets/img/pared_nombres.jpg');
 
-        // CAPÍTULO 2 — visuales (sin texto)
+        // CAPÍTULO 2
         this.load.image('fondo_cap2_eugenia', 'assets/img/fondo_cap2_eugenia.jpg');
         this.load.image('fondo_cap2_mateo', 'assets/img/fondo_cap2_mateo.jpg');
         this.load.image('panel_electrodos', 'assets/img/panel_electrodos.jpg');
@@ -49,8 +52,7 @@ class Boot extends Phaser.Scene {
         this.load.image('cinta_audio', 'assets/img/cinta_audio.jpg');
         this.load.image('puerta_47', 'assets/img/puerta_47.jpg');
         this.load.image('paciente_cero', 'assets/img/paciente_cero.jpg');
-
-        // CAPÍTULO 2 — bilingües (con texto)
+        
         this.load.image('transcripcion_es', 'assets/img/transcripcion_es.jpg');
         this.load.image('transcripcion_en', 'assets/img/transcripcion_en.jpg');
         this.load.image('transcripcion_completa_es', 'assets/img/transcripcion_completa_es.jpg');
@@ -62,7 +64,25 @@ class Boot extends Phaser.Scene {
         this.load.image('diario_paginas_es', 'assets/img/diario_paginas_es.jpg');
         this.load.image('diario_paginas_en', 'assets/img/diario_paginas_en.jpg');
 
-        // AUDIO CAP 1
+        // CAPÍTULO 3
+        this.load.image('fondo_cap3_eugenia', 'assets/img/fondo_cap3_eugenia.jpg');
+        this.load.image('fondo_cap3_mateo', 'assets/img/fondo_cap3_mateo.jpg');
+        this.load.image('panel_valvulas', 'assets/img/panel_valvulas.jpg');
+        this.load.image('pared_valvulas_marcas', 'assets/img/pared_valvulas_marcas.jpg');
+        this.load.image('mapa_hospital_quemado', 'assets/img/mapa_hospital_quemado.jpg');
+        this.load.image('cilindro_quemado', 'assets/img/cilindro_quemado.jpg');
+        this.load.image('puerta_47_abierta', 'assets/img/puerta_47_abierta.jpg');
+        
+        this.load.image('manual_valvulas_es', 'assets/img/manual_valvulas_es.jpg');
+        this.load.image('manual_valvulas_en', 'assets/img/manual_valvulas_en.jpg');
+        
+        // ✅ MAPA HOSPITAL: Una sola imagen para ambos idiomas
+        this.load.image('mapa_hospital', 'assets/img/mapa_hospital.jpg');
+        
+        // ✅ CILINDRO: Una sola imagen para ambos idiomas
+        this.load.image('cilindro_cifrado', 'assets/img/cilindro_cifrado.jpg');
+
+        // AUDIO
         this.load.audio('codigo_fenix', 'assets/audio/codigo_fenix.ogg');
         this.load.audio('presentacion', 'assets/audio/presentacion.ogg');
         this.load.audio('ambiente_menu', 'assets/audio/ambiente_menu.ogg');
@@ -74,39 +94,29 @@ class Boot extends Phaser.Scene {
         this.load.audio('revelacion', 'assets/audio/revelacion.ogg');
         this.load.audio('final_giro', 'assets/audio/final_giro.ogg');
 
-        // AUDIO CAP 2
         this.load.audio('ambiente_cap2_eugenia', 'assets/audio/ambiente_cap2_eugenia.ogg');
         this.load.audio('ambiente_cap2_mateo', 'assets/audio/ambiente_cap2_mateo.ogg');
         this.load.audio('puzzle_completar', 'assets/audio/puzzle_completar.ogg');
         this.load.audio('puzzle_ordenar', 'assets/audio/puzzle_ordenar.ogg');
         this.load.audio('revelacion_cap2', 'assets/audio/revelacion_cap2.ogg');
 
-        // CAPÍTULO 3 — visuales (sin texto)
-        this.load.image('fondo_cap3_eugenia', 'assets/img/fondo_cap3_eugenia.jpg');
-        this.load.image('fondo_cap3_mateo', 'assets/img/fondo_cap3_mateo.jpg');
-        this.load.image('panel_valvulas', 'assets/img/panel_valvulas.jpg');
-        this.load.image('pared_valvulas_marcas', 'assets/img/pared_valvulas_marcas.jpg');
-        this.load.image('mapa_hospital_quemado', 'assets/img/mapa_hospital_quemado.jpg');
-        this.load.image('cilindro_quemado', 'assets/img/cilindro_quemado.jpg');
-        this.load.image('puerta_47_abierta', 'assets/img/puerta_47_abierta.jpg');
-
-        // CAPÍTULO 3 — bilingües (con texto)
-        this.load.image('manual_valvulas_es', 'assets/img/manual_valvulas_es.jpg');
-        this.load.image('manual_valvulas_en', 'assets/img/manual_valvulas_en.jpg');
-        this.load.image('mapa_hospital_es', 'assets/img/mapa_hospital_es.jpg');
-        this.load.image('mapa_hospital_en', 'assets/img/mapa_hospital_en.jpg');
-        this.load.image('cilindro_cifrado_es', 'assets/img/cilindro_cifrado_es.jpg');
-        this.load.image('cilindro_cifrado_en', 'assets/img/cilindro_cifrado_en.jpg');
-
-        // AUDIO CAP 3
         this.load.audio('ambiente_cap3_eugenia', 'assets/audio/ambiente_cap3_eugenia.ogg');
         this.load.audio('ambiente_cap3_mateo', 'assets/audio/ambiente_cap3_mateo.ogg');
         this.load.audio('puzzle_valvulas', 'assets/audio/puzzle_valvulas.ogg');
         this.load.audio('puzzle_mapa', 'assets/audio/puzzle_mapa.ogg');
         this.load.audio('revelacion_cap3', 'assets/audio/revelacion_cap3.ogg');
-      
-        // AUDIO INTERLUDIOS
+
         this.load.audio('ambiente_interludio', 'assets/audio/ambiente_interludio.ogg');
+   
+        // CAPÍTULO 4
+        this.load.image('fondo_cap4', 'assets/img/fondo_cap4.jpg');
+        this.load.image('silla_electroshock', 'assets/img/silla_electroshock.jpg');
+        this.load.image('radio_antigua', 'assets/img/radio_antigua.jpg');
+        this.load.image('retrato_carmen', 'assets/img/retrato_carmen.jpg');
+
+        // AUDIO CAP 4
+        this.load.audio('ambiente_cap4', 'assets/audio/ambiente_cap4.ogg');
+        this.load.audio('final_giro', 'assets/audio/final_giro.ogg');
     }
 
     create() {

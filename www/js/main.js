@@ -1,4 +1,4 @@
-const GAME_WIDTH = 1280;
+const GAME_WIDTH = 1340;
 const GAME_HEIGHT = 720;
 
 const config = {
@@ -8,13 +8,11 @@ const config = {
     height: GAME_HEIGHT,
     backgroundColor: '#000000',
     scale: {
-        mode: Phaser.Scale.FIT,
+        mode: Phaser.Scale.ENVELOP,
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
-    input: {
-        activePointers: 3
-    },
-    scene: [Boot, CodigoFenix, Presentacion, Menu, Capitulos, Configuracion, Capitulo1, Interludio, Capitulo2, Capitulo3]
+    input: { activePointers: 3 },
+    scene: [Boot, CodigoFenix, Presentacion, Menu, Capitulos, Configuracion, Capitulo1, Interludio, Capitulo2, Capitulo3, Capitulo4, Creditos]
 };
 
 detectLanguage();
