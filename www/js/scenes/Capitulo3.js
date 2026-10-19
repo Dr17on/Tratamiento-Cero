@@ -39,7 +39,7 @@ class Capitulo3 extends Phaser.Scene {
         const cx = GAME_WIDTH / 2, cy = GAME_HEIGHT / 2;
         this.cameras.main.setBackgroundColor('#000000');
         this.add.rectangle(cx, cy, GAME_WIDTH, GAME_HEIGHT, 0x000000, 1);
-        const txt = this.add.text(cx, cy, texto, { fontSize: '28px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', wordWrap: { width: 900 }, align: 'center' }).setOrigin(0.5).setAlpha(0);
+        const txt = this.add.text(cx, cy, texto, { fontSize: '36px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', wordWrap: { width: 1000 }, align: 'center' }).setOrigin(0.5).setAlpha(0);
         this.tweens.add({
             targets: txt, alpha: 1, duration: 1500, ease: 'Power2',
             onComplete: () => { this.time.delayedCall(2500, () => { this.cameras.main.fadeOut(800, 0, 0, 0); this.time.delayedCall(900, callback); }); }
@@ -59,39 +59,39 @@ class Capitulo3 extends Phaser.Scene {
 
         const tinte = (this.rol === 'eugenia') ? 0xd44a20 : 0x1a2a5a;
         this.add.rectangle(cx, cy, GAME_WIDTH, GAME_HEIGHT, tinte, 0.10);
-        this.add.rectangle(cx, 30, GAME_WIDTH, 60, 0x000000, 0.6);
-        this.add.rectangle(cx, GAME_HEIGHT - 15, GAME_WIDTH, 30, 0x000000, 0.6);
+        this.add.rectangle(cx, 35, GAME_WIDTH, 70, 0x000000, 0.6);
+        this.add.rectangle(cx, GAME_HEIGHT - 20, GAME_WIDTH, 40, 0x000000, 0.6);
     }
 
     mostrarTitulo(mostrarAnterior = false) {
         const cx = GAME_WIDTH / 2;
-        this.add.rectangle(cx, 55, 700, 70, 0x000000, 0.65);
-        this.add.text(cx, 55, t('capitulo3.title'), { fontSize: '32px', color: '#e0d8c8', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 4 }).setOrigin(0.5);
+        this.add.rectangle(cx, 55, 800, 80, 0x000000, 0.7);
+        this.add.text(cx, 55, t('capitulo3.title'), { fontSize: '40px', color: '#e0d8c8', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 4 }).setOrigin(0.5);
 
-        const backBtn = this.add.text(80, GAME_HEIGHT - 60, '← ' + t('common.back'), { fontSize: '22px', color: '#ffffff', fontFamily: 'Courier New', backgroundColor: '#444444', padding: { x: 14, y: 8 } }).setOrigin(0, 0.5).setInteractive({ useHandCursor: true });
+        const backBtn = this.add.text(80, GAME_HEIGHT - 60, '← ' + t('common.back'), { fontSize: '28px', color: '#ffffff', fontFamily: 'Courier New', backgroundColor: '#444444', padding: { x: 16, y: 10 } }).setOrigin(0, 0.5).setInteractive({ useHandCursor: true });
         backBtn.on('pointerup', () => { this.detenerAmbiente(); this.scene.start('Menu'); });
 
         if (mostrarAnterior) {
             const puzzleActual = parseInt(localStorage.getItem('tc3_puzzle') || '1');
             const labelTexto = (puzzleActual === 1) ? '← ' + t('chapters.chapter2') : '← ' + t('common.previous');
-            const prevBtn = this.add.text(80, 55, labelTexto, { fontSize: '20px', color: '#ffffff', fontFamily: 'Courier New', backgroundColor: '#444444', padding: { x: 12, y: 6 } }).setOrigin(0, 0.5).setInteractive({ useHandCursor: true });
+            const prevBtn = this.add.text(80, 55, labelTexto, { fontSize: '26px', color: '#ffffff', fontFamily: 'Courier New', backgroundColor: '#444444', padding: { x: 14, y: 8 } }).setOrigin(0, 0.5).setInteractive({ useHandCursor: true });
             prevBtn.on('pointerup', () => this.irAPuzzleAnterior());
         }
 
-        const resetBtn = this.add.text(GAME_WIDTH - 40, 55, t('common.reiniciar'), { fontSize: '18px', color: '#ffffff', fontFamily: 'Courier New', backgroundColor: '#8b3a3a', padding: { x: 12, y: 6 } }).setOrigin(1, 0.5).setInteractive({ useHandCursor: true });
+        const resetBtn = this.add.text(GAME_WIDTH - 40, 55, t('common.reiniciar'), { fontSize: '24px', color: '#ffffff', fontFamily: 'Courier New', backgroundColor: '#8b3a3a', padding: { x: 14, y: 8 } }).setOrigin(1, 0.5).setInteractive({ useHandCursor: true });
         resetBtn.on('pointerup', () => this.confirmarReinicio());
     }
 
     confirmarReinicio() {
         const cx = GAME_WIDTH / 2, cy = GAME_HEIGHT / 2;
         const overlay = this.add.rectangle(cx, cy, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.9).setDepth(100);
-        const panel = this.add.rectangle(cx, cy, 600, 250, 0x1a1a1a, 1).setStrokeStyle(3, 0xc0a060).setDepth(101);
-        this.add.text(cx, cy - 40, t('common.reiniciar_confirm'), { fontSize: '22px', color: '#ffffff', fontFamily: 'Courier New', wordWrap: { width: 550 }, align: 'center' }).setOrigin(0.5).setDepth(102);
+        const panel = this.add.rectangle(cx, cy, 700, 280, 0x1a1a1a, 1).setStrokeStyle(3, 0xc0a060).setDepth(101);
+        this.add.text(cx, cy - 40, t('common.reiniciar_confirm'), { fontSize: '28px', color: '#ffffff', fontFamily: 'Courier New', wordWrap: { width: 600 }, align: 'center' }).setOrigin(0.5).setDepth(102);
 
-        const siBtn = this.add.rectangle(cx - 110, cy + 60, 180, 60, 0x2a6a2a, 0.95).setStrokeStyle(2, 0x4aaa4a).setInteractive({ useHandCursor: true }).setDepth(102);
-        this.add.text(cx - 110, cy + 60, t('common.si'), { fontSize: '22px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5).setDepth(103);
-        const noBtn = this.add.rectangle(cx + 110, cy + 60, 180, 60, 0x8b3a3a, 0.95).setStrokeStyle(2, 0xaa4a4a).setInteractive({ useHandCursor: true }).setDepth(102);
-        this.add.text(cx + 110, cy + 60, t('common.no'), { fontSize: '22px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5).setDepth(103);
+        const siBtn = this.add.rectangle(cx - 130, cy + 70, 200, 70, 0x2a6a2a, 0.95).setStrokeStyle(2, 0x4aaa4a).setInteractive({ useHandCursor: true }).setDepth(102);
+        this.add.text(cx - 130, cy + 70, t('common.si'), { fontSize: '28px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5).setDepth(103);
+        const noBtn = this.add.rectangle(cx + 130, cy + 70, 200, 70, 0x8b3a3a, 0.95).setStrokeStyle(2, 0xaa4a4a).setInteractive({ useHandCursor: true }).setDepth(102);
+        this.add.text(cx + 130, cy + 70, t('common.no'), { fontSize: '28px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5).setDepth(103);
 
         const destruir = () => { overlay.destroy(); panel.destroy(); siBtn.destroy(); noBtn.destroy(); };
         siBtn.on('pointerup', () => { reiniciarCapitulo(3); destruir(); this.scene.restart(); });
@@ -101,9 +101,9 @@ class Capitulo3 extends Phaser.Scene {
     mostrarPuzzleResueltoOverlay(callback) {
         const cx = GAME_WIDTH / 2, cy = GAME_HEIGHT / 2;
         const overlay = this.add.rectangle(cx, cy, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.4).setDepth(50);
-        this.add.text(cx, GAME_HEIGHT - 160, t('common.puzzle_resuelto'), { fontSize: '36px', color: '#66ff66', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 6 }).setOrigin(0.5).setDepth(51);
-        const btn = this.add.rectangle(cx, GAME_HEIGHT - 90, 280, 60, 0x2a6a2a, 0.95).setStrokeStyle(2, 0x4aaa4a).setInteractive({ useHandCursor: true }).setDepth(51);
-        this.add.text(cx, GAME_HEIGHT - 90, t('capitulo1.continuar'), { fontSize: '22px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5).setDepth(52);
+        this.add.text(cx, GAME_HEIGHT - 180, t('common.puzzle_resuelto'), { fontSize: '42px', color: '#66ff66', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 6 }).setOrigin(0.5).setDepth(51);
+        const btn = this.add.rectangle(cx, GAME_HEIGHT - 90, 320, 70, 0x2a6a2a, 0.95).setStrokeStyle(2, 0x4aaa4a).setInteractive({ useHandCursor: true }).setDepth(51);
+        this.add.text(cx, GAME_HEIGHT - 90, t('capitulo1.continuar'), { fontSize: '26px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5).setDepth(52);
         btn.on('pointerup', () => { overlay.destroy(); callback(); });
     }
 
@@ -112,18 +112,18 @@ class Capitulo3 extends Phaser.Scene {
         this.crearFondo(); this.mostrarTitulo(true);
         this.valvulasActuales = [0, 0, 0, 0];
         const cx = GAME_WIDTH / 2;
-        this.add.rectangle(cx, 100, 700, 40, 0x000000, 0.7);
-        this.add.text(cx, 100, t('capitulo3.puzzle1_title'), { fontSize: '24px', color: '#e0d8c8', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+        this.add.rectangle(cx, 100, 800, 50, 0x000000, 0.7);
+        this.add.text(cx, 100, t('capitulo3.puzzle1_title'), { fontSize: '30px', color: '#e0d8c8', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
         if (this.rol === 'eugenia') this.crearVistaEugeniaPuzzle1(); else this.crearVistaMateoPuzzle1();
     }
 
     crearVistaEugeniaPuzzle1() {
         const cx = GAME_WIDTH / 2;
-        if (this.textures.exists('panel_valvulas')) this.add.image(cx, 380, 'panel_valvulas').setDisplaySize(650, 400);
+        if (this.textures.exists('panel_valvulas')) this.add.image(cx, 380, 'panel_valvulas').setDisplaySize(700, 450);
         if (estaResuelto(3, 1)) { this.mostrarPuzzleResueltoOverlay(() => this.irAPuzzle2()); return; }
 
-        if (this.textures.exists(getImg('manual_valvulas'))) this.add.image(cx + 400, 200, getImg('manual_valvulas')).setDisplaySize(300, 400);
-        this.add.text(cx, 130, t('capitulo3.puzzle1_eugenia_hint'), { fontSize: '20px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+        if (this.textures.exists(getImg('manual_valvulas'))) this.add.image(cx + 450, 200, getImg('manual_valvulas')).setDisplaySize(350, 450);
+        this.add.text(cx - 200, 140, t('capitulo3.puzzle1_eugenia_hint'), { fontSize: '26px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
 
         const valvulasX = [cx - 180, cx - 60, cx + 60, cx + 180];
         const valvulasY = 420;
@@ -131,11 +131,11 @@ class Capitulo3 extends Phaser.Scene {
 
         for (let i = 0; i < 4; i++) {
             const x = valvulasX[i];
-            const circulo = this.add.circle(x, valvulasY, 50, 0x8b6b3a).setStrokeStyle(4, 0x4a3a2a).setInteractive({ useHandCursor: true });
+            const circulo = this.add.circle(x, valvulasY, 55, 0x8b6b3a).setStrokeStyle(4, 0x4a3a2a).setInteractive({ useHandCursor: true });
             this.valvulasCírculos.push(circulo);
-            const texto = this.add.text(x, valvulasY, '0°', { fontSize: '24px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+            const texto = this.add.text(x, valvulasY, '0°', { fontSize: '28px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
             this.valvulasTexts.push(texto);
-            this.add.text(x, valvulasY - 70, String.fromCharCode(65 + i), { fontSize: '28px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+            this.add.text(x, valvulasY - 80, String.fromCharCode(65 + i), { fontSize: '32px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
             const index = i;
             circulo.on('pointerup', () => this.rotarValvula(index));
         }
@@ -151,13 +151,13 @@ class Capitulo3 extends Phaser.Scene {
 
     crearVistaMateoPuzzle1() {
         const cx = GAME_WIDTH / 2;
-        if (this.textures.exists('pared_valvulas_marcas')) this.add.image(cx, 340, 'pared_valvulas_marcas').setDisplaySize(700, 450);
-        this.add.rectangle(cx, 620, 900, 100, 0x000000, 0.88).setStrokeStyle(2, 0xc0a060);
-        this.add.text(cx, 590, t('capitulo3.puzzle1_mateo_hint'), { fontSize: '20px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
-        this.add.text(cx, 635, t('capitulo3.puzzle1_mateo_orden'), { fontSize: '22px', color: '#ff6666', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 3, align: 'center' }).setOrigin(0.5);
+        if (this.textures.exists('pared_valvulas_marcas')) this.add.image(cx, 340, 'pared_valvulas_marcas').setDisplaySize(750, 500);
+        this.add.rectangle(cx, 630, 950, 120, 0x000000, 0.88).setStrokeStyle(2, 0xc0a060);
+        this.add.text(cx, 590, t('capitulo3.puzzle1_mateo_hint'), { fontSize: '26px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+        this.add.text(cx, 650, t('capitulo3.puzzle1_mateo_orden'), { fontSize: '28px', color: '#ff6666', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 3, align: 'center' }).setOrigin(0.5);
 
-        const continueBtn = this.add.rectangle(GAME_WIDTH - 140, GAME_HEIGHT - 60, 220, 60, 0x2a6a2a, 0.9).setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
-        this.add.text(GAME_WIDTH - 140, GAME_HEIGHT - 60, t('capitulo1.continuar'), { fontSize: '20px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
+        const continueBtn = this.add.rectangle(GAME_WIDTH - 160, GAME_HEIGHT - 70, 260, 70, 0x2a6a2a, 0.9).setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
+        this.add.text(GAME_WIDTH - 160, GAME_HEIGHT - 70, t('capitulo1.continuar'), { fontSize: '24px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
         continueBtn.on('pointerup', () => { this.mostrarTransicion(t('transiciones.cap3_p2'), () => this.irAPuzzle2()); });
     }
 
@@ -174,20 +174,19 @@ class Capitulo3 extends Phaser.Scene {
     mostrarPuzzle2() {
         this.crearFondo(); this.mostrarTitulo(true); this.caminoActual = [];
         const cx = GAME_WIDTH / 2;
-        this.add.rectangle(cx, 100, 700, 40, 0x000000, 0.7);
-        this.add.text(cx, 100, t('capitulo3.puzzle2_title'), { fontSize: '24px', color: '#e0d8c8', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+        this.add.rectangle(cx, 100, 800, 50, 0x000000, 0.7);
+        this.add.text(cx, 100, t('capitulo3.puzzle2_title'), { fontSize: '30px', color: '#e0d8c8', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
         if (this.rol === 'eugenia') this.crearVistaEugeniaPuzzle2(); else this.crearVistaMateoPuzzle2();
     }
 
     crearVistaEugeniaPuzzle2() {
         const cx = GAME_WIDTH / 2;
         
-        // ✅ AQUI ESTÁ EL CAMBIO: Usamos 'mapa_hospital' directamente
         if (this.textures.exists('mapa_hospital')) {
-            this.add.image(cx, 380, 'mapa_hospital').setDisplaySize(800, 500);
+            this.add.image(cx, 380, 'mapa_hospital').setDisplaySize(850, 530);
         } else {
-            this.add.rectangle(cx, 380, 800, 500, 0x222222, 0.8).setStrokeStyle(3, 0x555555);
-            this.add.text(cx, 380, '⚠️ Falta imagen:\nmapa_hospital.jpg', { fontSize: '24px', color: '#ff6666', fontFamily: 'Courier New', align: 'center' }).setOrigin(0.5);
+            this.add.rectangle(cx, 380, 850, 530, 0x222222, 0.8).setStrokeStyle(3, 0x555555);
+            this.add.text(cx, 380, '⚠️ Falta imagen:\nmapa_hospital.jpg', { fontSize: '28px', color: '#ff6666', fontFamily: 'Courier New', align: 'center' }).setOrigin(0.5);
         }
 
         if (estaResuelto(3, 2)) { this.mostrarPuzzleResueltoOverlay(() => this.irAPuzzle3()); return; }
@@ -201,14 +200,14 @@ class Capitulo3 extends Phaser.Scene {
 
         this.habitacionesBotones = [];
         habitaciones.forEach(h => {
-            const btn = this.add.circle(h.x, h.y, 32, 0x2a4a6a, 0.9).setStrokeStyle(3, 0xc0a060).setInteractive({ useHandCursor: true });
+            const btn = this.add.circle(h.x, h.y, 38, 0x2a4a6a, 0.9).setStrokeStyle(3, 0xc0a060).setInteractive({ useHandCursor: true });
             const label = h.num === 0 ? 'P47' : h.num.toString();
-            this.add.text(h.x, h.y, label, { fontSize: h.num === 0 ? '14px' : '22px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+            this.add.text(h.x, h.y, label, { fontSize: h.num === 0 ? '16px' : '26px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
             btn.habitacionNum = h.num; this.habitacionesBotones.push(btn);
             btn.on('pointerup', () => this.tocarHabitacion(h.num, btn));
         });
 
-        this.caminoTexto = this.add.text(cx, 660, t('capitulo3.puzzle2_eugenia_hint'), { fontSize: '20px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+        this.caminoTexto = this.add.text(cx, 680, t('capitulo3.puzzle2_eugenia_hint'), { fontSize: '24px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
     }
 
     tocarHabitacion(num, btn) {
@@ -227,17 +226,17 @@ class Capitulo3 extends Phaser.Scene {
         const cx = GAME_WIDTH / 2;
         
         if (this.textures.exists('mapa_hospital_quemado')) {
-            this.add.image(cx, 360, 'mapa_hospital_quemado').setDisplaySize(750, 480);
+            this.add.image(cx, 360, 'mapa_hospital_quemado').setDisplaySize(800, 520);
         } else {
-            this.add.rectangle(cx, 360, 750, 480, 0x222222, 0.8).setStrokeStyle(3, 0x555555);
-            this.add.text(cx, 360, '⚠️ Falta imagen:\nmapa_hospital_quemado.jpg', { fontSize: '24px', color: '#ff6666', fontFamily: 'Courier New', align: 'center' }).setOrigin(0.5);
+            this.add.rectangle(cx, 360, 800, 520, 0x222222, 0.8).setStrokeStyle(3, 0x555555);
+            this.add.text(cx, 360, '⚠️ Falta imagen:\nmapa_hospital_quemado.jpg', { fontSize: '28px', color: '#ff6666', fontFamily: 'Courier New', align: 'center' }).setOrigin(0.5);
         }
 
-        this.add.rectangle(cx, 660, 900, 60, 0x000000, 0.88).setStrokeStyle(2, 0xc0a060);
-        this.add.text(cx, 660, t('capitulo3.puzzle2_mateo_hint'), { fontSize: '20px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+        this.add.rectangle(cx, 670, 950, 60, 0x000000, 0.88).setStrokeStyle(2, 0xc0a060);
+        this.add.text(cx, 670, t('capitulo3.puzzle2_mateo_hint'), { fontSize: '24px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
 
-        const continueBtn = this.add.rectangle(GAME_WIDTH - 140, GAME_HEIGHT - 60, 220, 60, 0x2a6a2a, 0.9).setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
-        this.add.text(GAME_WIDTH - 140, GAME_HEIGHT - 60, t('capitulo1.continuar'), { fontSize: '20px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
+        const continueBtn = this.add.rectangle(GAME_WIDTH - 160, GAME_HEIGHT - 70, 260, 70, 0x2a6a2a, 0.9).setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
+        this.add.text(GAME_WIDTH - 160, GAME_HEIGHT - 70, t('capitulo1.continuar'), { fontSize: '24px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
         continueBtn.on('pointerup', () => { this.mostrarTransicion(t('transiciones.cap3_p3'), () => this.irAPuzzle3()); });
     }
 
@@ -251,8 +250,8 @@ class Capitulo3 extends Phaser.Scene {
     mostrarPuzzle3() {
         this.crearFondo(); this.mostrarTitulo(true); this.cilindroActual = [0, 0, 0, 0, 0];
         const cx = GAME_WIDTH / 2;
-        this.add.rectangle(cx, 100, 700, 40, 0x000000, 0.7);
-        this.add.text(cx, 100, t('capitulo3.puzzle3_title'), { fontSize: '24px', color: '#e0d8c8', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+        this.add.rectangle(cx, 100, 800, 50, 0x000000, 0.7);
+        this.add.text(cx, 100, t('capitulo3.puzzle3_title'), { fontSize: '30px', color: '#e0d8c8', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
         if (this.rol === 'eugenia') this.crearVistaEugeniaPuzzle3(); else this.crearVistaMateoPuzzle3();
     }
 
@@ -260,31 +259,31 @@ class Capitulo3 extends Phaser.Scene {
         const cx = GAME_WIDTH / 2;
         
         if (this.textures.exists('cilindro_cifrado')) {
-            this.add.image(cx, 340, 'cilindro_cifrado').setDisplaySize(600, 400);
+            this.add.image(cx, 340, 'cilindro_cifrado').setDisplaySize(650, 450);
         } else {
-            this.add.rectangle(cx, 340, 600, 400, 0x222222, 0.8).setStrokeStyle(3, 0x555555);
-            this.add.text(cx, 340, '⚠️ Falta imagen:\ncilindro_cifrado.jpg', { fontSize: '24px', color: '#ff6666', fontFamily: 'Courier New', align: 'center' }).setOrigin(0.5);
+            this.add.rectangle(cx, 340, 650, 450, 0x222222, 0.8).setStrokeStyle(3, 0x555555);
+            this.add.text(cx, 340, '⚠️ Falta imagen:\ncilindro_cifrado.jpg', { fontSize: '28px', color: '#ff6666', fontFamily: 'Courier New', align: 'center' }).setOrigin(0.5);
         }
 
         if (estaResuelto(3, 3)) { this.mostrarPuzzleResueltoOverlay(() => this.irAFinal()); return; }
 
-        this.add.text(cx, 580, t('capitulo3.puzzle3_eugenia_frase'), { fontSize: '20px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
-        this.add.text(cx, 610, t('capitulo3.puzzle3_eugenia_hint'), { fontSize: '16px', color: '#888888', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+        this.add.text(cx, 590, t('capitulo3.puzzle3_eugenia_frase'), { fontSize: '26px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+        this.add.text(cx, 630, t('capitulo3.puzzle3_eugenia_hint'), { fontSize: '20px', color: '#888888', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
 
         const letrasAlfabeto = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        const anillosY = [230, 280, 330, 380, 430];
+        const anillosY = [210, 270, 330, 390, 450];
         this.anillosTexts = []; this.anillosBotones = [];
 
         for (let i = 0; i < 5; i++) {
             const y = anillosY[i];
-            const btn = this.add.rectangle(cx, y, 260, 44, 0x333333, 0.95).setStrokeStyle(2, 0xc0a060).setInteractive({ useHandCursor: true });
+            const btn = this.add.rectangle(cx, y, 280, 50, 0x333333, 0.95).setStrokeStyle(2, 0xc0a060).setInteractive({ useHandCursor: true });
             this.anillosBotones.push(btn);
             const letra = letrasAlfabeto[this.cilindroActual[i]];
-            const txt = this.add.text(cx, y, letra, { fontSize: '28px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+            const txt = this.add.text(cx, y, letra, { fontSize: '32px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
             this.anillosTexts.push(txt);
 
-            const upBtn = this.add.text(cx + 150, y, '▲', { fontSize: '28px', color: '#ffffff', fontFamily: 'Courier New' }).setOrigin(0.5).setInteractive({ useHandCursor: true });
-            const downBtn = this.add.text(cx - 150, y, '▼', { fontSize: '28px', color: '#ffffff', fontFamily: 'Courier New' }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+            const upBtn = this.add.text(cx + 170, y, '▲', { fontSize: '32px', color: '#ffffff', fontFamily: 'Courier New' }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+            const downBtn = this.add.text(cx - 170, y, '▼', { fontSize: '32px', color: '#ffffff', fontFamily: 'Courier New' }).setOrigin(0.5).setInteractive({ useHandCursor: true });
             const idx = i;
             upBtn.on('pointerup', () => this.rotarAnillo(idx, 1));
             downBtn.on('pointerup', () => this.rotarAnillo(idx, -1));
@@ -307,18 +306,18 @@ class Capitulo3 extends Phaser.Scene {
         const cx = GAME_WIDTH / 2;
         
         if (this.textures.exists('cilindro_quemado')) {
-            this.add.image(cx, 340, 'cilindro_quemado').setDisplaySize(600, 400);
+            this.add.image(cx, 340, 'cilindro_quemado').setDisplaySize(650, 450);
         } else {
-            this.add.rectangle(cx, 340, 600, 400, 0x222222, 0.8).setStrokeStyle(3, 0x555555);
-            this.add.text(cx, 340, '⚠️ Falta imagen:\ncilindro_quemado.jpg', { fontSize: '24px', color: '#ff6666', fontFamily: 'Courier New', align: 'center' }).setOrigin(0.5);
+            this.add.rectangle(cx, 340, 650, 450, 0x222222, 0.8).setStrokeStyle(3, 0x555555);
+            this.add.text(cx, 340, '⚠️ Falta imagen:\ncilindro_quemado.jpg', { fontSize: '28px', color: '#ff6666', fontFamily: 'Courier New', align: 'center' }).setOrigin(0.5);
         }
 
-        this.add.rectangle(cx, 620, 900, 100, 0x000000, 0.88).setStrokeStyle(2, 0xc0a060);
-        this.add.text(cx, 590, t('capitulo3.puzzle3_mateo_hint'), { fontSize: '18px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
-        this.add.text(cx, 625, 'Anillo 1: L   ·   Anillo 2: I   ·   Anillo 4: E   ·   Anillo 5: R', { fontSize: '18px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+        this.add.rectangle(cx, 630, 950, 110, 0x000000, 0.88).setStrokeStyle(2, 0xc0a060);
+        this.add.text(cx, 590, t('capitulo3.puzzle3_mateo_hint'), { fontSize: '24px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+        this.add.text(cx, 640, 'Anillo 1: L   ·   Anillo 2: I   ·   Anillo 4: E   ·   Anillo 5: R', { fontSize: '24px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
 
-        const continueBtn = this.add.rectangle(GAME_WIDTH - 140, GAME_HEIGHT - 60, 220, 60, 0x2a6a2a, 0.9).setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
-        this.add.text(GAME_WIDTH - 140, GAME_HEIGHT - 60, t('capitulo1.continuar'), { fontSize: '20px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
+        const continueBtn = this.add.rectangle(GAME_WIDTH - 160, GAME_HEIGHT - 70, 260, 70, 0x2a6a2a, 0.9).setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
+        this.add.text(GAME_WIDTH - 160, GAME_HEIGHT - 70, t('capitulo1.continuar'), { fontSize: '24px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
         continueBtn.on('pointerup', () => this.irAFinal());
     }
 
@@ -330,7 +329,7 @@ class Capitulo3 extends Phaser.Scene {
     mostrarMensajeGlobal(texto, color) {
         const cx = GAME_WIDTH / 2;
         if (this.mensajeGlobal) this.mensajeGlobal.destroy();
-        this.mensajeGlobal = this.add.text(cx, GAME_HEIGHT - 110, texto, { fontSize: '22px', color: color, fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 4 }).setOrigin(0.5);
+        this.mensajeGlobal = this.add.text(cx, GAME_HEIGHT - 120, texto, { fontSize: '28px', color: color, fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 4 }).setOrigin(0.5);
     }
 
     irAPuzzleAnterior() {
@@ -354,41 +353,41 @@ class Capitulo3 extends Phaser.Scene {
     mostrarFinal() {
         this.crearFondo(); this.mostrarTitulo(true);
         const cx = GAME_WIDTH / 2;
-        this.add.text(cx, 130, t('capitulo3.chapter_end_title'), { fontSize: '40px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 6 }).setOrigin(0.5);
+        this.add.text(cx, 130, t('capitulo3.chapter_end_title'), { fontSize: '46px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 6 }).setOrigin(0.5);
         const miMitad = (this.rol === 'eugenia') ? '33--' : '--79';
         const etiqueta = (this.rol === 'eugenia') ? t('capitulo3.chapter_end_eugenia') : t('capitulo3.chapter_end_mateo');
 
-        this.add.text(cx, 210, etiqueta, { fontSize: '22px', color: '#aaaaaa', fontFamily: 'Courier New', fontStyle: 'italic' }).setOrigin(0.5);
-        this.add.text(cx, 270, miMitad, { fontSize: '70px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 6 }).setOrigin(0.5);
+        this.add.text(cx, 220, etiqueta, { fontSize: '28px', color: '#aaaaaa', fontFamily: 'Courier New', fontStyle: 'italic' }).setOrigin(0.5);
+        this.add.text(cx, 290, miMitad, { fontSize: '80px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 6 }).setOrigin(0.5);
 
         if (estaResuelto(3, 4)) {
-            this.add.text(cx, 400, t('common.puzzle_resuelto'), { fontSize: '28px', color: '#66ff66', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 4 }).setOrigin(0.5);
-            const irBtn = this.add.rectangle(cx, 510, 560, 70, 0x2a6a2a, 0.95).setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
-            this.add.text(cx, 510, '→ ' + t('interludio.title') + ' 3', { fontSize: '22px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
+            this.add.text(cx, 400, t('common.puzzle_resuelto'), { fontSize: '32px', color: '#66ff66', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 4 }).setOrigin(0.5);
+            const irBtn = this.add.rectangle(cx, 510, 600, 80, 0x2a6a2a, 0.95).setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
+            this.add.text(cx, 510, '→ ' + t('interludio.title') + ' 3', { fontSize: '26px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
             irBtn.on('pointerup', () => { this.detenerAmbiente(); localStorage.setItem('tc4_puzzle', '1'); this.scene.start('Interludio', { numero: 3, siguiente: 'Capitulo4' }); });
             return;
         }
 
-        this.add.text(cx, 340, t('capitulo3.chapter_end_instruction'), { fontSize: '20px', color: '#cccccc', fontFamily: 'Courier New', wordWrap: { width: 900 }, align: 'center', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+        this.add.text(cx, 360, t('capitulo3.chapter_end_instruction'), { fontSize: '24px', color: '#cccccc', fontFamily: 'Courier New', wordWrap: { width: 1000 }, align: 'center', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
         this.codigoIngresado = ['', '', '', ''];
         const startX = 470, spacing = 110;
         this.codigoTexts = [];
 
         for (let i = 0; i < 4; i++) {
             const x = startX + i * spacing;
-            this.add.rectangle(x, 440, 80, 90, 0x1a1a1a, 0.95).setStrokeStyle(3, 0xc0a060);
-            const txt = this.add.text(x, 440, '', { fontSize: '48px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
+            this.add.rectangle(x, 460, 90, 100, 0x1a1a1a, 0.95).setStrokeStyle(3, 0xc0a060);
+            const txt = this.add.text(x, 460, '', { fontSize: '56px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
             this.codigoTexts.push(txt);
             const index = i;
-            const upBtn = this.add.text(x, 370, '▲', { fontSize: '32px', color: '#cccccc', fontFamily: 'Courier New' }).setOrigin(0.5).setInteractive({ useHandCursor: true });
-            const downBtn = this.add.text(x, 510, '▼', { fontSize: '32px', color: '#cccccc', fontFamily: 'Courier New' }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+            const upBtn = this.add.text(x, 380, '▲', { fontSize: '38px', color: '#cccccc', fontFamily: 'Courier New' }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+            const downBtn = this.add.text(x, 540, '▼', { fontSize: '38px', color: '#cccccc', fontFamily: 'Courier New' }).setOrigin(0.5).setInteractive({ useHandCursor: true });
             upBtn.on('pointerup', () => { this.codigoIngresado[index] = ((parseInt(this.codigoIngresado[index]) || 0) + 1) % 10; this.codigoTexts[index].setText(this.codigoIngresado[index].toString()); });
             downBtn.on('pointerup', () => { this.codigoIngresado[index] = ((parseInt(this.codigoIngresado[index]) || 0) + 9) % 10; this.codigoTexts[index].setText(this.codigoIngresado[index].toString()); });
         }
 
-        const confirmBtn = this.add.rectangle(cx, 600, 500, 70, 0x2a6a2a, 0.9).setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
-        this.add.text(cx, 600, t('capitulo3.chapter_code_confirm'), { fontSize: '24px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
-        this.mensajeFinal = this.add.text(cx, 680, '', { fontSize: '24px', color: '#ff6666', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 4 }).setOrigin(0.5);
+        const confirmBtn = this.add.rectangle(cx, 630, 550, 80, 0x2a6a2a, 0.9).setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
+        this.add.text(cx, 630, t('capitulo3.chapter_code_confirm'), { fontSize: '28px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
+        this.mensajeFinal = this.add.text(cx, 700, '', { fontSize: '28px', color: '#ff6666', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 4 }).setOrigin(0.5);
         confirmBtn.on('pointerup', () => this.verificarCodigoCapitulo());
     }
 
@@ -400,8 +399,8 @@ class Capitulo3 extends Phaser.Scene {
             this.reproducirAcierto(); localStorage.setItem('tc_capitulo', '4'); localStorage.setItem('tc3_puzzle', '1');
             this.time.delayedCall(1500, () => {
                 const cx = GAME_WIDTH / 2;
-                const irBtn = this.add.rectangle(cx, GAME_HEIGHT - 110, 560, 70, 0x2a6a2a, 0.95).setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
-                this.add.text(cx, GAME_HEIGHT - 110, '→ ' + t('interludio.title') + ' 3', { fontSize: '22px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
+                const irBtn = this.add.rectangle(cx, GAME_HEIGHT - 110, 600, 80, 0x2a6a2a, 0.95).setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
+                this.add.text(cx, GAME_HEIGHT - 110, '→ ' + t('interludio.title') + ' 3', { fontSize: '26px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
                 irBtn.on('pointerup', () => { this.detenerAmbiente(); localStorage.setItem('tc4_puzzle', '1'); this.scene.start('Interludio', { numero: 3, siguiente: 'Capitulo4' }); });
             });
         } else {

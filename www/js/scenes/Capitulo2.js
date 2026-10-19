@@ -31,14 +31,10 @@ const PAGINAS_PUZLE4 = [
 const CODIGO_CAPITULO2 = '8156';
 
 class Capitulo2 extends Phaser.Scene {
-    constructor() {
-        super({ key: 'Capitulo2' });
-    }
+    constructor() { super({ key: 'Capitulo2' }); }
 
     create() {
-        if (this.sound.context && this.sound.context.state === 'suspended') {
-            this.sound.context.resume();
-        }
+        if (this.sound.context && this.sound.context.state === 'suspended') { this.sound.context.resume(); }
 
         this.rol = localStorage.getItem('tc_rol') || 'eugenia';
         this.ambiente = null;
@@ -80,7 +76,7 @@ class Capitulo2 extends Phaser.Scene {
 
         this.cameras.main.setBackgroundColor('#000000');
         this.add.rectangle(cx, cy, GAME_WIDTH, GAME_HEIGHT, 0x000000, 1);
-        const txt = this.add.text(cx, cy, texto, { fontSize: '28px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', wordWrap: { width: 900 }, align: 'center' }).setOrigin(0.5).setAlpha(0);
+        const txt = this.add.text(cx, cy, texto, { fontSize: '36px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', wordWrap: { width: 1000 }, align: 'center' }).setOrigin(0.5).setAlpha(0);
 
         this.tweens.add({
             targets: txt, alpha: 1, duration: 1500, ease: 'Power2',
@@ -103,39 +99,39 @@ class Capitulo2 extends Phaser.Scene {
 
         const tinte = (this.rol === 'eugenia') ? 0xd4a050 : 0x1a2a5a;
         this.add.rectangle(cx, cy, GAME_WIDTH, GAME_HEIGHT, tinte, 0.10);
-        this.add.rectangle(cx, 30, GAME_WIDTH, 60, 0x000000, 0.6);
-        this.add.rectangle(cx, GAME_HEIGHT - 15, GAME_WIDTH, 30, 0x000000, 0.6);
+        this.add.rectangle(cx, 35, GAME_WIDTH, 70, 0x000000, 0.6);
+        this.add.rectangle(cx, GAME_HEIGHT - 20, GAME_WIDTH, 40, 0x000000, 0.6);
     }
 
     mostrarTitulo(mostrarAnterior = false) {
         const cx = GAME_WIDTH / 2;
-        this.add.rectangle(cx, 55, 700, 70, 0x000000, 0.65);
-        this.add.text(cx, 55, t('capitulo2.title'), { fontSize: '32px', color: '#e0d8c8', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 4 }).setOrigin(0.5);
+        this.add.rectangle(cx, 55, 800, 80, 0x000000, 0.7);
+        this.add.text(cx, 55, t('capitulo2.title'), { fontSize: '40px', color: '#e0d8c8', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 4 }).setOrigin(0.5);
 
-        const backBtn = this.add.text(80, GAME_HEIGHT - 60, '← ' + t('common.back'), { fontSize: '22px', color: '#ffffff', fontFamily: 'Courier New', backgroundColor: '#444444', padding: { x: 14, y: 8 } }).setOrigin(0, 0.5).setInteractive({ useHandCursor: true });
+        const backBtn = this.add.text(80, GAME_HEIGHT - 60, '← ' + t('common.back'), { fontSize: '28px', color: '#ffffff', fontFamily: 'Courier New', backgroundColor: '#444444', padding: { x: 16, y: 10 } }).setOrigin(0, 0.5).setInteractive({ useHandCursor: true });
         backBtn.on('pointerup', () => { this.detenerAmbiente(); this.scene.start('Menu'); });
 
         if (mostrarAnterior) {
             const puzzleActual = parseInt(localStorage.getItem('tc2_puzzle') || '1');
             const labelTexto = (puzzleActual === 1) ? '← ' + t('chapters.chapter1') : '← ' + t('common.previous');
-            const prevBtn = this.add.text(80, 55, labelTexto, { fontSize: '20px', color: '#ffffff', fontFamily: 'Courier New', backgroundColor: '#444444', padding: { x: 12, y: 6 } }).setOrigin(0, 0.5).setInteractive({ useHandCursor: true });
+            const prevBtn = this.add.text(80, 55, labelTexto, { fontSize: '26px', color: '#ffffff', fontFamily: 'Courier New', backgroundColor: '#444444', padding: { x: 14, y: 8 } }).setOrigin(0, 0.5).setInteractive({ useHandCursor: true });
             prevBtn.on('pointerup', () => this.irAPuzzleAnterior());
         }
 
-        const resetBtn = this.add.text(GAME_WIDTH - 40, 55, t('common.reiniciar'), { fontSize: '18px', color: '#ffffff', fontFamily: 'Courier New', backgroundColor: '#8b3a3a', padding: { x: 12, y: 6 } }).setOrigin(1, 0.5).setInteractive({ useHandCursor: true });
+        const resetBtn = this.add.text(GAME_WIDTH - 40, 55, t('common.reiniciar'), { fontSize: '24px', color: '#ffffff', fontFamily: 'Courier New', backgroundColor: '#8b3a3a', padding: { x: 14, y: 8 } }).setOrigin(1, 0.5).setInteractive({ useHandCursor: true });
         resetBtn.on('pointerup', () => this.confirmarReinicio());
     }
 
     confirmarReinicio() {
         const cx = GAME_WIDTH / 2, cy = GAME_HEIGHT / 2;
         const overlay = this.add.rectangle(cx, cy, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.9).setDepth(100);
-        const panel = this.add.rectangle(cx, cy, 600, 250, 0x1a1a1a, 1).setStrokeStyle(3, 0xc0a060).setDepth(101);
-        this.add.text(cx, cy - 40, t('common.reiniciar_confirm'), { fontSize: '22px', color: '#ffffff', fontFamily: 'Courier New', wordWrap: { width: 550 }, align: 'center' }).setOrigin(0.5).setDepth(102);
+        const panel = this.add.rectangle(cx, cy, 700, 280, 0x1a1a1a, 1).setStrokeStyle(3, 0xc0a060).setDepth(101);
+        this.add.text(cx, cy - 40, t('common.reiniciar_confirm'), { fontSize: '28px', color: '#ffffff', fontFamily: 'Courier New', wordWrap: { width: 600 }, align: 'center' }).setOrigin(0.5).setDepth(102);
 
-        const siBtn = this.add.rectangle(cx - 110, cy + 60, 180, 60, 0x2a6a2a, 0.95).setStrokeStyle(2, 0x4aaa4a).setInteractive({ useHandCursor: true }).setDepth(102);
-        this.add.text(cx - 110, cy + 60, t('common.si'), { fontSize: '22px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5).setDepth(103);
-        const noBtn = this.add.rectangle(cx + 110, cy + 60, 180, 60, 0x8b3a3a, 0.95).setStrokeStyle(2, 0xaa4a4a).setInteractive({ useHandCursor: true }).setDepth(102);
-        this.add.text(cx + 110, cy + 60, t('common.no'), { fontSize: '22px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5).setDepth(103);
+        const siBtn = this.add.rectangle(cx - 130, cy + 70, 200, 70, 0x2a6a2a, 0.95).setStrokeStyle(2, 0x4aaa4a).setInteractive({ useHandCursor: true }).setDepth(102);
+        this.add.text(cx - 130, cy + 70, t('common.si'), { fontSize: '28px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5).setDepth(103);
+        const noBtn = this.add.rectangle(cx + 130, cy + 70, 200, 70, 0x8b3a3a, 0.95).setStrokeStyle(2, 0xaa4a4a).setInteractive({ useHandCursor: true }).setDepth(102);
+        this.add.text(cx + 130, cy + 70, t('common.no'), { fontSize: '28px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5).setDepth(103);
 
         const destruir = () => { overlay.destroy(); panel.destroy(); siBtn.destroy(); noBtn.destroy(); };
         siBtn.on('pointerup', () => { reiniciarCapitulo(2); destruir(); this.scene.restart(); });
@@ -145,9 +141,9 @@ class Capitulo2 extends Phaser.Scene {
     mostrarPuzzleResueltoOverlay(callback) {
         const cx = GAME_WIDTH / 2, cy = GAME_HEIGHT / 2;
         const overlay = this.add.rectangle(cx, cy, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.4).setDepth(50);
-        this.add.text(cx, GAME_HEIGHT - 160, t('common.puzzle_resuelto'), { fontSize: '36px', color: '#66ff66', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 6 }).setOrigin(0.5).setDepth(51);
-        const btn = this.add.rectangle(cx, GAME_HEIGHT - 90, 280, 60, 0x2a6a2a, 0.95).setStrokeStyle(2, 0x4aaa4a).setInteractive({ useHandCursor: true }).setDepth(51);
-        this.add.text(cx, GAME_HEIGHT - 90, t('capitulo1.continuar'), { fontSize: '22px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5).setDepth(52);
+        this.add.text(cx, GAME_HEIGHT - 180, t('common.puzzle_resuelto'), { fontSize: '42px', color: '#66ff66', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 6 }).setOrigin(0.5).setDepth(51);
+        const btn = this.add.rectangle(cx, GAME_HEIGHT - 90, 320, 70, 0x2a6a2a, 0.95).setStrokeStyle(2, 0x4aaa4a).setInteractive({ useHandCursor: true }).setDepth(51);
+        this.add.text(cx, GAME_HEIGHT - 90, t('capitulo1.continuar'), { fontSize: '26px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5).setDepth(52);
         btn.on('pointerup', () => { overlay.destroy(); callback(); });
     }
 
@@ -160,8 +156,8 @@ class Capitulo2 extends Phaser.Scene {
         this.mostrarTitulo(true);
         this.electrodosColocados = [null, null, null, null];
         const cx = GAME_WIDTH / 2;
-        this.add.rectangle(cx, 100, 700, 40, 0x000000, 0.7);
-        this.add.text(cx, 100, t('capitulo2.puzzle1_title'), { fontSize: '24px', color: '#e0d8c8', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+        this.add.rectangle(cx, 100, 800, 50, 0x000000, 0.7);
+        this.add.text(cx, 100, t('capitulo2.puzzle1_title'), { fontSize: '30px', color: '#e0d8c8', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
 
         if (this.rol === 'eugenia') this.crearVistaEugeniaPuzzle1();
         else this.crearVistaMateoPuzzle1();
@@ -169,16 +165,16 @@ class Capitulo2 extends Phaser.Scene {
 
     crearVistaEugeniaPuzzle1() {
         const cx = GAME_WIDTH / 2;
-        this.add.image(cx, 360, 'panel_electrodos').setDisplaySize(560, 360);
+        this.add.image(cx, 360, 'panel_electrodos').setDisplaySize(650, 450);
         if (estaResuelto(2, 1)) { this.mostrarPuzzleResueltoOverlay(() => this.irAPuzzle2()); return; }
 
         const startX = cx - 210, spacing = 140;
         this.slots = [];
         for (let i = 0; i < 4; i++) {
             const x = startX + i * spacing;
-            const slot = this.add.rectangle(x, 300, 100, 100, 0x000000, 0.5).setStrokeStyle(3, 0xc0a060);
+            const slot = this.add.rectangle(x, 300, 110, 110, 0x000000, 0.5).setStrokeStyle(3, 0xc0a060);
             slot.slotIndex = i; this.slots.push(slot);
-            this.add.text(x, 240, (i + 1).toString(), { fontSize: '24px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
+            this.add.text(x, 230, (i + 1).toString(), { fontSize: '28px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
         }
 
         const electrodosDesordenados = [1, 3, 0, 2];
@@ -186,23 +182,23 @@ class Capitulo2 extends Phaser.Scene {
         electrodosDesordenados.forEach((idx, i) => {
             const x = startX + i * spacing;
             const y = 540;
-            const circulo = this.add.circle(x, y, 45, ELECTRODOS[idx].color).setStrokeStyle(4, 0xc0a060).setInteractive({ draggable: true, useHandCursor: true });
-            const textoNombre = this.add.text(x, y, ELECTRODOS[idx].nombre, { fontSize: '16px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+            const circulo = this.add.circle(x, y, 50, ELECTRODOS[idx].color).setStrokeStyle(4, 0xc0a060).setInteractive({ draggable: true, useHandCursor: true });
+            const textoNombre = this.add.text(x, y, ELECTRODOS[idx].nombre, { fontSize: '18px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
             circulo.electrodoIndex = idx; circulo.textoVinculado = textoNombre; circulo.posOriginal = { x: x, y: y };
             this.electrodoObjetos.push(circulo); this.input.setDraggable(circulo);
             circulo.on('drag', (pointer, dragX, dragY) => { circulo.x = dragX; circulo.y = dragY; textoNombre.x = dragX; textoNombre.y = dragY; });
             circulo.on('dragend', () => this.intentarColocarElectrodo(circulo));
         });
-        this.mensaje = this.add.text(cx, GAME_HEIGHT - 60, t('capitulo2.puzzle1_eugenia_hint'), { fontSize: '18px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+        this.mensaje = this.add.text(cx, GAME_HEIGHT - 60, t('capitulo2.puzzle1_eugenia_hint'), { fontSize: '24px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
     }
 
     crearVistaMateoPuzzle1() {
         const cx = GAME_WIDTH / 2;
-        this.add.image(cx, 400, 'pared_simbolos').setDisplaySize(700, 450);
-        this.add.rectangle(cx, 670, 800, 50, 0x000000, 0.7);
-        this.add.text(cx, 670, t('capitulo2.puzzle1_mateo_hint'), { fontSize: '20px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
-        const continueBtn = this.add.rectangle(GAME_WIDTH - 140, GAME_HEIGHT - 60, 220, 60, 0x2a6a2a, 0.9).setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
-        this.add.text(GAME_WIDTH - 140, GAME_HEIGHT - 60, t('capitulo1.continuar'), { fontSize: '20px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
+        this.add.image(cx, 400, 'pared_simbolos').setDisplaySize(800, 500);
+        this.add.rectangle(cx, 670, 900, 60, 0x000000, 0.7);
+        this.add.text(cx, 670, t('capitulo2.puzzle1_mateo_hint'), { fontSize: '28px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+        const continueBtn = this.add.rectangle(GAME_WIDTH - 160, GAME_HEIGHT - 70, 260, 70, 0x2a6a2a, 0.9).setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
+        this.add.text(GAME_WIDTH - 160, GAME_HEIGHT - 70, t('capitulo1.continuar'), { fontSize: '24px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
         continueBtn.on('pointerup', () => { this.mostrarTransicion(t('transiciones.cap2_p2'), () => this.irAPuzzle2()); });
     }
 
@@ -249,23 +245,23 @@ class Capitulo2 extends Phaser.Scene {
     mostrarPuzzle2() {
         this.crearFondo(); this.mostrarTitulo(true); this.palabrasColocadas = [null, null, null, null, null];
         const cx = GAME_WIDTH / 2;
-        this.add.rectangle(cx, 100, 700, 40, 0x000000, 0.7);
-        this.add.text(cx, 100, t('capitulo2.puzzle2_title'), { fontSize: '24px', color: '#e0d8c8', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+        this.add.rectangle(cx, 100, 800, 50, 0x000000, 0.7);
+        this.add.text(cx, 100, t('capitulo2.puzzle2_title'), { fontSize: '30px', color: '#e0d8c8', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
         if (this.rol === 'eugenia') this.crearVistaEugeniaPuzzle2(); else this.crearVistaMateoPuzzle2();
     }
 
     crearVistaEugeniaPuzzle2() {
         const cx = GAME_WIDTH / 2;
-        this.add.image(cx, 280, getImg('transcripcion')).setDisplaySize(800, 280);
+        this.add.image(cx, 280, getImg('transcripcion')).setDisplaySize(850, 300);
         if (estaResuelto(2, 2)) { this.mostrarPuzzleResueltoOverlay(() => this.irAPuzzle3()); return; }
 
-        this.add.text(cx, 150, t('capitulo2.puzzle2_eugenia_hint'), { fontSize: '18px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+        this.add.text(cx, 140, t('capitulo2.puzzle2_eugenia_hint'), { fontSize: '26px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
 
-        const huecosY = 420, startX = cx - 240, spacing = 120;
+        const huecosY = 440, startX = cx - 240, spacing = 120;
         this.slotsPalabras = [];
         for (let i = 0; i < 5; i++) {
             const x = startX + i * spacing;
-            const slot = this.add.rectangle(x, huecosY, 110, 50, 0x000000, 0.7).setStrokeStyle(3, 0xc0a060);
+            const slot = this.add.rectangle(x, huecosY, 120, 60, 0x000000, 0.7).setStrokeStyle(3, 0xc0a060);
             slot.slotIndex = i; this.slotsPalabras.push(slot);
         }
 
@@ -273,13 +269,13 @@ class Capitulo2 extends Phaser.Scene {
         const mezcladas = Phaser.Utils.Array.Shuffle([...todasLasPalabras]);
 
         this.palabrasObjetos = [];
-        const bancoStartX = cx - 400, bancoY = 580, bancoSpacing = 160;
+        const bancoStartX = cx - 400, bancoY = 600, bancoSpacing = 160;
 
         mezcladas.forEach((palabra, i) => {
             const col = i % 5, fila = Math.floor(i / 5);
-            const x = bancoStartX + col * bancoSpacing, y = bancoY + fila * 60;
-            const caja = this.add.rectangle(x, y, 140, 45, 0x333333, 0.9).setStrokeStyle(2, 0xc0a060).setInteractive({ draggable: true, useHandCursor: true });
-            const texto = this.add.text(x, y, palabra, { fontSize: '18px', color: '#ffffff', fontFamily: 'Courier New', stroke: '#000000', strokeThickness: 2 }).setOrigin(0.5);
+            const x = bancoStartX + col * bancoSpacing, y = bancoY + fila * 70;
+            const caja = this.add.rectangle(x, y, 150, 55, 0x333333, 0.9).setStrokeStyle(2, 0xc0a060).setInteractive({ draggable: true, useHandCursor: true });
+            const texto = this.add.text(x, y, palabra, { fontSize: '22px', color: '#ffffff', fontFamily: 'Courier New', stroke: '#000000', strokeThickness: 2 }).setOrigin(0.5);
             caja.palabra = palabra; caja.textoVinculado = texto; caja.posOriginal = { x: x, y: y };
             this.palabrasObjetos.push(caja); this.input.setDraggable(caja);
             caja.on('drag', (pointer, dragX, dragY) => { caja.x = dragX; caja.y = dragY; texto.x = dragX; texto.y = dragY; });
@@ -289,15 +285,15 @@ class Capitulo2 extends Phaser.Scene {
 
     crearVistaMateoPuzzle2() {
         const cx = GAME_WIDTH / 2;
-        this.add.image(cx, 320, 'cinta_audio').setDisplaySize(600, 360);
-        this.add.rectangle(cx, 120, 800, 40, 0x000000, 0.7);
-        this.add.text(cx, 120, t('capitulo2.puzzle2_mateo_hint'), { fontSize: '18px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
-        this.add.rectangle(cx, 560, 900, 130, 0x000000, 0.88).setStrokeStyle(2, 0xc0a060);
-        this.add.text(cx, 510, '🔊 Palabras que se oyen en la cinta:', { fontSize: '18px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic' }).setOrigin(0.5);
-        this.add.text(cx, 560, PALABRAS_PUZLE2.correctas.join('   •   '), { fontSize: '22px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold', wordWrap: { width: 850 }, align: 'center', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+        this.add.image(cx, 320, 'cinta_audio').setDisplaySize(650, 400);
+        this.add.rectangle(cx, 120, 800, 50, 0x000000, 0.7);
+        this.add.text(cx, 120, t('capitulo2.puzzle2_mateo_hint'), { fontSize: '24px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+        this.add.rectangle(cx, 580, 950, 150, 0x000000, 0.88).setStrokeStyle(2, 0xc0a060);
+        this.add.text(cx, 530, '🔊 Palabras que se oyen en la cinta:', { fontSize: '24px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic' }).setOrigin(0.5);
+        this.add.text(cx, 580, PALABRAS_PUZLE2.correctas.join('   •   '), { fontSize: '26px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold', wordWrap: { width: 850 }, align: 'center', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
 
-        const continueBtn = this.add.rectangle(GAME_WIDTH - 140, GAME_HEIGHT - 60, 220, 60, 0x2a6a2a, 0.9).setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
-        this.add.text(GAME_WIDTH - 140, GAME_HEIGHT - 60, t('capitulo1.continuar'), { fontSize: '20px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
+        const continueBtn = this.add.rectangle(GAME_WIDTH - 160, GAME_HEIGHT - 70, 260, 70, 0x2a6a2a, 0.9).setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
+        this.add.text(GAME_WIDTH - 160, GAME_HEIGHT - 70, t('capitulo1.continuar'), { fontSize: '24px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
         continueBtn.on('pointerup', () => { this.mostrarTransicion(t('transiciones.cap2_p3'), () => this.irAPuzzle3()); });
     }
 
@@ -328,8 +324,8 @@ class Capitulo2 extends Phaser.Scene {
             this.time.delayedCall(800, () => {
                 const cx = GAME_WIDTH / 2;
                 const overlay = this.add.rectangle(cx, 360, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.95).setDepth(50);
-                const img = this.add.image(cx, 340, getImg('transcripcion_completa')).setDisplaySize(900, 500).setDepth(51);
-                const ok = this.add.text(cx, GAME_HEIGHT - 60, '✓ Mensaje descifrado', { fontSize: '28px', color: '#66ff66', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 4 }).setOrigin(0.5).setDepth(52);
+                const img = this.add.image(cx, 340, getImg('transcripcion_completa')).setDisplaySize(950, 550).setDepth(51);
+                const ok = this.add.text(cx, GAME_HEIGHT - 70, '✓ Mensaje descifrado', { fontSize: '32px', color: '#66ff66', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 4 }).setOrigin(0.5).setDepth(52);
                 this.time.delayedCall(2500, () => { overlay.destroy(); img.destroy(); ok.destroy(); this.mostrarTransicion(t('transiciones.cap2_p3'), () => this.irAPuzzle3()); });
             });
         } else {
@@ -350,34 +346,34 @@ class Capitulo2 extends Phaser.Scene {
     mostrarPuzzle3() {
         this.crearFondo(); this.mostrarTitulo(true); this.fragmentosColocados = [null, null, null, null, null];
         const cx = GAME_WIDTH / 2;
-        this.add.rectangle(cx, 100, 700, 40, 0x000000, 0.7);
-        this.add.text(cx, 100, t('capitulo2.puzzle3_title'), { fontSize: '24px', color: '#e0d8c8', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+        this.add.rectangle(cx, 100, 800, 50, 0x000000, 0.7);
+        this.add.text(cx, 100, t('capitulo2.puzzle3_title'), { fontSize: '30px', color: '#e0d8c8', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
         if (this.rol === 'eugenia') this.crearVistaEugeniaPuzzle3(); else this.crearVistaMateoPuzzle3();
     }
 
     crearVistaEugeniaPuzzle3() {
         const cx = GAME_WIDTH / 2;
-        this.add.image(cx, 320, getImg('espejo_eugenia')).setDisplaySize(650, 400);
+        this.add.image(cx, 320, getImg('espejo_eugenia')).setDisplaySize(700, 450);
         if (estaResuelto(2, 3)) { this.mostrarPuzzleResueltoOverlay(() => this.irAPuzzle4()); return; }
 
-        this.add.rectangle(cx, 130, 800, 40, 0x000000, 0.7);
-        this.add.text(cx, 130, t('capitulo2.puzzle3_eugenia_hint'), { fontSize: '18px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+        this.add.rectangle(cx, 130, 800, 50, 0x000000, 0.7);
+        this.add.text(cx, 130, t('capitulo2.puzzle3_eugenia_hint'), { fontSize: '26px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
 
-        const startY = 590, startX = 200, spacingX = 220;
+        const startY = 600, startX = 200, spacingX = 220;
         this.slotsFragmentos = [];
         for (let i = 0; i < 5; i++) {
             const x = startX + i * spacingX;
-            const slot = this.add.rectangle(x, startY, 190, 55, 0x000000, 0.7).setStrokeStyle(3, 0xc0a060);
+            const slot = this.add.rectangle(x, startY, 200, 65, 0x000000, 0.7).setStrokeStyle(3, 0xc0a060);
             slot.slotIndex = i; this.slotsFragmentos.push(slot);
-            this.add.text(x - 100, startY, (i + 1).toString(), { fontSize: '22px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+            this.add.text(x - 110, startY, (i + 1).toString(), { fontSize: '26px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
         }
 
         const ordenDesordenado = [1, 4, 2, 0, 3];
         this.fragmentosObjetos = [];
         ordenDesordenado.forEach((idx, i) => {
-            const x = 200 + i * 220, y = 500;
-            const caja = this.add.rectangle(x, y, 200, 55, 0x333333, 0.95).setStrokeStyle(2, 0xc0a060).setInteractive({ draggable: true, useHandCursor: true });
-            const texto = this.add.text(x, y, FRAGMENTOS_PUZLE3[idx], { fontSize: '15px', color: '#ffffff', fontFamily: 'Courier New', wordWrap: { width: 190 }, align: 'center', stroke: '#000000', strokeThickness: 2 }).setOrigin(0.5);
+            const x = 200 + i * 220, y = 510;
+            const caja = this.add.rectangle(x, y, 210, 65, 0x333333, 0.95).setStrokeStyle(2, 0xc0a060).setInteractive({ draggable: true, useHandCursor: true });
+            const texto = this.add.text(x, y, FRAGMENTOS_PUZLE3[idx], { fontSize: '18px', color: '#ffffff', fontFamily: 'Courier New', wordWrap: { width: 200 }, align: 'center', stroke: '#000000', strokeThickness: 2 }).setOrigin(0.5);
             caja.fragmentoIndex = idx; caja.textoVinculado = texto; caja.posOriginal = { x: x, y: y };
             this.fragmentosObjetos.push(caja); this.input.setDraggable(caja);
             caja.on('drag', (pointer, dragX, dragY) => { caja.x = dragX; caja.y = dragY; texto.x = dragX; texto.y = dragY; });
@@ -387,11 +383,11 @@ class Capitulo2 extends Phaser.Scene {
 
     crearVistaMateoPuzzle3() {
         const cx = GAME_WIDTH / 2;
-        this.add.image(cx, 300, getImg('espejo_roto')).setDisplaySize(550, 380);
-        this.add.rectangle(cx, 110, 800, 40, 0x000000, 0.7);
-        this.add.text(cx, 110, t('capitulo2.puzzle3_mateo_hint'), { fontSize: '18px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
-        this.add.rectangle(cx, 560, 900, 200, 0x000000, 0.88).setStrokeStyle(2, 0xc0a060);
-        this.add.text(cx, 480, '📜 Números grabados detrás de cada fragmento:', { fontSize: '18px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic' }).setOrigin(0.5);
+        this.add.image(cx, 300, getImg('espejo_roto')).setDisplaySize(600, 420);
+        this.add.rectangle(cx, 110, 850, 50, 0x000000, 0.7);
+        this.add.text(cx, 110, t('capitulo2.puzzle3_mateo_hint'), { fontSize: '26px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+        this.add.rectangle(cx, 580, 950, 220, 0x000000, 0.88).setStrokeStyle(2, 0xc0a060);
+        this.add.text(cx, 490, '📜 Números grabados detrás de cada fragmento:', { fontSize: '24px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic' }).setOrigin(0.5);
 
         const mapeo = [
             { num: 'I',   texto: FRAGMENTOS_PUZLE3[0] },
@@ -401,13 +397,13 @@ class Capitulo2 extends Phaser.Scene {
             { num: 'V',   texto: FRAGMENTOS_PUZLE3[4] }
         ];
         mapeo.forEach((item, i) => {
-            const x = cx - 380 + i * 155;
-            this.add.text(x, 530, item.num, { fontSize: '22px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
-            this.add.text(x, 570, item.texto, { fontSize: '11px', color: '#ffffff', fontFamily: 'Courier New', wordWrap: { width: 140 }, align: 'center', stroke: '#000000', strokeThickness: 2 }).setOrigin(0.5);
+            const x = cx - 400 + i * 200;
+            this.add.text(x, 540, item.num, { fontSize: '28px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+            this.add.text(x, 590, item.texto, { fontSize: '15px', color: '#ffffff', fontFamily: 'Courier New', wordWrap: { width: 180 }, align: 'center', stroke: '#000000', strokeThickness: 2 }).setOrigin(0.5);
         });
 
-        const continueBtn = this.add.rectangle(GAME_WIDTH - 140, GAME_HEIGHT - 60, 220, 60, 0x2a6a2a, 0.9).setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
-        this.add.text(GAME_WIDTH - 140, GAME_HEIGHT - 60, t('capitulo1.continuar'), { fontSize: '20px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
+        const continueBtn = this.add.rectangle(GAME_WIDTH - 160, GAME_HEIGHT - 70, 260, 70, 0x2a6a2a, 0.9).setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
+        this.add.text(GAME_WIDTH - 160, GAME_HEIGHT - 70, t('capitulo1.continuar'), { fontSize: '24px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
         continueBtn.on('pointerup', () => { this.mostrarTransicion(t('transiciones.cap2_p4'), () => this.irAPuzzle4()); });
     }
 
@@ -449,40 +445,39 @@ class Capitulo2 extends Phaser.Scene {
     irAPuzzle4() { localStorage.setItem('tc2_puzzle', '4'); this.scene.restart(); }
 
     // ==========================================
-    // PUZLE 4 - REDISEÑADO
+    // PUZLE 4
     // ==========================================
     mostrarPuzzle4() {
         this.crearFondo(); this.mostrarTitulo(true); this.paginasColocadas = [null, null, null, null, null];
         const cx = GAME_WIDTH / 2;
-        this.add.rectangle(cx, 100, 700, 40, 0x000000, 0.7);
-        this.add.text(cx, 100, t('capitulo2.puzzle4_title'), { fontSize: '24px', color: '#e0d8c8', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+        this.add.rectangle(cx, 100, 800, 50, 0x000000, 0.7);
+        this.add.text(cx, 100, t('capitulo2.puzzle4_title'), { fontSize: '30px', color: '#e0d8c8', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
         if (this.rol === 'eugenia') this.crearVistaEugeniaPuzzle4(); else this.crearVistaMateoPuzzle4();
     }
 
     crearVistaEugeniaPuzzle4() {
         const cx = GAME_WIDTH / 2;
-        
-        this.add.text(cx, 140, t('capitulo2.puzzle4_eugenia_hint'), { fontSize: '20px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+        this.add.rectangle(cx, 140, 850, 50, 0x000000, 0.7);
+        this.add.text(cx, 140, t('capitulo2.puzzle4_eugenia_hint'), { fontSize: '26px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
 
         if (estaResuelto(2, 4)) { this.mostrarPuzzleResueltoOverlay(() => this.irAFinal()); return; }
 
-        const startY = 220;
-        const spacingY = 60;
+        const startY = 240, spacingY = 65;
         this.slotsPaginas = [];
         for (let i = 0; i < 5; i++) {
             const y = startY + i * spacingY;
-            const slot = this.add.rectangle(cx, y, 600, 45, 0x000000, 0.6).setStrokeStyle(3, 0xc0a060);
+            const slot = this.add.rectangle(cx, y, 650, 55, 0x000000, 0.6).setStrokeStyle(3, 0xc0a060);
             slot.slotIndex = i; this.slotsPaginas.push(slot);
-            this.add.text(cx - 290, y, (i + 1).toString(), { fontSize: '22px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
+            this.add.text(cx - 320, y, (i + 1).toString(), { fontSize: '26px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
         }
 
         const ordenDesordenado = [3, 1, 4, 0, 2];
         this.paginasObjetos = [];
         ordenDesordenado.forEach((idx, i) => {
-            const y = 560;
+            const y = 600;
             const x = 180 + i * 220;
-            const caja = this.add.rectangle(x, y, 180, 45, 0xd4c4a0, 0.95).setStrokeStyle(2, 0x8b6b3a).setInteractive({ draggable: true, useHandCursor: true });
-            const texto = this.add.text(x, y, t('capitulo2.' + PAGINAS_PUZLE4[idx].palabraKey), { fontSize: '18px', color: '#1a1a1a', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
+            const caja = this.add.rectangle(x, y, 190, 55, 0xd4c4a0, 0.95).setStrokeStyle(2, 0x8b6b3a).setInteractive({ draggable: true, useHandCursor: true });
+            const texto = this.add.text(x, y, t('capitulo2.' + PAGINAS_PUZLE4[idx].palabraKey), { fontSize: '22px', color: '#1a1a1a', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
             
             caja.paginaIndex = idx; caja.textoVinculado = texto; caja.posOriginal = { x: x, y: y };
             this.paginasObjetos.push(caja); this.input.setDraggable(caja);
@@ -493,37 +488,24 @@ class Capitulo2 extends Phaser.Scene {
 
     crearVistaMateoPuzzle4() {
         const cx = GAME_WIDTH / 2;
-        
-        this.add.text(cx, 110, t('capitulo2.puzzle4_mateo_hint'), { fontSize: '20px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+        this.add.rectangle(cx, 120, 850, 50, 0x000000, 0.7);
+        this.add.text(cx, 120, t('capitulo2.puzzle4_mateo_hint'), { fontSize: '26px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
 
         const notasPos = [
-            { x: cx - 350, y: 220 },
-            { x: cx + 250, y: 200 },
-            { x: cx - 150, y: 380 },
-            { x: cx + 350, y: 350 },
-            { x: cx + 20,  y: 520 }
+            { x: cx - 380, y: 240 }, { x: cx + 280, y: 220 }, { x: cx - 150, y: 400 }, { x: cx + 380, y: 380 }, { x: cx + 20,  y: 550 }
         ];
 
         PAGINAS_PUZLE4.forEach((pag, i) => {
             const pos = notasPos[i];
             const angulo = (Math.random() - 0.5) * 10;
 
-            this.add.rectangle(pos.x, pos.y, 280, 110, 0xd4c4a0, 0.95)
-                .setStrokeStyle(3, 0x8b6b3a)
-                .setAngle(angulo);
-
-            this.add.text(pos.x, pos.y - 30, pag.fecha, {
-                fontSize: '22px', color: '#1a1a1a', fontFamily: 'Courier New', fontStyle: 'bold'
-            }).setOrigin(0.5).setAngle(angulo);
-
-            this.add.text(pos.x, pos.y + 15, t('capitulo2.' + pag.hintKey), {
-                fontSize: '16px', color: '#8b3a3a', fontFamily: 'Courier New', fontStyle: 'bold',
-                wordWrap: { width: 250 }, align: 'center'
-            }).setOrigin(0.5).setAngle(angulo);
+            this.add.rectangle(pos.x, pos.y, 320, 130, 0xd4c4a0, 0.95).setStrokeStyle(3, 0x8b6b3a).setAngle(angulo);
+            this.add.text(pos.x, pos.y - 35, pag.fecha, { fontSize: '26px', color: '#1a1a1a', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5).setAngle(angulo);
+            this.add.text(pos.x, pos.y + 20, t('capitulo2.' + pag.hintKey), { fontSize: '20px', color: '#8b3a3a', fontFamily: 'Courier New', fontStyle: 'bold', wordWrap: { width: 300 }, align: 'center' }).setOrigin(0.5).setAngle(angulo);
         });
 
-        const continueBtn = this.add.rectangle(GAME_WIDTH - 140, GAME_HEIGHT - 60, 220, 60, 0x2a6a2a, 0.9).setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
-        this.add.text(GAME_WIDTH - 140, GAME_HEIGHT - 60, t('capitulo1.continuar'), { fontSize: '20px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
+        const continueBtn = this.add.rectangle(GAME_WIDTH - 160, GAME_HEIGHT - 70, 260, 70, 0x2a6a2a, 0.9).setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
+        this.add.text(GAME_WIDTH - 160, GAME_HEIGHT - 70, t('capitulo1.continuar'), { fontSize: '24px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
         continueBtn.on('pointerup', () => this.irAFinal());
     }
 
@@ -562,13 +544,10 @@ class Capitulo2 extends Phaser.Scene {
         }
     }
 
-    // ==========================================
-    // HELPERS
-    // ==========================================
     mostrarMensajeGlobal(texto, color) {
         const cx = GAME_WIDTH / 2;
         if (this.mensajeGlobal) this.mensajeGlobal.destroy();
-        this.mensajeGlobal = this.add.text(cx, GAME_HEIGHT - 60, texto, { fontSize: '22px', color: color, fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 4 }).setOrigin(0.5);
+        this.mensajeGlobal = this.add.text(cx, GAME_HEIGHT - 70, texto, { fontSize: '26px', color: color, fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 4 }).setOrigin(0.5);
     }
 
     irAPuzzleAnterior() {
@@ -593,41 +572,41 @@ class Capitulo2 extends Phaser.Scene {
     mostrarFinal() {
         this.crearFondo(); this.mostrarTitulo(true);
         const cx = GAME_WIDTH / 2;
-        this.add.text(cx, 130, t('capitulo2.chapter_end_title'), { fontSize: '40px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 6 }).setOrigin(0.5);
+        this.add.text(cx, 130, t('capitulo2.chapter_end_title'), { fontSize: '46px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 6 }).setOrigin(0.5);
         const miMitad = (this.rol === 'eugenia') ? '81--' : '--56';
         const etiqueta = (this.rol === 'eugenia') ? t('capitulo2.chapter_end_eugenia') : t('capitulo2.chapter_end_mateo');
 
-        this.add.text(cx, 210, etiqueta, { fontSize: '22px', color: '#aaaaaa', fontFamily: 'Courier New', fontStyle: 'italic' }).setOrigin(0.5);
-        this.add.text(cx, 270, miMitad, { fontSize: '70px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 6 }).setOrigin(0.5);
+        this.add.text(cx, 220, etiqueta, { fontSize: '28px', color: '#aaaaaa', fontFamily: 'Courier New', fontStyle: 'italic' }).setOrigin(0.5);
+        this.add.text(cx, 290, miMitad, { fontSize: '80px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 6 }).setOrigin(0.5);
 
         if (estaResuelto(2, 5)) {
-            this.add.text(cx, 400, t('common.puzzle_resuelto'), { fontSize: '28px', color: '#66ff66', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 4 }).setOrigin(0.5);
-            const irBtn = this.add.rectangle(cx, 510, 560, 70, 0x2a6a2a, 0.95).setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
-            this.add.text(cx, 510, '→ ' + t('interludio.title') + ' 2', { fontSize: '22px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
+            this.add.text(cx, 400, t('common.puzzle_resuelto'), { fontSize: '32px', color: '#66ff66', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 4 }).setOrigin(0.5);
+            const irBtn = this.add.rectangle(cx, 510, 600, 80, 0x2a6a2a, 0.95).setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
+            this.add.text(cx, 510, '→ ' + t('interludio.title') + ' 2', { fontSize: '26px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
             irBtn.on('pointerup', () => { this.detenerAmbiente(); localStorage.setItem('tc3_puzzle', '1'); this.scene.start('Interludio', { numero: 2, siguiente: 'Capitulo3' }); });
             return;
         }
 
-        this.add.text(cx, 340, t('capitulo2.chapter_end_instruction'), { fontSize: '20px', color: '#cccccc', fontFamily: 'Courier New', wordWrap: { width: 900 }, align: 'center', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+        this.add.text(cx, 360, t('capitulo2.chapter_end_instruction'), { fontSize: '24px', color: '#cccccc', fontFamily: 'Courier New', wordWrap: { width: 1000 }, align: 'center', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
         this.codigoIngresado = ['', '', '', ''];
         const startX = 470, spacing = 110;
         this.codigoTexts = [];
 
         for (let i = 0; i < 4; i++) {
             const x = startX + i * spacing;
-            this.add.rectangle(x, 440, 80, 90, 0x1a1a1a, 0.95).setStrokeStyle(3, 0xc0a060);
-            const txt = this.add.text(x, 440, '', { fontSize: '48px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
+            this.add.rectangle(x, 460, 90, 100, 0x1a1a1a, 0.95).setStrokeStyle(3, 0xc0a060);
+            const txt = this.add.text(x, 460, '', { fontSize: '56px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
             this.codigoTexts.push(txt);
             const index = i;
-            const upBtn = this.add.text(x, 370, '▲', { fontSize: '32px', color: '#cccccc', fontFamily: 'Courier New' }).setOrigin(0.5).setInteractive({ useHandCursor: true });
-            const downBtn = this.add.text(x, 510, '▼', { fontSize: '32px', color: '#cccccc', fontFamily: 'Courier New' }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+            const upBtn = this.add.text(x, 380, '▲', { fontSize: '38px', color: '#cccccc', fontFamily: 'Courier New' }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+            const downBtn = this.add.text(x, 540, '▼', { fontSize: '38px', color: '#cccccc', fontFamily: 'Courier New' }).setOrigin(0.5).setInteractive({ useHandCursor: true });
             upBtn.on('pointerup', () => { this.codigoIngresado[index] = ((parseInt(this.codigoIngresado[index]) || 0) + 1) % 10; this.codigoTexts[index].setText(this.codigoIngresado[index].toString()); });
             downBtn.on('pointerup', () => { this.codigoIngresado[index] = ((parseInt(this.codigoIngresado[index]) || 0) + 9) % 10; this.codigoTexts[index].setText(this.codigoIngresado[index].toString()); });
         }
 
-        const confirmBtn = this.add.rectangle(cx, 600, 500, 70, 0x2a6a2a, 0.9).setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
-        this.add.text(cx, 600, t('capitulo2.chapter_code_confirm'), { fontSize: '24px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
-        this.mensajeFinal = this.add.text(cx, 680, '', { fontSize: '24px', color: '#ff6666', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 4 }).setOrigin(0.5);
+        const confirmBtn = this.add.rectangle(cx, 630, 550, 80, 0x2a6a2a, 0.9).setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
+        this.add.text(cx, 630, t('capitulo2.chapter_code_confirm'), { fontSize: '28px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
+        this.mensajeFinal = this.add.text(cx, 700, '', { fontSize: '28px', color: '#ff6666', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 4 }).setOrigin(0.5);
         confirmBtn.on('pointerup', () => this.verificarCodigoCapitulo());
     }
 
@@ -639,8 +618,8 @@ class Capitulo2 extends Phaser.Scene {
             this.reproducirAcierto(); localStorage.setItem('tc_capitulo', '3'); localStorage.setItem('tc2_puzzle', '1');
             this.time.delayedCall(1500, () => {
                 const cx = GAME_WIDTH / 2;
-                const irBtn = this.add.rectangle(cx, GAME_HEIGHT - 110, 560, 70, 0x2a6a2a, 0.95).setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
-                this.add.text(cx, GAME_HEIGHT - 110, '→ ' + t('interludio.title') + ' 2', { fontSize: '22px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
+                const irBtn = this.add.rectangle(cx, GAME_HEIGHT - 110, 600, 80, 0x2a6a2a, 0.95).setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
+                this.add.text(cx, GAME_HEIGHT - 110, '→ ' + t('interludio.title') + ' 2', { fontSize: '26px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
                 irBtn.on('pointerup', () => { this.detenerAmbiente(); localStorage.setItem('tc3_puzzle', '1'); this.scene.start('Interludio', { numero: 2, siguiente: 'Capitulo3' }); });
             });
         } else {
