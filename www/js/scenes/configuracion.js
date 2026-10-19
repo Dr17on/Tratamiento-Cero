@@ -119,23 +119,14 @@ class Configuracion extends Phaser.Scene {
         this.volFill.width = 400 * vol;
         this.volText.setText(Math.round(vol * 100) + '%');
 
-        // Aplicar a TODOS los sonidos activos
         this.sound.sounds.forEach(sound => {
-            if (sound.key === 'ambiente_menu') {
-                sound.setVolume(vol * 0.5);
-            } else if (sound.key === 'puzzle_tension') {
-                sound.setVolume(vol * 0.18);
-            } else if (sound.key === 'ambiente_eugenia' || sound.key === 'ambiente_mateo') {
-                sound.setVolume(vol * 0.35);
-            } else if (sound.key === 'presentacion') {
-                sound.setVolume(vol * 0.5);
-            } else if (sound.key === 'revelacion') {
-                sound.setVolume(vol * 0.5);
-            } else if (sound.key === 'codigo_fenix') {
-                sound.setVolume(vol * 0.6);
-            } else {
-                sound.setVolume(vol * 0.7);
-            }
+            if (sound.key === 'ambiente_menu') sound.setVolume(vol * 0.5);
+            else if (sound.key === 'puzzle_tension') sound.setVolume(vol * 0.18);
+            else if (sound.key === 'ambiente_eugenia' || sound.key === 'ambiente_mateo') sound.setVolume(vol * 0.35);
+            else if (sound.key === 'presentacion') sound.setVolume(vol * 0.5);
+            else if (sound.key === 'revelacion') sound.setVolume(vol * 0.5);
+            else if (sound.key === 'codigo_fenix') sound.setVolume(vol * 0.6);
+            else sound.setVolume(vol * 0.7);
         });
     }
 
@@ -152,9 +143,10 @@ class Configuracion extends Phaser.Scene {
             { texto: 'Dos épocas. Una sola voz.', size: '20px', color: '#888888', y: -150, italic: true },
             { texto: '—', size: '20px', color: '#666666', y: -100 },
             { texto: 'Un juego de CÓDIGO FÉNIX', size: '26px', color: '#ffffff', y: -50 },
-            { texto: 'Creado por: Dr17on', size: '20px', color: '#cccccc', y: 0 },
+            // ✅ AQUÍ ESTÁ TU NOMBRE
+            { texto: 'Creado por: Álvaro Quintana Gómez', size: '22px', color: '#cccccc', y: 0 },
             { texto: 'Diseño narrativo y programación:', size: '18px', color: '#888888', y: 50 },
-            { texto: 'Dr17on', size: '22px', color: '#ffffff', y: 80 },
+            { texto: 'Álvaro Quintana Gómez', size: '22px', color: '#ffffff', y: 80 },
             { texto: '—', size: '20px', color: '#666666', y: 130 },
             { texto: 'Inspirado en The Past Within y Tick Tock', size: '18px', color: '#888888', y: 170, italic: true },
             { texto: '© 2026 Código Fénix. Todos los derechos reservados.', size: '16px', color: '#666666', y: 220 }

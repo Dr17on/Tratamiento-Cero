@@ -19,11 +19,9 @@ class Boot extends Phaser.Scene {
             console.error('❌ FALLÓ:', file.key, '→', file.src);
         });
 
-        // ... (cargas anteriores)
-
-        // PORTADA Y LOGO
+        // LOGO Y PORTADA
         this.load.image('logo_codigo_fenix', 'assets/img/logo_codigo_fenix.png');
-        this.load.image('portada', 'assets/img/portada.jpg'); // <-- NUEVA LÍNEA
+        this.load.image('portada', 'assets/img/portada.jpg'); 
 
         // PRESENTACIÓN
         this.load.image('presentacion_1', 'assets/img/presentacion_1.jpg');
@@ -72,17 +70,21 @@ class Boot extends Phaser.Scene {
         this.load.image('mapa_hospital_quemado', 'assets/img/mapa_hospital_quemado.jpg');
         this.load.image('cilindro_quemado', 'assets/img/cilindro_quemado.jpg');
         this.load.image('puerta_47_abierta', 'assets/img/puerta_47_abierta.jpg');
-        
         this.load.image('manual_valvulas_es', 'assets/img/manual_valvulas_es.jpg');
         this.load.image('manual_valvulas_en', 'assets/img/manual_valvulas_en.jpg');
-        
-        // ✅ MAPA HOSPITAL: Una sola imagen para ambos idiomas
         this.load.image('mapa_hospital', 'assets/img/mapa_hospital.jpg');
-        
-        // ✅ CILINDRO: Una sola imagen para ambos idiomas
         this.load.image('cilindro_cifrado', 'assets/img/cilindro_cifrado.jpg');
 
-        // AUDIO
+        // CAPÍTULO 4
+        this.load.image('fondo_cap4', 'assets/img/fondo_cap4.jpg');
+        this.load.image('silla_electroshock', 'assets/img/silla_electroshock.jpg');
+        this.load.image('radio_antigua', 'assets/img/radio_antigua.jpg');
+        this.load.image('retrato_carmen', 'assets/img/retrato_carmen.jpg');
+
+        // ==========================================
+        // AUDIOS
+        // ==========================================
+        // Cap 1
         this.load.audio('codigo_fenix', 'assets/audio/codigo_fenix.ogg');
         this.load.audio('presentacion', 'assets/audio/presentacion.ogg');
         this.load.audio('ambiente_menu', 'assets/audio/ambiente_menu.ogg');
@@ -92,31 +94,29 @@ class Boot extends Phaser.Scene {
         this.load.audio('acierto', 'assets/audio/acierto.ogg');
         this.load.audio('error', 'assets/audio/error.ogg');
         this.load.audio('revelacion', 'assets/audio/revelacion.ogg');
+        
+        // ✅ ESTE ES EL AUDIO QUE USARÁ EL CAP 1 Y EL CAP 4
         this.load.audio('final_giro', 'assets/audio/final_giro.ogg');
 
+        // Cap 2
         this.load.audio('ambiente_cap2_eugenia', 'assets/audio/ambiente_cap2_eugenia.ogg');
         this.load.audio('ambiente_cap2_mateo', 'assets/audio/ambiente_cap2_mateo.ogg');
         this.load.audio('puzzle_completar', 'assets/audio/puzzle_completar.ogg');
         this.load.audio('puzzle_ordenar', 'assets/audio/puzzle_ordenar.ogg');
         this.load.audio('revelacion_cap2', 'assets/audio/revelacion_cap2.ogg');
 
+        // Cap 3
         this.load.audio('ambiente_cap3_eugenia', 'assets/audio/ambiente_cap3_eugenia.ogg');
         this.load.audio('ambiente_cap3_mateo', 'assets/audio/ambiente_cap3_mateo.ogg');
         this.load.audio('puzzle_valvulas', 'assets/audio/puzzle_valvulas.ogg');
         this.load.audio('puzzle_mapa', 'assets/audio/puzzle_mapa.ogg');
         this.load.audio('revelacion_cap3', 'assets/audio/revelacion_cap3.ogg');
 
-        this.load.audio('ambiente_interludio', 'assets/audio/ambiente_interludio.ogg');
-   
-        // CAPÍTULO 4
-        this.load.image('fondo_cap4', 'assets/img/fondo_cap4.jpg');
-        this.load.image('silla_electroshock', 'assets/img/silla_electroshock.jpg');
-        this.load.image('radio_antigua', 'assets/img/radio_antigua.jpg');
-        this.load.image('retrato_carmen', 'assets/img/retrato_carmen.jpg');
-
-        // AUDIO CAP 4
+        // Cap 4
         this.load.audio('ambiente_cap4', 'assets/audio/ambiente_cap4.ogg');
-        this.load.audio('final_giro', 'assets/audio/final_giro.ogg');
+
+        // Interludios
+        this.load.audio('ambiente_interludio', 'assets/audio/ambiente_interludio.ogg');
     }
 
     create() {

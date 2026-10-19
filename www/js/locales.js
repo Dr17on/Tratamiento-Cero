@@ -48,7 +48,10 @@ const LOCALES = {
             cap2_p4: "Un diario antiguo descansa sobre la mesa. Las páginas están desordenadas.",
             cap3_p1: "El fuego avanza. Un panel de válvulas de gas bloquea el paso.",
             cap3_p2: "El humo se disipa un poco. Un mapa del hospital está clavado en la pared.",
-            cap3_p3: "Frente a la puerta 47, un cilindro de metal con anillos gira lentamente."
+            cap3_p3: "Frente a la puerta 47, un cilindro de metal con anillos gira lentamente.",
+            cap4_p2: "La máquina cobra vida con un zumbido eléctrico. Una radio antigua parpadea en la esquina.",
+            cap4_p3: "La señal se capta entre la estática. Una voz susurra un nombre. Solo falta escribirlo en el cilindro.",
+            cap4_final: "El nombre está completo. La silla de electroshock se apaga lentamente. El silencio inunda el sótano."
         },
         capitulo1: {
             title: "Capítulo 1 — El Ingreso",
@@ -102,8 +105,6 @@ const LOCALES = {
             puzzle4_mateo_hint: "Dicta las fechas y pistas de las notas a Eugenia",
             puzzle4_correct: "✓ Las páginas forman un mensaje",
             puzzle4_wrong: "✗ El orden de las fechas no es correcto",
-            
-            // Pistas y palabras del Puzle 4 (Cap 2)
             puzzle4_palabra1: "NO",
             puzzle4_palabra2: "FUISTE",
             puzzle4_palabra3: "TÚ",
@@ -114,7 +115,6 @@ const LOCALES = {
             puzzle4_hint3: "3. Segunda persona",
             puzzle4_hint4: "4. Artículo definido",
             puzzle4_hint5: "5. Culpable",
-
             chapter_end_title: "CAPÍTULO 2 COMPLETADO",
             chapter_end_eugenia: "Tu mitad del código:",
             chapter_end_mateo: "Tu mitad del código:",
@@ -185,21 +185,18 @@ const LOCALES = {
             int1_eugenia2: "Mateo, ¿me estás oyendo?",
             int1_mateo2: "Sí. Pero tu voz viene de muy lejos.",
             int1_narr2: "Ambos cruzan el pasillo, cada uno desde su tiempo.",
-
             int2_narr1: "El diario estaba en la estantería. Las páginas formaban una frase.",
             int2_mateo1: "«No fuiste tú el culpable». Eugenia, mi abuela escribió esto.",
             int2_eugenia1: "Recuerdo ese nombre. Estaba en el expediente del Tratamiento Cero.",
             int2_mateo2: "¿Era una paciente?",
             int2_eugenia2: "No. Era la Paciente Cero. La primera.",
             int2_narr2: "El nombre de la abuela de Mateo cuelga en el aire.",
-
             int3_narr1: "El incendio comenzó a las 3:00. Ni un minuto antes.",
             int3_eugenia1: "Mateo, fue un accidente. Lo vi. Nadie pudo evitarlo.",
             int3_mateo1: "Pero yo pude haber hecho algo. Pude haber cambiado el pasado.",
             int3_eugenia2: "No. El pasado no se cambia. Solo se entiende.",
             int3_mateo2: "Entonces, ¿para qué estamos aquí?",
             int3_narr2: "Una última puerta les espera. La del Tratamiento Cero.",
-
             int4_narr1: "Cerraron el experimento. Las voces callan, una por una.",
             int4_eugenia1: "Mateo... esa voz. La que me guio en 1953.",
             int4_mateo1: "¿Qué pasa con ella?",
@@ -271,7 +268,10 @@ const LOCALES = {
             cap2_p4: "An old diary rests on the table. The pages are out of order.",
             cap3_p1: "The fire advances. A panel of gas valves blocks the way.",
             cap3_p2: "The smoke clears a bit. A hospital map is nailed to the wall.",
-            cap3_p3: "In front of door 47, a metal cylinder with rings spins slowly."
+            cap3_p3: "In front of door 47, a metal cylinder with rings spins slowly.",
+            cap4_p2: "The machine hums to life with an electric buzz. An old radio flickers in the corner.",
+            cap4_p3: "The signal is caught through the static. A voice whispers a name. It just needs to be written.",
+            cap4_final: "The name is complete. The electroshock chair slowly powers down. Silence floods the basement."
         },
         capitulo1: {
             title: "Chapter 1 — Admission",
@@ -325,8 +325,6 @@ const LOCALES = {
             puzzle4_mateo_hint: "Dictate the dates and hints from the notes to Eugenia",
             puzzle4_correct: "✓ The pages form a message",
             puzzle4_wrong: "✗ The date order is wrong",
-            
-            // Pistas y palabras del Puzle 4 (Cap 2)
             puzzle4_palabra1: "YOU",
             puzzle4_palabra2: "WERE",
             puzzle4_palabra3: "NOT",
@@ -337,7 +335,6 @@ const LOCALES = {
             puzzle4_hint3: "3. Negation",
             puzzle4_hint4: "4. Article",
             puzzle4_hint5: "5. Guilty",
-
             chapter_end_title: "CHAPTER 2 COMPLETE",
             chapter_end_eugenia: "Your half of the code:",
             chapter_end_mateo: "Your half of the code:",
@@ -408,21 +405,18 @@ const LOCALES = {
             int1_eugenia2: "Mateo, can you hear me?",
             int1_mateo2: "Yes. But your voice comes from very far away.",
             int1_narr2: "They both walk the hallway, each from their own time.",
-
             int2_narr1: "The diary was on the shelf. The pages formed a sentence.",
             int2_mateo1: "«You were not the culprit». Eugenia, my grandmother wrote this.",
             int2_eugenia1: "I remember that name. It was in the Treatment Zero file.",
             int2_mateo2: "Was she a patient?",
             int2_eugenia2: "No. She was Patient Zero. The first one.",
             int2_narr2: "Mateo's grandmother's name hangs in the air.",
-
             int3_narr1: "The fire started at 3:00. Not a minute earlier.",
             int3_eugenia1: "Mateo, it was an accident. I saw it. No one could have stopped it.",
             int3_mateo1: "But I could have done something. I could have changed the past.",
             int3_eugenia2: "No. The past can't be changed. Only understood.",
             int3_mateo2: "So what are we doing here?",
             int3_narr2: "One last door awaits them. Treatment Zero's.",
-
             int4_narr1: "They shut down the experiment. The voices fall silent, one by one.",
             int4_eugenia1: "Mateo... that voice. The one that guided me in 1953.",
             int4_mateo1: "What about it?",

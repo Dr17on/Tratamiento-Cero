@@ -2,25 +2,31 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <!-- ✅ viewport-fit=cover permite que el juego ocupe hasta los bordes de la pantalla -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Tratamiento Cero</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div id="game-container"></div>
+    
+    <!-- Panel de errores en pantalla (útil para depurar) -->
     <div id="error-log" style="color: #ff6666; position: absolute; top: 10px; left: 10px; z-index: 9999; font-family: monospace; font-size: 13px; background: rgba(0,0,0,0.95); padding: 15px; max-width: 95%; border: 1px solid #ff6666; display: none; word-wrap: break-word;"></div>
 
     <script>
         window.onerror = function(msg, url, line) {
             const errorDiv = document.getElementById('error-log');
             errorDiv.style.display = 'block';
-            errorDiv.innerHTML += '⚠️ ' + msg + '<br>📁 ' + url + '<br>📍 Línea: ' + line + '<br><hr>';
+            errorDiv.innerHTML += '⚠️ ERROR: ' + msg + '<br>📁 Archivo: ' + url + '<br>📍 Línea: ' + line + '<br><hr>';
             return false;
         };
     </script>
 
+    <!-- 1. Motor y traducciones -->
     <script src="lib/phaser.min.js"></script>
     <script src="js/locales.js"></script>
+
+    <!-- 2. Escenas (en orden, antes de main.js) -->
     <script src="js/scenes/boot.js"></script>
     <script src="js/scenes/CodigoFenix.js"></script>
     <script src="js/scenes/presentacion.js"></script>
@@ -33,6 +39,8 @@
     <script src="js/scenes/Capitulo3.js"></script>
     <script src="js/scenes/Capitulo4.js"></script>
     <script src="js/scenes/Creditos.js"></script>
+
+    <!-- 3. main.js AL FINAL, es el que arranca todo -->
     <script src="js/main.js"></script>
 </body>
 </html>
