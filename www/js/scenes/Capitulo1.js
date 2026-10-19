@@ -39,7 +39,8 @@ class Capitulo1 extends Phaser.Scene {
             this.tension.play();
         }
 
-        const vista = parseInt(localStorage.getItem('tc1_puzzle') || '1');
+        // ✅ GUARDADO INDEPENDIENTE POR ROL
+        const vista = parseInt(localStorage.getItem('tc1_puzzle_' + this.rol) || '1');
         if (vista === 2) this.mostrarPuzzle2();
         else if (vista === 3) this.mostrarFinal();
         else this.mostrarPuzzle1();
@@ -111,7 +112,11 @@ class Capitulo1 extends Phaser.Scene {
         this.add.text(cx + 130, cy + 70, t('common.no'), { fontSize: '28px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5).setDepth(103);
 
         const destruir = () => { overlay.destroy(); panel.destroy(); siBtn.destroy(); noBtn.destroy(); };
-        siBtn.on('pointerup', () => { reiniciarCapitulo(1); destruir(); this.scene.restart(); });
+        siBtn.on('pointerup', () => { 
+            localStorage.removeItem('tc1_puzzle_' + this.rol);
+            for(let i=1; i<=3; i++) localStorage.removeItem('tc1_p_' + i + '_resuelto_' + this.rol);
+            destruir(); this.scene.restart(); 
+        });
         noBtn.on('pointerup', () => destruir());
     }
 
@@ -125,7 +130,7 @@ class Capitulo1 extends Phaser.Scene {
     }
 
     mostrarPuzzle1() {
-        localStorage.setItem('tc1_puzzle', '1');
+        localStorage.setItem('tc1_puzzle_' + this.rol, '1');
         this.crearFondo();
         this.mostrarTitulo(false);
 
@@ -164,7 +169,7 @@ class Capitulo1 extends Phaser.Scene {
         this.add.text(cx, 540, t('capitulo1.mateo_instruction'), { fontSize: '30px', color: '#ffffff', fontFamily: 'Courier New', stroke: '#000000', strokeThickness: 4 }).setOrigin(0.5);
         this.add.text(cx, 580, t('capitulo1.mateo_instruction2'), { fontSize: '24px', color: '#aaaaaa', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
 
-        if (estaResuelto(1, 1)) {
+        if (estaResuelto(1, 1, this.rol)) {
             this.mostrarPuzzleResueltoOverlay(() => this.irAPuzzle2());
             return;
         }
@@ -191,7 +196,7 @@ class Capitulo1 extends Phaser.Scene {
     verificarPuzzle1() {
         const codigo = this.digitos.join('');
         if (codigo === CODIGO_PUZLE1) {
-            marcarResuelto(1, 1);
+            marcarResuelto(1, 1, this.rol);
             this.mensaje.setText(t('capitulo1.correct')).setColor('#66ff66');
             this.reproducirAcierto();
             this.time.delayedCall(1500, () => {
@@ -205,7 +210,7 @@ class Capitulo1 extends Phaser.Scene {
     }
 
     irAPuzzle2() {
-        localStorage.setItem('tc1_puzzle', '2');
+        localStorage.setItem('tc1_puzzle_' + this.rol, '2');
         this.hora = 0; this.minuto = 0;
         this.scene.restart();
     }
@@ -225,7 +230,7 @@ class Capitulo1 extends Phaser.Scene {
         const cx = GAME_WIDTH / 2;
         this.add.image(cx, 400, 'reloj_eugenia').setDisplaySize(550, 550);
 
-        if (estaResuelto(1, 2)) {
+        if (estaResuelto(1, 2, this.rol)) {
             this.mostrarPuzzleResueltoOverlay(() => this.irAFinal());
             return;
         }
@@ -263,7 +268,7 @@ class Capitulo1 extends Phaser.Scene {
 
     verificarReloj() {
         if (this.hora === HORA_CORRECTA && this.minuto === MINUTO_CORRECTO) {
-            marcarResuelto(1, 2);
+            marcarResuelto(1, 2, this.rol);
             this.mensaje.setText(t('capitulo1.clock_correct')).setColor('#66ff66');
             this.reproducirAcierto();
             this.time.delayedCall(1800, () => this.irAFinal());
@@ -275,13 +280,13 @@ class Capitulo1 extends Phaser.Scene {
     }
 
     irAPuzzleAnterior() {
-        const actual = parseInt(localStorage.getItem('tc1_puzzle') || '1');
-        if (actual === 3) { localStorage.setItem('tc1_puzzle', '2'); this.mostrarPuzzle2(); }
-        else if (actual === 2) { localStorage.setItem('tc1_puzzle', '1'); this.mostrarPuzzle1(); }
+        const actual = parseInt(localStorage.getItem('tc1_puzzle_' + this.rol) || '1');
+        if (actual === 3) { localStorage.setItem('tc1_puzzle_' + this.rol, '2'); this.mostrarPuzzle2(); }
+        else if (actual === 2) { localStorage.setItem('tc1_puzzle_' + this.rol, '1'); this.mostrarPuzzle1(); }
     }
 
     irAFinal() {
-        localStorage.setItem('tc1_puzzle', '3');
+        localStorage.setItem('tc1_puzzle_' + this.rol, '3');
         this.detenerAmbiente();
         if (this.cache.audio.exists('revelacion')) {
             this.revelacionMusica = this.sound.add('revelacion', { loop: true, volume: getVolumen() * 0.5 });
@@ -302,11 +307,11 @@ class Capitulo1 extends Phaser.Scene {
         this.add.text(cx, 220, etiqueta, { fontSize: '28px', color: '#aaaaaa', fontFamily: 'Courier New', fontStyle: 'italic' }).setOrigin(0.5);
         this.add.text(cx, 290, miMitad, { fontSize: '80px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 6 }).setOrigin(0.5);
 
-        if (estaResuelto(1, 3)) {
+        if (estaResuelto(1, 3, this.rol)) {
             this.add.text(cx, 400, t('common.puzzle_resuelto'), { fontSize: '32px', color: '#66ff66', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 4 }).setOrigin(0.5);
             const irBtn = this.add.rectangle(cx, 510, 600, 80, 0x2a6a2a, 0.95).setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
             this.add.text(cx, 510, '→ ' + t('chapters.chapter2') + ': ' + t('chapters.chapter2_sub'), { fontSize: '26px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
-            irBtn.on('pointerup', () => { this.detenerAmbiente(); localStorage.setItem('tc2_puzzle', '1'); this.scene.start('Interludio', { numero: 1, siguiente: 'Capitulo2' }); });
+            irBtn.on('pointerup', () => { this.detenerAmbiente(); localStorage.setItem('tc2_puzzle_' + this.rol, '1'); this.scene.start('Interludio', { numero: 1, siguiente: 'Capitulo2' }); });
             return;
         }
 
@@ -337,7 +342,7 @@ class Capitulo1 extends Phaser.Scene {
     verificarCodigoCapitulo() {
         const codigo = this.codigoIngresado.join('');
         if (codigo === CODIGO_CAPITULO) {
-            marcarResuelto(1, 3);
+            marcarResuelto(1, 3, this.rol);
             this.mensajeFinal.setText(t('capitulo1.chapter_code_ok')).setColor('#66ff66');
             this.reproducirAcierto();
             localStorage.setItem('tc_capitulo', '2');
@@ -345,7 +350,7 @@ class Capitulo1 extends Phaser.Scene {
                 const cx = GAME_WIDTH / 2;
                 const irBtn = this.add.rectangle(cx, GAME_HEIGHT - 110, 600, 80, 0x2a6a2a, 0.95).setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
                 this.add.text(cx, GAME_HEIGHT - 110, '→ ' + t('chapters.chapter2') + ': ' + t('chapters.chapter2_sub'), { fontSize: '26px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
-                irBtn.on('pointerup', () => { this.detenerAmbiente(); localStorage.setItem('tc2_puzzle', '1'); this.scene.start('Interludio', { numero: 1, siguiente: 'Capitulo2' }); });
+                irBtn.on('pointerup', () => { this.detenerAmbiente(); localStorage.setItem('tc2_puzzle_' + this.rol, '1'); this.scene.start('Interludio', { numero: 1, siguiente: 'Capitulo2' }); });
             });
         } else {
             this.mensajeFinal.setText(t('capitulo1.chapter_code_bad')).setColor('#ff6666');

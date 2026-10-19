@@ -21,7 +21,8 @@ class Capitulo4 extends Phaser.Scene {
             this.ambiente.play();
         }
 
-        const puzzleGuardado = parseInt(localStorage.getItem('tc4_puzzle') || '1');
+        // ✅ GUARDADO INDEPENDIENTE POR ROL
+        const puzzleGuardado = parseInt(localStorage.getItem('tc4_puzzle_' + this.rol) || '1');
         if (puzzleGuardado === 2) this.mostrarPuzzle2();
         else if (puzzleGuardado === 3) this.mostrarPuzzle3();
         else if (puzzleGuardado === 4) this.mostrarFinal();
@@ -73,13 +74,13 @@ class Capitulo4 extends Phaser.Scene {
         this.add.rectangle(cx, 55, 800, 80, 0x000000, 0.7);
         this.add.text(cx, 55, t('capitulo4.title'), { fontSize: '40px', color: '#e0d8c8', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 4 }).setOrigin(0.5);
 
-        // Botón Menú (abajo izquierda)
+        // Botón Menú
         const backBtn = this.add.text(80, GAME_HEIGHT - 60, '← ' + t('common.back'), { fontSize: '28px', color: '#ffffff', fontFamily: 'Courier New', backgroundColor: '#444444', padding: { x: 16, y: 10 } }).setOrigin(0, 0.5).setInteractive({ useHandCursor: true });
         backBtn.on('pointerup', () => { this.detenerAmbiente(); this.scene.start('Menu'); });
 
-        // Botón Anterior (arriba izquierda)
+        // Botón Anterior
         if (mostrarAnterior) {
-            const puzzleActual = parseInt(localStorage.getItem('tc4_puzzle') || '1');
+            const puzzleActual = parseInt(localStorage.getItem('tc4_puzzle_' + this.rol) || '1');
             const labelTexto = (puzzleActual === 1) ? '← ' + t('chapters.chapter3') : '← ' + t('common.previous');
             const prevBtn = this.add.text(80, 55, labelTexto, { fontSize: '26px', color: '#ffffff', fontFamily: 'Courier New', backgroundColor: '#444444', padding: { x: 14, y: 8 } }).setOrigin(0, 0.5).setInteractive({ useHandCursor: true });
             prevBtn.on('pointerup', () => this.irAPuzzleAnterior());
@@ -101,7 +102,11 @@ class Capitulo4 extends Phaser.Scene {
         this.add.text(cx + 130, cy + 70, t('common.no'), { fontSize: '28px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5).setDepth(103);
 
         const destruir = () => { overlay.destroy(); panel.destroy(); siBtn.destroy(); noBtn.destroy(); };
-        siBtn.on('pointerup', () => { reiniciarCapitulo(4); destruir(); this.scene.restart(); });
+        siBtn.on('pointerup', () => { 
+            localStorage.removeItem('tc4_puzzle_' + this.rol);
+            for(let i=1; i<=4; i++) localStorage.removeItem('tc4_p_' + i + '_resuelto_' + this.rol);
+            destruir(); this.scene.restart(); 
+        });
         noBtn.on('pointerup', () => destruir());
     }
 
@@ -115,10 +120,10 @@ class Capitulo4 extends Phaser.Scene {
     }
 
     irAPuzzleAnterior() {
-        const actual = parseInt(localStorage.getItem('tc4_puzzle') || '1');
-        if (actual === 4) { localStorage.setItem('tc4_puzzle', '3'); this.scene.restart(); }
-        else if (actual === 3) { localStorage.setItem('tc4_puzzle', '2'); this.scene.restart(); }
-        else if (actual === 2) { localStorage.setItem('tc4_puzzle', '1'); this.scene.restart(); }
+        const actual = parseInt(localStorage.getItem('tc4_puzzle_' + this.rol) || '1');
+        if (actual === 4) { localStorage.setItem('tc4_puzzle_' + this.rol, '3'); this.scene.restart(); }
+        else if (actual === 3) { localStorage.setItem('tc4_puzzle_' + this.rol, '2'); this.scene.restart(); }
+        else if (actual === 2) { localStorage.setItem('tc4_puzzle_' + this.rol, '1'); this.scene.restart(); }
         else if (actual === 1) { this.detenerAmbiente(); this.scene.start('Capitulo3'); }
     }
 
@@ -126,7 +131,7 @@ class Capitulo4 extends Phaser.Scene {
     // PUZLE 1 - CABLES
     // ==========================================
     mostrarPuzzle1() {
-        localStorage.setItem('tc4_puzzle', '1');
+        localStorage.setItem('tc4_puzzle_' + this.rol, '1');
         this.crearFondo(); this.mostrarTitulo(true);
         this.cablesColocados = [null, null, null, null];
         
@@ -142,7 +147,7 @@ class Capitulo4 extends Phaser.Scene {
         const cx = GAME_WIDTH / 2;
         this.add.image(cx, 380, 'silla_electroshock').setDisplaySize(650, 450);
 
-        if (estaResuelto(4, 1)) { this.mostrarPuzzleResueltoOverlay(() => this.irAPuzzle2()); return; }
+        if (estaResuelto(4, 1, this.rol)) { this.mostrarPuzzleResueltoOverlay(() => this.irAPuzzle2()); return; }
 
         const infoText = esEugenia ? t('capitulo4.puzzle1_eugenia_hint') : t('capitulo4.puzzle1_mateo_hint');
         this.add.text(cx, 150, infoText, { fontSize: '26px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
@@ -200,7 +205,7 @@ class Capitulo4 extends Phaser.Scene {
     verificarPuzzle1() {
         const correcto = this.cablesColocados.every((c, i) => c === CABLES_SOLUCION[i]);
         if (correcto) {
-            marcarResuelto(4, 1); this.reproducirAcierto();
+            marcarResuelto(4, 1, this.rol); this.reproducirAcierto();
             this.time.delayedCall(800, () => { 
                 this.mostrarTransicion(t('transiciones.cap4_p2'), () => this.irAPuzzle2()); 
             });
@@ -217,7 +222,7 @@ class Capitulo4 extends Phaser.Scene {
     // ==========================================
     // PUZLE 2 - RADIO
     // ==========================================
-    irAPuzzle2() { localStorage.setItem('tc4_puzzle', '2'); this.scene.restart(); }
+    irAPuzzle2() { localStorage.setItem('tc4_puzzle_' + this.rol, '2'); this.scene.restart(); }
 
     mostrarPuzzle2() {
         this.crearFondo(); this.mostrarTitulo(true);
@@ -227,11 +232,10 @@ class Capitulo4 extends Phaser.Scene {
 
         this.add.image(cx, 380, 'radio_antigua').setDisplaySize(600, 450);
 
-        if (estaResuelto(4, 2)) { this.mostrarPuzzleResueltoOverlay(() => this.irAPuzzle3()); return; }
+        if (estaResuelto(4, 2, this.rol)) { this.mostrarPuzzleResueltoOverlay(() => this.irAPuzzle3()); return; }
 
         if (this.rol === 'eugenia') {
             this.add.text(cx, 160, t('capitulo4.puzzle2_eugenia_hint'), { fontSize: '26px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
-            
             this.add.text(cx, 230, t('capitulo4.puzzle2_eugenia_frecuencia'), { fontSize: '36px', color: '#00ff00', fontFamily: 'Courier New', fontStyle: 'bold', backgroundColor: '#111111', padding: {x: 25, y: 15} }).setOrigin(0.5);
             
             const btn = this.add.rectangle(GAME_WIDTH - 160, GAME_HEIGHT - 70, 260, 70, 0x2a6a2a, 0.9).setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
@@ -257,7 +261,7 @@ class Capitulo4 extends Phaser.Scene {
         this.frecuenciaText.setText(this.frecuenciaActual.toFixed(1) + ' MHz');
 
         if (Math.abs(this.frecuenciaActual - FRECUENCIA_SOLUCION) < 0.01) {
-            marcarResuelto(4, 2); this.reproducirAcierto();
+            marcarResuelto(4, 2, this.rol); this.reproducirAcierto();
             this.time.delayedCall(800, () => { 
                 this.mostrarTransicion(t('transiciones.cap4_p3'), () => this.irAPuzzle3()); 
             });
@@ -267,7 +271,7 @@ class Capitulo4 extends Phaser.Scene {
     // ==========================================
     // PUZLE 3 - NOMBRE
     // ==========================================
-    irAPuzzle3() { localStorage.setItem('tc4_puzzle', '3'); this.scene.restart(); }
+    irAPuzzle3() { localStorage.setItem('tc4_puzzle_' + this.rol, '3'); this.scene.restart(); }
 
     mostrarPuzzle3() {
         this.crearFondo(); this.mostrarTitulo(true);
@@ -277,9 +281,10 @@ class Capitulo4 extends Phaser.Scene {
 
         this.add.image(cx + 400, 400, 'retrato_carmen').setDisplaySize(280, 350).setAlpha(0.9);
 
-        if (estaResuelto(4, 3)) { this.mostrarPuzzleResueltoOverlay(() => this.irAFinal()); return; }
+        if (estaResuelto(4, 3, this.rol)) { this.mostrarPuzzleResueltoOverlay(() => this.irAFinal()); return; }
 
         if (this.rol === 'mateo') {
+            // ✅ MATEO VE LA NOTA CON EL NOMBRE
             this.add.text(cx - 250, 160, t('capitulo4.puzzle3_mateo_hint'), { fontSize: '26px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
             
             this.add.rectangle(cx - 250, 350, 550, 220, 0x000000, 0.85).setStrokeStyle(3, 0xc0a060);
@@ -291,6 +296,7 @@ class Capitulo4 extends Phaser.Scene {
             return;
         }
 
+        // VISTA EUGENIA: Teclado para escribir
         this.add.text(cx - 300, 160, t('capitulo4.puzzle3_eugenia_hint'), { fontSize: '26px', color: '#c0a060', fontFamily: 'Courier New', fontStyle: 'italic', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
 
         const letrasAlfabeto = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -323,7 +329,7 @@ class Capitulo4 extends Phaser.Scene {
 
         const palabra = this.nombreActual.map(i => letrasAlfabeto[i]).join('');
         if (palabra === NOMBRE_SOLUCION.join('')) {
-            marcarResuelto(4, 3); this.reproducirAcierto();
+            marcarResuelto(4, 3, this.rol); this.reproducirAcierto();
             this.time.delayedCall(800, () => { 
                 this.mostrarTransicion(t('transiciones.cap4_final'), () => this.irAFinal()); 
             });
@@ -334,7 +340,7 @@ class Capitulo4 extends Phaser.Scene {
     // FINAL
     // ==========================================
     irAFinal() {
-        localStorage.setItem('tc4_puzzle', '4');
+        localStorage.setItem('tc4_puzzle_' + this.rol, '4');
         this.detenerAmbiente();
         if (this.cache.audio.exists('final_giro')) {
             this.revelacionMusica = this.sound.add('final_giro', { loop: true, volume: getVolumen() * 0.6 });
@@ -354,7 +360,7 @@ class Capitulo4 extends Phaser.Scene {
         this.add.text(cx, 220, etiqueta, { fontSize: '28px', color: '#aaaaaa', fontFamily: 'Courier New', fontStyle: 'italic' }).setOrigin(0.5);
         this.add.text(cx, 290, miMitad, { fontSize: '80px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold', stroke: '#000000', strokeThickness: 6 }).setOrigin(0.5);
 
-        if (estaResuelto(4, 4)) {
+        if (estaResuelto(4, 4, this.rol)) {
             const irBtn = this.add.rectangle(cx, 510, 600, 80, 0x2a6a2a, 0.95).setStrokeStyle(3, 0x4aaa4a).setInteractive({ useHandCursor: true });
             this.add.text(cx, 510, '→ ' + t('interludio.title') + ' 4 (Final)', { fontSize: '26px', color: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold' }).setOrigin(0.5);
             irBtn.on('pointerup', () => { this.detenerAmbiente(); this.scene.start('Interludio', { numero: 4, siguiente: 'Creditos' }); });
@@ -387,7 +393,7 @@ class Capitulo4 extends Phaser.Scene {
     verificarCodigoCapitulo() {
         const codigo = this.codigoIngresado.join('');
         if (codigo === CODIGO_CAPITULO4) {
-            marcarResuelto(4, 4);
+            marcarResuelto(4, 4, this.rol);
             this.mensajeFinal.setText(t('capitulo4.chapter_code_ok')).setColor('#66ff66');
             this.reproducirAcierto();
             this.time.delayedCall(1500, () => {
