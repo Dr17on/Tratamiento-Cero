@@ -24,6 +24,12 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
+      # ✅ PASO CLAVE: Instalar las Android Build-Tools y añadirlas al PATH
+      - name: Install Android Build-Tools
+        run: |
+          yes | sdkmanager "build-tools;34.0.0"
+          echo "$ANDROID_HOME/build-tools/34.0.0" >> $GITHUB_PATH
+
       - name: Install Dependencies
         run: npm install
 
@@ -44,7 +50,7 @@ jobs:
           MANIFEST=android/app/src/main/AndroidManifest.xml
           sed -i 's|<activity|<activity android:screenOrientation="landscape"|g' $MANIFEST
 
-      # 1. Compilamos el APK sin firmar (esto siempre funciona)
+      # 1. Compilamos el APK sin firmar
       - name: Build Unsigned Release APK
         run: cd android && ./gradlew assembleRelease
 
@@ -55,7 +61,7 @@ jobs:
         run: |
           echo "$KEYSTORE_BASE64" | base64 --decode > android/release.keystore
 
-      # 3. Usamos apksigner para firmar el APK manualmente (Evita errores de Gradle)
+      # 3. Firmamos el APK usando la ruta completa a las herramientas
       - name: Sign APK
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
@@ -64,11 +70,10 @@ jobs:
         run: |
           cd android/app/build/outputs/apk/release/
           
-          # Alinear el APK (necesario antes de firmar)
-          zipalign -v -p 4 app-release-unsigned.apk app-release-aligned.apk
+          # ✅ Usamos la ruta completa para evitar errores de PATH
+          $ANDROID_HOME/build-tools/34.0.0/zipalign -v -p 4 app-release-unsigned.apk app-release-aligned.apk
           
-          # Firmar el APK con tu Keystore
-          apksigner sign --ks ../../../../release.keystore \
+          $ANDROID_HOME/build-tools/34.0.0/apksigner sign --ks ../../../../release.keystore \
           --ks-pass pass:$KEYSTORE_PASSWORD \
           --key-pass pass:$KEY_PASSWORD \
           --ks-key-alias $KEY_ALIAS \
