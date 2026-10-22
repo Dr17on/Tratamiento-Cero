@@ -62,33 +62,35 @@ jobs:
         run: |
           echo "$KEYSTORE_BASE64" | base64 --decode > android/release.keystore
           ls -l android/release.keystore
-          echo "--- Verificando el keystore ---"
-          keytool -list -keystore android/release.keystore -storepass "$KEYSTORE_PASSWORD" || echo "⚠️ La contraseña del keystore podría ser incorrecta."
+          keytool -list -keystore android/release.keystore -storepass "$KEYSTORE_PASSWORD"
 
+      # ✅ AQUÍ ESTÁ LA CORRECCIÓN DE LA RUTA
       - name: Sign APK with apksigner
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
-          cd android/app/build/outputs/apk/release/
+          # Definimos las rutas exactas
+          KEYSTORE_PATH="$GITHUB_WORKSPACE/android/release.keystore"
+          APK_DIR="$GITHUB_WORKSPACE/android/app/build/outputs/apk/release"
           
-          $ANDROID_HOME/build-tools/34.0.0/zipalign -v -p 4 app-release-unsigned.apk app-release-aligned.apk
+          # Alinear
+          $ANDROID_HOME/build-tools/34.0.0/zipalign -v -p 4 "$APK_DIR/app-release-unsigned.apk" "$APK_DIR/app-release-aligned.apk"
           
+          # Firmar usando la ruta absoluta
           $ANDROID_HOME/build-tools/34.0.0/apksigner sign \
-            --ks ../../../../release.keystore \
-            --ks-pass env:KEYSTORE_PASSWORD \
-            --key-pass env:KEY_PASSWORD \
+            --ks "$KEYSTORE_PATH" \
+            --ks-pass pass:"$KEYSTORE_PASSWORD" \
+            --key-pass pass:"$KEY_PASSWORD" \
             --ks-key-alias "$KEY_ALIAS" \
-            --verbose \
-            --out app-release-signed.apk \
-            app-release-aligned.apk
+            --out "$APK_DIR/app-release-signed.apk" \
+            "$APK_DIR/app-release-aligned.apk"
 
       - name: Verify APK Signature
         run: |
-          cd android/app/build/outputs/apk/release/
-          echo "--- Verificando la firma del APK ---"
-          $ANDROID_HOME/build-tools/34.0.0/apksigner verify --verbose app-release-signed.apk
+          APK_DIR="$GITHUB_WORKSPACE/android/app/build/outputs/apk/release"
+          $ANDROID_HOME/build-tools/34.0.0/apksigner verify --verbose "$APK_DIR/app-release-signed.apk"
 
       - name: Upload Release APK
         uses: actions/upload-artifact@v4
