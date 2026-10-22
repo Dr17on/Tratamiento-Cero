@@ -24,7 +24,6 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
-      # ✅ PASO CLAVE: Configurar el SDK de Android
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
         with:
@@ -56,13 +55,17 @@ jobs:
       - name: Build Unsigned Release APK
         run: cd android && ./gradlew assembleRelease
 
-      - name: Decode Keystore
+      - name: Decode and Verify Keystore
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
         run: |
           echo "$KEYSTORE_BASE64" | base64 --decode > android/release.keystore
+          ls -l android/release.keystore
+          echo "--- Verificando el keystore ---"
+          keytool -list -keystore android/release.keystore -storepass "$KEYSTORE_PASSWORD" || echo "⚠️ La contraseña del keystore podría ser incorrecta."
 
-      - name: Sign APK
+      - name: Sign APK with apksigner
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
@@ -70,14 +73,22 @@ jobs:
         run: |
           cd android/app/build/outputs/apk/release/
           
-          # ✅ Usamos la ruta completa para evitar errores
           $ANDROID_HOME/build-tools/34.0.0/zipalign -v -p 4 app-release-unsigned.apk app-release-aligned.apk
           
-          $ANDROID_HOME/build-tools/34.0.0/apksigner sign --ks ../../../../release.keystore \
-          --ks-pass pass:$KEYSTORE_PASSWORD \
-          --key-pass pass:$KEY_PASSWORD \
-          --ks-key-alias $KEY_ALIAS \
-          --out app-release-signed.apk app-release-aligned.apk
+          $ANDROID_HOME/build-tools/34.0.0/apksigner sign \
+            --ks ../../../../release.keystore \
+            --ks-pass env:KEYSTORE_PASSWORD \
+            --key-pass env:KEY_PASSWORD \
+            --ks-key-alias "$KEY_ALIAS" \
+            --verbose \
+            --out app-release-signed.apk \
+            app-release-aligned.apk
+
+      - name: Verify APK Signature
+        run: |
+          cd android/app/build/outputs/apk/release/
+          echo "--- Verificando la firma del APK ---"
+          $ANDROID_HOME/build-tools/34.0.0/apksigner verify --verbose app-release-signed.apk
 
       - name: Upload Release APK
         uses: actions/upload-artifact@v4
